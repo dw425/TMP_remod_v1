@@ -5,6 +5,7 @@
 **Date**: February 8, 2026
 **Status**: Ready for Development
 **Original Repo**: github.com/dw425/TMP_Dev_v4
+**New Repo**: github.com/dw425/TMP_remod_v1
 
 ---
 
@@ -58,7 +59,7 @@ Converting the Blueprint Technology Marketplace from a 30-file static HTML websi
 
 | Repository | Purpose | Visibility |
 |---|---|---|
-| `bpcs/blueprint-marketplace` | React SPA — the website itself | Public (GitHub Pages) |
+| `dw425/TMP_remod_v1` | React SPA — the website itself | Public (GitHub Pages) |
 | `bpcs/marketplace-content` | Notebooks, wheels, bundles — IP assets | **Private** (never public) |
 
 ---
@@ -166,7 +167,7 @@ Converting the Blueprint Technology Marketplace from a 30-file static HTML websi
 
 # 3. TWO-REPO STRATEGY
 
-## Repo 1: `bpcs/blueprint-marketplace` (Public)
+## Repo 1: `dw425/TMP_remod_v1` (Public)
 
 The React SPA. Contains all UI code, styling, configuration, and build tooling. Deployed to GitHub Pages (or Vercel). This is what users see and interact with.
 
@@ -308,7 +309,7 @@ Databricks:     #FF3621
 # 6. COMPLETE PROJECT STRUCTURE
 
 ```
-bpcs/blueprint-marketplace/
+dw425/TMP_remod_v1/
 │
 ├── .github/
 │   └── workflows/
@@ -859,10 +860,10 @@ export const BPCS = {
 ## 0.1 Create Repo 1 (Marketplace SPA)
 
 ```bash
-# Create new repo on GitHub: bpcs/blueprint-marketplace
+# New repo on GitHub: dw425/TMP_remod_v1
 # Clone locally
-git clone git@github.com:bpcs/blueprint-marketplace.git
-cd blueprint-marketplace
+git clone git@github.com:dw425/TMP_remod_v1.git
+cd TMP_remod_v1
 
 # Initialize Vite + React + TypeScript
 npm create vite@latest . -- --template react-ts
@@ -936,7 +937,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  base: '/blueprint-marketplace/',  // GitHub Pages subdirectory
+  base: '/TMP_remod_v1/',  // GitHub Pages subdirectory
   build: {
     outDir: 'dist',
     sourcemap: false,
@@ -1013,7 +1014,7 @@ export default defineConfig({
 ```bash
 # App
 VITE_APP_NAME=Blueprint Marketplace
-VITE_APP_URL=https://bpcs.github.io/blueprint-marketplace
+VITE_APP_URL=https://dw425.github.io/TMP_remod_v1
 
 # API (Vercel Edge Functions or external backend)
 VITE_API_URL=https://marketplace-api.bpcs.com
@@ -1078,7 +1079,7 @@ export const env = envSchema.parse(import.meta.env);
   // Single-page app redirect for GitHub Pages
   // Converts /products/ciq → /?p=/products/ciq → index.html handles it
   var path = window.location.pathname;
-  var repo = '/blueprint-marketplace';
+  var repo = '/TMP_remod_v1';
   if (path.startsWith(repo)) path = path.slice(repo.length);
   window.location.replace(
     window.location.origin + repo + '/?p=' + encodeURIComponent(path + window.location.search)
@@ -1331,7 +1332,7 @@ const router = createBrowserRouter([
       { path: '*', element: <Suspense fallback={<Spinner />}><NotFoundPage /></Suspense> },
     ],
   },
-], { basename: '/blueprint-marketplace' });
+], { basename: '/TMP_remod_v1' });
 
 export function AppRouter() {
   return <RouterProvider router={router} />;
@@ -2295,4 +2296,4 @@ Every PR must pass before merge:
 
 # END OF DOCUMENT
 
-This document is self-contained. With this spec and access to the original v1 repo (`github.com/dw425/TMP_Dev_v4`), any developer can build Blueprint Marketplace 2.0 from scratch without additional context.
+This document is self-contained. With this spec, access to the original v1 repo (`github.com/dw425/TMP_Dev_v4`), and the new v2 repo (`github.com/dw425/TMP_remod_v1`), any developer can build Blueprint Marketplace 2.0 from scratch without additional context.
