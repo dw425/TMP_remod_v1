@@ -2,8 +2,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import { RootLayout } from '@/layouts/RootLayout';
 import { Spinner } from '@/components/ui';
+import { ROUTES } from '@/config/routes';
 
 const MarketplacePage = lazy(() => import('@/pages/marketplace/MarketplacePage'));
+const CartPage = lazy(() => import('@/pages/cart/CartPage'));
+const ProductDetailPage = lazy(() => import('@/pages/products/ProductDetailPage'));
 const NotFoundPage = lazy(() => import('@/pages/errors/NotFoundPage'));
 
 const SuspenseWrap = ({ children }: { children: React.ReactNode }) => (
@@ -20,6 +23,22 @@ const router = createBrowserRouter(
           element: (
             <SuspenseWrap>
               <MarketplacePage />
+            </SuspenseWrap>
+          ),
+        },
+        {
+          path: ROUTES.CART,
+          element: (
+            <SuspenseWrap>
+              <CartPage />
+            </SuspenseWrap>
+          ),
+        },
+        {
+          path: ROUTES.PRODUCT,
+          element: (
+            <SuspenseWrap>
+              <ProductDetailPage />
             </SuspenseWrap>
           ),
         },

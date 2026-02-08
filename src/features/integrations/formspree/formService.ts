@@ -16,3 +16,15 @@ export async function submitForm(endpoint: keyof typeof FORMSPREE_ENDPOINTS, dat
 
   return response.json();
 }
+
+export interface PORequestData {
+  name: string;
+  email: string;
+  company: string;
+  phone?: string;
+  message: string;
+}
+
+export async function submitPORequest(data: PORequestData) {
+  return submitForm('poCheckout', { ...data });
+}
