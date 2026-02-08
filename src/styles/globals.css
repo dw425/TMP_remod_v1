@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --blueprint-blue: #1d4ed8;
+    --bg-primary: #eef2f6;
+    --text-primary: #111827;
+    --border-card: #d1d5db;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* CRITICAL: Blueprint sharp corners everywhere */
+  *,
+  *::before,
+  *::after {
+    border-radius: 0px !important;
+  }
+
+  /* Exception: cart badge is circular */
+  .badge-circle {
+    border-radius: 9999px !important;
+  }
+}
+
+@layer components {
+  .blue-logo-filter {
+    filter: brightness(0) saturate(100%) invert(25%) sepia(98%) saturate(1600%) hue-rotate(219deg)
+      brightness(96%) contrast(95%);
+  }
+}

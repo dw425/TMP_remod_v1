@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Blueprint Marketplace</title>
+    <script>
+      // Single-page app redirect for GitHub Pages
+      // Converts /products/ciq → /?p=/products/ciq → index.html handles it
+      var path = window.location.pathname;
+      var repo = '/TMP_remod_v1';
+      if (path.startsWith(repo)) path = path.slice(repo.length);
+      window.location.replace(
+        window.location.origin + repo + '/?p=' + encodeURIComponent(path + window.location.search)
+      );
+    </script>
+  </head>
+  <body></body>
+</html>
