@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+Disallow: /login
+Disallow: /signup
+Disallow: /forgot-password
+Disallow: /account/
+Disallow: /admin/
+Disallow: /auth/
+
+Sitemap: https://dw425.github.io/TMP_remod_v1/sitemap.xml
