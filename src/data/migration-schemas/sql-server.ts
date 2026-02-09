@@ -4,81 +4,330 @@ export const sqlServerSchema: MigrationSchema = {
   platform: 'sql-server',
   title: 'SQL Server to Databricks Migration Assessment',
   subtitle:
-    'Inventory your SQL Server databases, SSIS packages, and SSRS reports for Databricks migration.',
+    'Inventory your SQL Server, Oracle, or Postgres estate to generate a precise ROM estimate.',
   brandColor: '#737373',
   romConfig: {
-    objectCountFields: ['tableCount', 'viewCount', 'storedProcCount', 'ssisPackageCount'],
+    objectCountFields: [
+      'tableCount',
+      'viewCount',
+      'spCount',
+      'udfCount',
+      'triggerCount',
+      'etlCount',
+      'scriptCount',
+      'jobCount',
+    ],
     complexityField: 'overallComplexity',
     hoursPerObject: { simple: 2, medium: 8, complex: 22, veryComplex: 55 },
     hourlyRate: { low: 150, high: 250 },
   },
   sections: [
+    // ── Executive Summary ───────────────────────────────────────────────
     {
       id: 'exec',
       title: 'Executive Summary',
-      canMarkNA: false,
+      canMarkNA: true,
       fields: [
         { name: 'projectName', label: 'Project Name', type: 'text', required: true },
-        { name: 'stakeholder', label: 'Key Stakeholder', type: 'text', required: true },
-        { name: 'timeline', label: 'Target Timeline', type: 'text', placeholder: 'e.g., Q3 2026' },
+        { name: 'stakeholder', label: 'Primary Stakeholder', type: 'text', required: true },
+        {
+          name: 'timeline',
+          label: 'Timeline Expectations',
+          type: 'text',
+          placeholder: 'e.g., Q2 2025',
+        },
         { name: 'contactEmail', label: 'Contact Email', type: 'email', required: true },
-        { name: 'businessDriver', label: 'Business Driver', type: 'textarea' },
+        {
+          name: 'businessDriver',
+          label: 'Business Driver for Migration',
+          type: 'textarea',
+          placeholder:
+            'e.g., License renewal, performance issues, move to Lakehouse...',
+        },
       ],
     },
+
+    // ── 1. Current SQL Environment ──────────────────────────────────────
     {
-      id: 'database-inventory',
-      title: 'SQL Server Database Inventory',
-      subtitle: 'Detail your SQL Server environment.',
+      id: 'current-env',
+      title: '1. Current SQL Environment',
+      subtitle: 'System, hosting, object inventory, and data structure details.',
       canMarkNA: true,
       fields: [
-        { name: 'instanceCount', label: 'Number of Instances', type: 'number', min: 0 },
+        // ── 1.1 System & Hosting ──
         {
-          name: 'sqlVersion',
-          label: 'SQL Server Version',
+          name: 'sqlSystem',
+          label: 'Source SQL System',
           type: 'select',
           options: [
-            { value: '2022', label: 'SQL Server 2022' },
-            { value: '2019', label: 'SQL Server 2019' },
-            { value: '2017', label: 'SQL Server 2017' },
-            { value: '2016', label: 'SQL Server 2016' },
-            { value: 'older', label: 'SQL Server 2014 or older' },
-            { value: 'azure', label: 'Azure SQL Database' },
+            { value: 'sqlserver', label: 'SQL Server (T-SQL)' },
+            { value: 'oracle', label: 'Oracle (PL/SQL)' },
+            { value: 'postgresql', label: 'PostgreSQL' },
+            { value: 'mysql', label: 'MySQL' },
+            { value: 'other', label: 'Other' },
           ],
         },
-        { name: 'databaseCount', label: 'Number of Databases', type: 'number', min: 0 },
-        { name: 'tableCount', label: 'Total Table Count', type: 'number', min: 0, defaultValue: 0 },
-        { name: 'viewCount', label: 'View Count', type: 'number', min: 0, defaultValue: 0 },
-        { name: 'totalDataSize', label: 'Total Data Size (TB)', type: 'number', min: 0 },
-      ],
-    },
-    {
-      id: 'code-objects',
-      title: 'T-SQL & Code Objects',
-      canMarkNA: true,
-      fields: [
-        { name: 'storedProcCount', label: 'Stored Procedures', type: 'number', min: 0, defaultValue: 0 },
-        { name: 'functionCount', label: 'Functions (Scalar + Table)', type: 'number', min: 0 },
-        { name: 'triggerCount', label: 'Triggers', type: 'number', min: 0 },
-        { name: 'linkedServerCount', label: 'Linked Servers', type: 'number', min: 0 },
-      ],
-    },
-    {
-      id: 'ssis-ssrs',
-      title: 'SSIS & SSRS Inventory',
-      subtitle: 'Detail your ETL and reporting landscape.',
-      canMarkNA: true,
-      fields: [
-        { name: 'ssisPackageCount', label: 'SSIS Packages', type: 'number', min: 0, defaultValue: 0 },
-        { name: 'ssrsReportCount', label: 'SSRS Reports', type: 'number', min: 0 },
-        { name: 'ssasModelCount', label: 'SSAS Models', type: 'number', min: 0 },
         {
-          name: 'agentJobCount',
-          label: 'SQL Agent Jobs',
-          type: 'number',
-          min: 0,
+          name: 'hostingEnv',
+          label: 'Hosting Environment',
+          type: 'select',
+          options: [
+            { value: 'on_premises', label: 'On-Premises' },
+            { value: 'aws_rds', label: 'AWS (RDS)' },
+            { value: 'azure_sql', label: 'Azure (SQL DB / MI)' },
+            { value: 'gcp_sql', label: 'GCP (Cloud SQL)' },
+            { value: 'other_cloud', label: 'Other Cloud/VM' },
+          ],
+        },
+
+        // ── 1.2 Object Inventory ──
+        { name: 'tableCount', label: 'Total Tables', type: 'number', min: 0, defaultValue: 0 },
+        {
+          name: 'tableComplexity',
+          label: 'Schema Complexity',
+          type: 'range',
+          min: 1,
+          max: 5,
+          defaultValue: 3,
+        },
+        { name: 'viewCount', label: 'Total Views', type: 'number', min: 0, defaultValue: 0 },
+        {
+          name: 'viewComplexity',
+          label: 'View Logic Complexity',
+          type: 'range',
+          min: 1,
+          max: 5,
+          defaultValue: 2,
+        },
+        { name: 'databaseCount', label: 'Databases', type: 'number', min: 0, defaultValue: 0 },
+        { name: 'schemaCount', label: 'Schemas', type: 'number', min: 0, defaultValue: 0 },
+        { name: 'totalDataSize', label: 'Data Size (TB)', type: 'number', min: 0 },
+
+        // ── 1.3 Data Structure & Features ──
+        {
+          name: 'dataFeatures',
+          label: 'Features Used',
+          type: 'checkbox-group',
+          options: [
+            { value: 'temp_tables', label: 'Temporary Tables' },
+            { value: 'ext_tables', label: 'External Tables' },
+            { value: 'm_views', label: 'Materialized Views' },
+            { value: 'partitioning', label: 'Data Partitioning' },
+            { value: 'clr', label: 'CLR Assemblies (.NET)' },
+            { value: 'java_db', label: 'Java in DB' },
+          ],
+        },
+        {
+          name: 'indexingStrategy',
+          label: 'Indexing & Partitioning',
+          type: 'textarea',
+          placeholder:
+            'Describe clustered indexes, partitioning keys, and performance tuning strategies.',
+        },
+        { name: 'linkCount', label: 'Linked Servers / DB Links Count', type: 'number', min: 0, defaultValue: 0 },
+      ],
+    },
+
+    // ── 2. Compute, Logic & ETL ─────────────────────────────────────────
+    {
+      id: 'compute-logic-etl',
+      title: '2. Compute, Logic & ETL',
+      subtitle: 'Stored procedures, functions, ETL packages, and external scripts.',
+      canMarkNA: true,
+      fields: [
+        // ── 2.1 Stored Procedures & Logic ──
+        { name: 'spCount', label: 'Stored Procedures', type: 'number', min: 0, defaultValue: 0 },
+        {
+          name: 'spComplexity',
+          label: 'Procedural Complexity',
+          type: 'range',
+          min: 1,
+          max: 5,
+          defaultValue: 3,
+        },
+        { name: 'udfCount', label: 'User-Defined Functions', type: 'number', min: 0, defaultValue: 0 },
+        {
+          name: 'udfComplexity',
+          label: 'Function Complexity',
+          type: 'range',
+          min: 1,
+          max: 5,
+          defaultValue: 3,
+        },
+        { name: 'triggerCount', label: 'Triggers', type: 'number', min: 0, defaultValue: 0 },
+        {
+          name: 'spDetails',
+          label: 'SP/Trigger Details',
+          type: 'text',
+          placeholder: 'Dynamic SQL, Transaction Control?',
+        },
+
+        // ── 2.2 Data Loading & ETL ──
+        { name: 'etlCount', label: 'ETL Packages (SSIS/Other)', type: 'number', min: 0, defaultValue: 0 },
+        {
+          name: 'etlComplexity',
+          label: 'ETL Complexity',
+          type: 'range',
+          min: 1,
+          max: 5,
+          defaultValue: 3,
+        },
+        {
+          name: 'ingestionMethods',
+          label: 'Ingestion Methods',
+          type: 'checkbox-group',
+          options: [
+            { value: 'log_shipping', label: 'Log Shipping/Replication' },
+            { value: 'bulk_insert', label: 'Bulk Insert/BCP' },
+            { value: 'cdc', label: 'CDC (Change Data Capture)' },
+            { value: 'ssis', label: 'SSIS/Integration Services' },
+          ],
+        },
+        {
+          name: 'ssisPackages',
+          label: 'SSIS/ETL Details',
+          type: 'textarea',
+          placeholder:
+            'Describe complexity of SSIS packages (Script tasks, custom components).',
+        },
+
+        // ── 2.3 External Scripts ──
+        { name: 'scriptCount', label: 'External Scripts (.bat/ps1)', type: 'number', min: 0, defaultValue: 0 },
+        {
+          name: 'scriptComplexity',
+          label: 'Script Complexity',
+          type: 'range',
+          min: 1,
+          max: 5,
+          defaultValue: 2,
+        },
+        {
+          name: 'sqlScripts',
+          label: 'Script Details',
+          type: 'textarea',
+          placeholder:
+            'Describe reliance on external batch, PowerShell, or shell scripts.',
         },
       ],
     },
+
+    // ── 3. Orchestration & Infrastructure ───────────────────────────────
+    {
+      id: 'orchestration-infra',
+      title: '3. Orchestration & Infrastructure',
+      subtitle: 'Job scheduling, orchestration methods, and server infrastructure.',
+      canMarkNA: true,
+      fields: [
+        // ── 3.1 Job Scheduling ──
+        { name: 'jobCount', label: 'Scheduled Jobs (Agent)', type: 'number', min: 0, defaultValue: 0 },
+        {
+          name: 'jobComplexity',
+          label: 'Job Complexity',
+          type: 'range',
+          min: 1,
+          max: 5,
+          defaultValue: 3,
+        },
+        {
+          name: 'orchestration',
+          label: 'Orchestration Methods',
+          type: 'checkbox-group',
+          options: [
+            { value: 'db_jobs', label: 'Database Jobs (Agent)' },
+            { value: 'airflow', label: 'External (Airflow)' },
+            { value: 'third_party', label: '3rd Party (Control-M, Autosys)' },
+          ],
+        },
+
+        // ── 3.2 Server Infrastructure ──
+        { name: 'serverCount', label: 'Server Count', type: 'number', min: 0, defaultValue: 0 },
+        {
+          name: 'serverSpecs',
+          label: 'Specs (Avg)',
+          type: 'text',
+          placeholder: 'vCores, RAM...',
+        },
+        {
+          name: 'instanceUsage',
+          label: 'Instance Usage',
+          type: 'textarea',
+          placeholder: 'HA/DR setup, OLTP vs OLAP separation.',
+        },
+      ],
+    },
+
+    // ── 4. Security & Governance ────────────────────────────────────────
+    {
+      id: 'security-governance',
+      title: '4. Security & Governance',
+      canMarkNA: true,
+      fields: [
+        {
+          name: 'accessManagement',
+          label: 'User & Role Management',
+          type: 'textarea',
+          placeholder: 'Active Directory integration, Windows Auth, Mixed Mode?',
+        },
+        {
+          name: 'secFeatures',
+          label: 'Security Features',
+          type: 'checkbox-group',
+          options: [
+            { value: 'rls', label: 'Row-Level Security' },
+            { value: 'masking', label: 'Dynamic Masking' },
+            { value: 'tde', label: 'TDE (Transparent Encryption)' },
+          ],
+        },
+      ],
+    },
+
+    // ── 5. Cost & Priorities ────────────────────────────────────────────
+    {
+      id: 'cost-priorities',
+      title: '5. Cost & Priorities',
+      canMarkNA: true,
+      fields: [
+        { name: 'totalSpend', label: 'Annual Licensing Cost ($)', type: 'number', min: 0 },
+        { name: 'servicesBudget', label: 'Services Budget ($)', type: 'number', min: 0 },
+        {
+          name: 'jobSLAs',
+          label: 'Critical SLAs',
+          type: 'textarea',
+          placeholder: 'Time windows for batch processing.',
+        },
+      ],
+    },
+
+    // ── 6. Target State ─────────────────────────────────────────────────
+    {
+      id: 'target-state',
+      title: '6. Target State',
+      canMarkNA: true,
+      fields: [
+        {
+          name: 'targetCloudProvider',
+          label: 'Target Cloud',
+          type: 'select',
+          options: [
+            { value: 'aws', label: 'AWS' },
+            { value: 'azure', label: 'Azure' },
+            { value: 'gcp', label: 'GCP' },
+          ],
+        },
+        {
+          name: 'dbxFeatures',
+          label: 'Databricks Features',
+          type: 'checkbox-group',
+          options: [
+            { value: 'uc', label: 'Unity Catalog' },
+            { value: 'dbsql', label: 'Databricks SQL' },
+            { value: 'dlt', label: 'Delta Live Tables' },
+          ],
+        },
+      ],
+    },
+
+    // ── Overall Complexity Assessment ───────────────────────────────────
     {
       id: 'complexity',
       title: 'Overall Complexity Assessment',
@@ -94,21 +343,14 @@ export const sqlServerSchema: MigrationSchema = {
         },
       ],
     },
-    {
-      id: 'budget',
-      title: 'Budget & Cost Information',
-      canMarkNA: true,
-      fields: [
-        { name: 'currentAnnualSpend', label: 'Current Annual SQL Server Spend ($)', type: 'number', min: 0 },
-        { name: 'migrationBudget', label: 'Migration Services Budget ($)', type: 'number', min: 0 },
-      ],
-    },
+
+    // ── Form Completion Details ─────────────────────────────────────────
     {
       id: 'contact',
       title: 'Form Completion Details',
       canMarkNA: false,
       fields: [
-        { name: 'completedBy', label: 'Completed By', type: 'text', required: true },
+        { name: 'completedBy', label: 'Questionnaire Completed By', type: 'text', required: true },
         { name: 'completionDate', label: 'Date', type: 'date' },
       ],
     },

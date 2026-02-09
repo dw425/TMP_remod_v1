@@ -14,6 +14,19 @@ import { sanitizeInput } from '@/lib/sanitize';
 const USERS_KEY = 'blueprint_users';
 const SESSION_KEY = 'blueprint_session';
 
+/**
+ * Emails that are automatically assigned admin role on signup/login.
+ * Add your email here to get admin access.
+ */
+const ADMIN_EMAILS: string[] = (import.meta.env.VITE_ADMIN_EMAILS || '')
+  .split(',')
+  .map((e: string) => e.trim().toLowerCase())
+  .filter(Boolean);
+
+function isAdminEmail(email: string): boolean {
+  return ADMIN_EMAILS.includes(email.trim().toLowerCase());
+}
+
 function getStoredUsers(): Record<string, { user: User; passwordHash: string }> {
   try {
     return JSON.parse(localStorage.getItem(USERS_KEY) || '{}');
@@ -68,6 +81,10 @@ export async function login(credentials: LoginCredentials): Promise<{ user: User
   clearLoginFailures(email);
 
   entry.user.lastLogin = new Date().toISOString();
+  // Auto-promote to admin if email is in ADMIN_EMAILS
+  if (isAdminEmail(email) && entry.user.role !== 'admin') {
+    entry.user.role = 'admin';
+  }
   saveUsers(users);
 
   const token = generateToken();
@@ -118,7 +135,7 @@ export async function signup(credentials: SignupCredentials): Promise<{ user: Us
     firstName: sanitizeInput(credentials.firstName.trim()),
     lastName: sanitizeInput(credentials.lastName.trim()),
     company: sanitizeInput(credentials.company.trim()),
-    role: 'user',
+    role: isAdminEmail(email) ? 'admin' : 'user',
     createdAt: new Date().toISOString(),
     lastLogin: new Date().toISOString(),
   };
@@ -173,4 +190,30 @@ export async function updateProfile(
   Object.assign(entry.user, sanitized);
   saveUsers(users);
   return entry.user;
+}
+
+/** Get all registered users (admin function) */
+export function getAllUsers(): User[] {
+  const users = getStoredUsers();
+  return Object.values(users).map((entry) => entry.user);
+}
+
+/** Delete a user by ID (admin function) */
+export function deleteUser(userId: string): void {
+  const users = getStoredUsers();
+  const email = Object.keys(users).find((k) => users[k]?.user.id === userId);
+  if (email) {
+    delete users[email];
+    saveUsers(users);
+  }
+}
+
+/** Update a user's role (admin function) */
+export function setUserRole(userId: string, role: User['role']): void {
+  const users = getStoredUsers();
+  const entry = Object.values(users).find((u) => u.user.id === userId);
+  if (entry) {
+    entry.user.role = role;
+    saveUsers(users);
+  }
 }

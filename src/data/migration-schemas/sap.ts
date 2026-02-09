@@ -4,65 +4,84 @@ export const sapSchema: MigrationSchema = {
   platform: 'sap',
   title: 'SAP to Databricks Migration Assessment',
   subtitle:
-    'Inventory your SAP ERP, BW, and HANA landscapes to generate a precise ROM estimate.',
+    'Inventory your SAP ERP, BW, and HANA landscapes to generate a precise ROM estimate and migration roadmap.',
   brandColor: '#008FD3',
   romConfig: {
-    objectCountFields: ['tableCount', 'bwObjectCount', 'viewCount', 'pipelineCount'],
+    objectCountFields: ['tableCount', 'bwObjectCount', 'viewCount', 'abapCount', 'etlCount'],
     complexityField: 'overallComplexity',
     hoursPerObject: { simple: 4, medium: 12, complex: 32, veryComplex: 80 },
     hourlyRate: { low: 175, high: 275 },
   },
   sections: [
+    /* ------------------------------------------------------------------ */
+    /*  Executive Summary                                                 */
+    /* ------------------------------------------------------------------ */
     {
       id: 'exec',
       title: 'Executive Summary',
       subtitle: 'High-level project information and business context.',
-      canMarkNA: false,
+      canMarkNA: true,
       fields: [
         { name: 'projectName', label: 'Project Name', type: 'text', required: true },
-        { name: 'stakeholder', label: 'Key Stakeholder', type: 'text', required: true },
+        {
+          name: 'stakeholder',
+          label: 'Primary Stakeholder',
+          type: 'text',
+          required: true,
+        },
         {
           name: 'timeline',
-          label: 'Target Timeline',
+          label: 'Timeline Expectations',
           type: 'text',
-          placeholder: 'e.g., Q3 2026',
+          placeholder: 'e.g., Q3 2025',
         },
-        { name: 'contactEmail', label: 'Contact Email', type: 'email', required: true },
+        {
+          name: 'contactEmail',
+          label: 'Contact Email',
+          type: 'email',
+          required: true,
+        },
         {
           name: 'businessDriver',
-          label: 'Business Driver',
+          label: 'Business Driver for Migration',
           type: 'textarea',
-          placeholder: 'e.g., S/4HANA upgrade, cost reduction...',
+          placeholder:
+            'e.g., S/4HANA upgrade, BW retirement, cost reduction, real-time analytics...',
         },
       ],
     },
+
+    /* ------------------------------------------------------------------ */
+    /*  1. Current SAP Landscape                                          */
+    /* ------------------------------------------------------------------ */
     {
       id: 'source-landscape',
-      title: 'Source ERP & Database Landscape',
+      title: '1. Current SAP Landscape',
       subtitle: 'Describe your current SAP environment and data footprint.',
       canMarkNA: true,
       fields: [
+        /* --- 1.1 System Architecture --- */
         {
           name: 'sapSystem',
-          label: 'SAP System',
+          label: 'Core System',
           type: 'select',
           options: [
-            { value: 'ecc6', label: 'ECC 6.0' },
-            { value: 's4hana', label: 'S/4HANA' },
-            { value: 'bw4hana', label: 'BW/4HANA' },
-            { value: 'bw', label: 'BW on HANA' },
-            { value: 'other', label: 'Other' },
+            { value: 'ecc', label: 'SAP ECC 6.0' },
+            { value: 's4', label: 'SAP S/4HANA' },
+            { value: 'bw', label: 'SAP BW (NetWeaver)' },
+            { value: 'bw4', label: 'SAP BW/4HANA' },
+            { value: 'crm', label: 'SAP CRM/SRM' },
           ],
         },
         {
           name: 'databaseType',
-          label: 'Database Type',
+          label: 'Underlying Database',
           type: 'text',
-          placeholder: 'e.g., Oracle, HANA, DB2',
+          placeholder: 'e.g., Oracle, HANA, DB2, SQL Server',
         },
         {
           name: 'modules',
-          label: 'SAP Modules in Scope',
+          label: 'Modules in Scope',
           type: 'checkbox-group',
           options: [
             { value: 'fi_co', label: 'FI/CO (Finance)' },
@@ -73,66 +92,248 @@ export const sapSchema: MigrationSchema = {
             { value: 'bw', label: 'BW/BI Reporting' },
           ],
         },
-        { name: 'tableCount', label: 'Estimated Table Count', type: 'number', min: 0, defaultValue: 0 },
-        { name: 'bwObjectCount', label: 'BW Object Count', type: 'number', min: 0, defaultValue: 0 },
-        { name: 'totalDataSize', label: 'Total Data Size (TB)', type: 'number', min: 0 },
-      ],
-    },
-    {
-      id: 'hana-views',
-      title: 'HANA/CDS Views & Dependencies',
-      subtitle: 'Detail your HANA calculation views and CDS layer.',
-      canMarkNA: true,
-      fields: [
-        { name: 'viewCount', label: 'Calculation/CDS View Count', type: 'number', min: 0, defaultValue: 0 },
+
+        /* --- 1.2 Data Objects (Tables & BW) --- */
         {
-          name: 'viewComplexity',
-          label: 'View Complexity (1 = simple, 5 = very complex)',
+          name: 'tableCount',
+          label: 'Total Tables',
+          type: 'number',
+          min: 0,
+          defaultValue: 0,
+          placeholder: 'Transparent, Cluster, & Pool Tables',
+        },
+        {
+          name: 'tableComplexity',
+          label: 'Customization Level (Z-Tables)',
           type: 'range',
           min: 1,
           max: 5,
           defaultValue: 3,
         },
         {
-          name: 'viewDependencies',
-          label: 'Cross-View Dependencies',
-          type: 'select',
-          options: [
-            { value: 'none', label: 'None / Minimal' },
-            { value: 'moderate', label: 'Moderate (some chains)' },
-            { value: 'heavy', label: 'Heavy (deep nesting)' },
-          ],
+          name: 'bwObjectCount',
+          label: 'BW Objects (DSOs/Cubes)',
+          type: 'number',
+          min: 0,
+          defaultValue: 0,
+          placeholder: 'InfoCubes, DSOs, ADSOs',
+        },
+        {
+          name: 'bwComplexity',
+          label: 'BW Model Complexity',
+          type: 'range',
+          min: 1,
+          max: 5,
+          defaultValue: 3,
+        },
+        {
+          name: 'totalDataSize',
+          label: 'Total Data Volume (TB)',
+          type: 'number',
+          min: 0,
         },
       ],
     },
+
+    /* ------------------------------------------------------------------ */
+    /*  2. Views, Code & Logic (ABAP/HANA)                                */
+    /* ------------------------------------------------------------------ */
     {
-      id: 'etl',
-      title: 'ETL & Integration Layer',
-      subtitle: 'Describe existing data pipelines and integration tools.',
+      id: 'views-code-logic',
+      title: '2. Views, Code & Logic (ABAP/HANA)',
+      subtitle: 'Detail your HANA calculation views, CDS layer, and ABAP codebase.',
       canMarkNA: true,
       fields: [
-        { name: 'pipelineCount', label: 'Number of ETL Pipelines', type: 'number', min: 0, defaultValue: 0 },
+        /* --- 2.1 Views & Virtual Models --- */
         {
-          name: 'etlTools',
-          label: 'ETL Tools Used',
-          type: 'checkbox-group',
-          options: [
-            { value: 'bods', label: 'SAP BODS' },
-            { value: 'sdi', label: 'SAP SDI/SDA' },
-            { value: 'informatica', label: 'Informatica' },
-            { value: 'talend', label: 'Talend' },
-            { value: 'adf', label: 'Azure Data Factory' },
-            { value: 'custom', label: 'Custom Scripts' },
-          ],
+          name: 'viewCount',
+          label: 'HANA/CDS Views',
+          type: 'number',
+          min: 0,
+          defaultValue: 0,
+          placeholder: 'Calculation Views, CDS Views',
         },
         {
-          name: 'schedulingTool',
-          label: 'Scheduling / Orchestration',
-          type: 'text',
-          placeholder: 'e.g., Control-M, Airflow, cron',
+          name: 'viewComplexity',
+          label: 'View Logic Complexity',
+          type: 'range',
+          min: 1,
+          max: 5,
+          defaultValue: 3,
+        },
+
+        /* --- 2.2 ABAP & Procedural Logic --- */
+        {
+          name: 'abapCount',
+          label: 'ABAP Reports/Funcs',
+          type: 'number',
+          min: 0,
+          defaultValue: 0,
+          placeholder: 'Z-Programs, Function Modules',
+        },
+        {
+          name: 'abapComplexity',
+          label: 'ABAP Complexity',
+          type: 'range',
+          min: 1,
+          max: 5,
+          defaultValue: 3,
+        },
+        {
+          name: 'logicFeatures',
+          label: 'Logic Details',
+          type: 'checkbox-group',
+          options: [
+            { value: 'amdp', label: 'AMDP (ABAP Managed Database Procedures)' },
+            { value: 'bapi', label: 'BAPIs Custom Usage' },
+            { value: 'hana_proc', label: 'Native HANA Stored Procedures' },
+            { value: 'enhancements', label: 'User Exits / Enhancements' },
+          ],
         },
       ],
     },
+
+    /* ------------------------------------------------------------------ */
+    /*  3. Integration & ETL                                              */
+    /* ------------------------------------------------------------------ */
+    {
+      id: 'etl',
+      title: '3. Integration & ETL',
+      subtitle: 'Describe existing data pipelines, integration tools, and dependencies.',
+      canMarkNA: true,
+      fields: [
+        /* --- 3.1 Data Movement Tools --- */
+        {
+          name: 'etlCount',
+          label: 'ETL Jobs / Chains',
+          type: 'number',
+          min: 0,
+          defaultValue: 0,
+          placeholder: 'BODS Jobs, BW Process Chains, SLT',
+        },
+        {
+          name: 'etlComplexity',
+          label: 'Integration Complexity',
+          type: 'range',
+          min: 1,
+          max: 5,
+          defaultValue: 3,
+        },
+        {
+          name: 'etlTools',
+          label: 'Tools in Use',
+          type: 'checkbox-group',
+          options: [
+            { value: 'bods', label: 'SAP Data Services (BODS)' },
+            { value: 'slt', label: 'SLT (Landscape Transformation)' },
+            { value: 'sdi', label: 'HANA SDI / SDA' },
+            { value: 'bw_extractors', label: 'Standard BW Extractors' },
+            { value: 'po', label: 'SAP PO/PI' },
+          ],
+        },
+
+        /* --- 3.2 Dependencies --- */
+        {
+          name: 'upstream',
+          label: 'Source Systems (Upstream)',
+          type: 'textarea',
+          placeholder: 'Other SAP systems, Non-SAP DBs, Flat files...',
+        },
+        {
+          name: 'downstream',
+          label: 'Downstream Consumers',
+          type: 'textarea',
+          placeholder: 'BOBJ, Analytics Cloud, Tableau, PowerBI...',
+        },
+      ],
+    },
+
+    /* ------------------------------------------------------------------ */
+    /*  4. Security & Governance                                          */
+    /* ------------------------------------------------------------------ */
+    {
+      id: 'security-governance',
+      title: '4. Security & Governance',
+      subtitle: 'Describe your authorization model and role structure.',
+      canMarkNA: true,
+      fields: [
+        {
+          name: 'analysisAuth',
+          label: 'Analysis Authorizations',
+          type: 'textarea',
+          placeholder:
+            'Describe complexity of BW/HANA analysis authorizations (Row-level security).',
+        },
+        {
+          name: 'roleHierarchy',
+          label: 'Role Hierarchy',
+          type: 'textarea',
+          placeholder: 'Derived roles, composite roles, structural authorizations?',
+        },
+      ],
+    },
+
+    /* ------------------------------------------------------------------ */
+    /*  5. Target State & Priorities                                      */
+    /* ------------------------------------------------------------------ */
+    {
+      id: 'target-state',
+      title: '5. Target State & Priorities',
+      subtitle: 'Define your target Databricks architecture, strategy, and budget.',
+      canMarkNA: true,
+      fields: [
+        /* --- 5.1 Architecture --- */
+        {
+          name: 'targetCloudProvider',
+          label: 'Target Cloud',
+          type: 'select',
+          options: [
+            { value: 'aws', label: 'AWS' },
+            { value: 'azure', label: 'Azure' },
+            { value: 'gcp', label: 'GCP' },
+          ],
+        },
+        {
+          name: 'migrationStrategy',
+          label: 'Strategy',
+          type: 'select',
+          options: [
+            { value: 'replicate', label: 'Replicate (Cortex/Fivetran -> Datalake)' },
+            { value: 'federate', label: 'Federate (Query SAP directly)' },
+            { value: 'migrate', label: 'Full Migration (Decommission SAP BW)' },
+          ],
+        },
+        {
+          name: 'dbxFeatures',
+          label: 'Databricks Features',
+          type: 'checkbox-group',
+          options: [
+            { value: 'uc', label: 'Unity Catalog' },
+            { value: 'dbsql', label: 'Databricks SQL' },
+            { value: 'dlt', label: 'Delta Live Tables (DLT)' },
+            { value: 'sap_connector', label: 'SAP Connectors (Spark)' },
+          ],
+        },
+
+        /* --- 5.2 Budget & Costs --- */
+        {
+          name: 'totalSpend',
+          label: 'Current Annual SAP Spend ($)',
+          type: 'number',
+          min: 0,
+        },
+        {
+          name: 'servicesBudget',
+          label: 'Services Budget ($)',
+          type: 'number',
+          min: 0,
+        },
+      ],
+    },
+
+    /* ------------------------------------------------------------------ */
+    /*  Overall Complexity Assessment                                     */
+    /* ------------------------------------------------------------------ */
     {
       id: 'complexity',
       title: 'Overall Complexity Assessment',
@@ -148,35 +349,17 @@ export const sapSchema: MigrationSchema = {
         },
       ],
     },
-    {
-      id: 'budget',
-      title: 'Budget & Cost Information',
-      subtitle: 'Current spend and migration budget expectations.',
-      canMarkNA: true,
-      fields: [
-        {
-          name: 'currentAnnualSpend',
-          label: 'Current Annual Data Platform Spend ($)',
-          type: 'number',
-          min: 0,
-          placeholder: 'e.g., 500000',
-        },
-        {
-          name: 'migrationBudget',
-          label: 'Migration Services Budget ($)',
-          type: 'number',
-          min: 0,
-          placeholder: 'e.g., 200000',
-        },
-      ],
-    },
+
+    /* ------------------------------------------------------------------ */
+    /*  Form Completion Details                                           */
+    /* ------------------------------------------------------------------ */
     {
       id: 'contact',
       title: 'Form Completion Details',
       canMarkNA: false,
       fields: [
-        { name: 'completedBy', label: 'Completed By', type: 'text', required: true },
-        { name: 'completionDate', label: 'Date', type: 'date' },
+        { name: 'completedBy', label: 'Questionnaire Completed By', type: 'text', required: true },
+        { name: 'completionDate', label: 'Date', type: 'date', required: true },
       ],
     },
   ],

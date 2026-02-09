@@ -28,7 +28,7 @@ export const platforms: Platform[] = [
     brandColor: '#FF4D00',
     description: 'Convert Informatica PowerCenter and IICS mappings to Databricks.',
     tag: 'ETL & Integration',
-    logo: '/images/infromatica.png',
+    logo: 'infromatica.png',
     logoType: 'url',
   },
   {
@@ -48,7 +48,7 @@ export const platforms: Platform[] = [
     brandColor: '#F37421',
     description: 'Transition Teradata data warehouses and BTEQ scripts to Databricks.',
     tag: 'Enterprise Data Warehouse',
-    logo: '/images/teradata.png',
+    logo: 'teradata.png',
     logoType: 'url',
   },
   {

@@ -196,7 +196,7 @@ export default function WhitepaperPage() {
                 </h3>
                 <p className="mb-6">Schedule a demo of CampaignIQ or buy it today to start maximizing your ROAS.</p>
                 <Link
-                  to="/products/campaigniq"
+                  to="/products/campaign-iq"
                   className="inline-block bg-blueprint-blue text-white font-bold py-3 px-8 uppercase tracking-widest text-xs hover:bg-blue-800 transition-colors"
                 >
                   Explore CampaignIQ
@@ -220,7 +220,7 @@ export default function WhitepaperPage() {
               </p>
             </div>
             <Link
-              to="/products/campaigniq"
+              to="/products/campaign-iq"
               className="block w-full text-center bg-blueprint-blue text-white font-bold py-4 uppercase tracking-widest text-[10px] hover:bg-blue-800 transition-colors"
             >
               View Product

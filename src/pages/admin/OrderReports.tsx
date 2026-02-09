@@ -13,17 +13,32 @@ function formatCurrency(amount: number): string {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
 }
 
+function getLocalStorageOrders(): DBOrder[] {
+  try {
+    const raw = localStorage.getItem('blueprint_orders');
+    if (!raw) return [];
+    return JSON.parse(raw);
+  } catch {
+    return [];
+  }
+}
+
 export default function OrderReports() {
   const [orders, setOrders] = useState<DBOrder[]>([]);
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadOrders() {
       try {
         const dbOrders = await dbGetAllOrders();
-        setOrders(dbOrders.sort((a, b) => b.submittedAt.localeCompare(a.submittedAt)));
+        if (dbOrders.length > 0) {
+          setOrders(dbOrders.sort((a, b) => b.submittedAt.localeCompare(a.submittedAt)));
+        } else {
+          setOrders(getLocalStorageOrders().sort((a, b) => (b.submittedAt || '').localeCompare(a.submittedAt || '')));
+        }
       } catch {
-        setOrders([]);
+        setOrders(getLocalStorageOrders());
       }
     }
     loadOrders();
@@ -93,22 +108,49 @@ export default function OrderReports() {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((order) => (
-                  <tr key={order.id} className="border-t border-gray-100">
-                    <td className="px-6 py-4 text-sm font-mono text-gray-900">{order.poNumber || order.id.slice(0, 8)}</td>
-                    <td className="px-6 py-4 text-sm text-gray-500">{order.company}</td>
-                    <td className="px-6 py-4 text-sm text-gray-500">{order.items.length} item{order.items.length !== 1 ? 's' : ''}</td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">{formatCurrency(order.total)}</td>
-                    <td className="px-6 py-4">
-                      <span className={`text-[10px] font-bold uppercase px-2 py-1 ${STATUS_STYLES[order.status] || 'bg-gray-100 text-gray-600'}`}>
-                        {order.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-500">
-                      {new Date(order.submittedAt).toLocaleDateString()}
-                    </td>
-                  </tr>
-                ))}
+                {filtered.map((order) => {
+                  const isExpanded = expandedOrder === order.id;
+                  return (
+                    <tr key={order.id} className="border-t border-gray-100">
+                      <td className="px-6 py-4 text-sm font-mono text-gray-900">
+                        <button
+                          onClick={() => setExpandedOrder(isExpanded ? null : order.id)}
+                          className="hover:text-blueprint-blue"
+                        >
+                          {order.poNumber || order.id.slice(0, 8)}
+                          <span className="text-[10px] text-gray-400 ml-1">{isExpanded ? '\u25B2' : '\u25BC'}</span>
+                        </button>
+                        {isExpanded && (
+                          <div className="mt-3 p-4 bg-gray-50 border border-gray-200 text-xs space-y-1 font-sans">
+                            <p className="font-bold text-gray-700 uppercase tracking-wider mb-2">Line Items</p>
+                            {order.items.map((item, i) => (
+                              <div key={i} className="flex justify-between py-1 border-b border-gray-100 last:border-0">
+                                <span className="text-gray-700">{item.title}</span>
+                                <span className="text-gray-500">{formatCurrency(item.price)}</span>
+                              </div>
+                            ))}
+                            <div className="flex justify-between pt-2 font-bold text-gray-900">
+                              <span>Total</span>
+                              <span>{formatCurrency(order.total)}</span>
+                            </div>
+                            {order.email && <p className="pt-2"><span className="text-gray-500">Contact:</span> {order.email}</p>}
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-500">{order.company}</td>
+                      <td className="px-6 py-4 text-sm text-gray-500">{order.items.length} item{order.items.length !== 1 ? 's' : ''}</td>
+                      <td className="px-6 py-4 text-sm font-medium text-gray-900">{formatCurrency(order.total)}</td>
+                      <td className="px-6 py-4">
+                        <span className={`text-[10px] font-bold uppercase px-2 py-1 ${STATUS_STYLES[order.status] || 'bg-gray-100 text-gray-600'}`}>
+                          {order.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-500">
+                        {new Date(order.submittedAt).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

@@ -38,7 +38,7 @@ export function TechArchModal({ src, onClose }: TechArchModalProps) {
         </button>
         <div className="w-full bg-white flex items-center justify-center overflow-hidden">
           <img
-            src={src}
+            src={`${import.meta.env.BASE_URL}images/${src}`}
             alt="Technical Architecture Diagram"
             className="w-full h-auto block"
           />

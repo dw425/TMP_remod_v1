@@ -4,7 +4,7 @@ export function Footer() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-gray-500 font-medium">
-            &copy; {new Date().getFullYear()} Blueprint Technology. All rights reserved.
+            &copy; {new Date().getFullYear()} Blueprint Technologies, LLC. All rights reserved.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             {/* Facebook */}

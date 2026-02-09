@@ -85,9 +85,11 @@ const router = createBrowserRouter(
         {
           path: ROUTES.ROM_CALCULATOR,
           element: (
-            <SuspenseWrap>
-              <ROMCalculatorPage />
-            </SuspenseWrap>
+            <AdminGuard>
+              <SuspenseWrap>
+                <ROMCalculatorPage />
+              </SuspenseWrap>
+            </AdminGuard>
           ),
         },
         {

@@ -27,7 +27,10 @@ export function PlatformTile({ platform, onClick }: PlatformTileProps) {
             </text>
           </svg>
         ) : platform.logo ? (
-          <img src={platform.logo} alt={platform.name} />
+          <img
+            src={platform.logo.startsWith('http') ? platform.logo : `${import.meta.env.BASE_URL}images/${platform.logo}`}
+            alt={platform.name}
+          />
         ) : null}
       </div>
       <div>

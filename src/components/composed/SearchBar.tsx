@@ -11,23 +11,63 @@ interface SearchResult {
   description: string;
 }
 
+/** Score how well a query matches a product (higher = better match, 0 = no match) */
+function fuzzyScore(query: string, text: string): number {
+  const lower = text.toLowerCase();
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+
+  // Exact substring match — highest score
+  if (lower.includes(query.toLowerCase())) return 100;
+
+  // All words present as substrings
+  const allWordsMatch = words.every((w) => lower.includes(w));
+  if (allWordsMatch) return 80;
+
+  // Partial word matches (at least half the query words match)
+  const matchedWords = words.filter((w) => lower.includes(w));
+  if (matchedWords.length > 0) {
+    return 40 + (matchedWords.length / words.length) * 30;
+  }
+
+  // Character-level fuzzy: check if query chars appear in order
+  let qi = 0;
+  const q = query.toLowerCase();
+  for (let i = 0; i < lower.length && qi < q.length; i++) {
+    if (lower[i] === q[qi]) qi++;
+  }
+  if (qi === q.length) return 20;
+
+  // Prefix match on any word in the text
+  const textWords = lower.split(/\s+/);
+  for (const w of words) {
+    if (textWords.some((tw) => tw.startsWith(w) || w.startsWith(tw))) {
+      return 15;
+    }
+  }
+
+  return 0;
+}
+
 function searchProducts(query: string): SearchResult[] {
   if (!query || query.length < 2) return [];
-  const lower = query.toLowerCase();
 
-  return products
-    .filter((p) => {
-      const searchable = `${p.title} ${p.description} ${p.tags.join(' ')} ${p.features.join(' ')}`.toLowerCase();
-      return searchable.includes(lower);
+  const scored = products
+    .map((p) => {
+      const searchable = `${p.title} ${p.description} ${p.tags.join(' ')} ${p.features.join(' ')}`;
+      const score = fuzzyScore(query, searchable);
+      return { product: p, score };
     })
-    .slice(0, 6)
-    .map((p) => ({
-      id: p.id,
-      title: p.title,
-      slug: p.slug,
-      type: p.type,
-      description: p.description,
-    }));
+    .filter((s) => s.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 6);
+
+  return scored.map((s) => ({
+    id: s.product.id,
+    title: s.product.title,
+    slug: s.product.slug,
+    type: s.product.type,
+    description: s.product.description,
+  }));
 }
 
 export function SearchBar() {

@@ -4,7 +4,7 @@ export const oracleSchema: MigrationSchema = {
   platform: 'oracle',
   title: 'Oracle to Databricks Migration Assessment',
   subtitle:
-    'Inventory your Oracle databases, PL/SQL code, and ETL workflows for migration planning.',
+    'Assess your Oracle database environment, PL/SQL logic, and integration patterns to generate a precise ROM estimate.',
   brandColor: '#C74634',
   romConfig: {
     objectCountFields: ['tableCount', 'viewCount', 'plsqlObjectCount', 'pipelineCount'],
@@ -13,64 +13,194 @@ export const oracleSchema: MigrationSchema = {
     hourlyRate: { low: 165, high: 265 },
   },
   sections: [
+    /* ── Executive Summary ─────────────────────────────────────────────── */
     {
       id: 'exec',
       title: 'Executive Summary',
-      canMarkNA: false,
-      fields: [
-        { name: 'projectName', label: 'Project Name', type: 'text', required: true },
-        { name: 'stakeholder', label: 'Key Stakeholder', type: 'text', required: true },
-        { name: 'timeline', label: 'Target Timeline', type: 'text', placeholder: 'e.g., Q3 2026' },
-        { name: 'contactEmail', label: 'Contact Email', type: 'email', required: true },
-        { name: 'businessDriver', label: 'Business Driver', type: 'textarea' },
-      ],
-    },
-    {
-      id: 'database-landscape',
-      title: 'Oracle Database Landscape',
-      subtitle: 'Describe your Oracle database environment.',
       canMarkNA: true,
       fields: [
-        { name: 'instanceCount', label: 'Number of Oracle Instances', type: 'number', min: 0 },
+        { name: 'projectName', label: 'Project Name', type: 'text', required: true },
+        { name: 'stakeholder', label: 'Primary Stakeholder', type: 'text', required: true },
+        {
+          name: 'timeline',
+          label: 'Timeline Expectations',
+          type: 'text',
+          placeholder: 'e.g., Q2 2025',
+        },
+        { name: 'contactEmail', label: 'Contact Email', type: 'email', required: true },
+        {
+          name: 'businessDriver',
+          label: 'Business Driver for Migration',
+          type: 'textarea',
+          placeholder:
+            'e.g., License renewal, Exadata retirement, move to Lakehouse...',
+        },
+      ],
+    },
+
+    /* ── 1. Current Oracle Environment ─────────────────────────────────── */
+    {
+      id: 'oracle-environment',
+      title: '1. Current Oracle Environment',
+      subtitle: 'Describe your Oracle database environment, object inventory, and data features.',
+      canMarkNA: true,
+      fields: [
+        /* — 1.1 System Details — */
+        {
+          name: 'oracleVersion',
+          label: 'Oracle Version',
+          type: 'text',
+          placeholder: 'e.g., 11g, 12c, 19c',
+        },
         {
           name: 'oracleEdition',
-          label: 'Oracle Edition',
-          type: 'select',
+          label: 'Edition & Hosting',
+          type: 'text',
+          placeholder: 'e.g., Enterprise Edition, RAC, Exadata, RDS',
+        },
+        {
+          name: 'oracleOptions',
+          label: 'Advanced Options in Use',
+          type: 'checkbox-group',
           options: [
-            { value: 'ee', label: 'Enterprise Edition' },
-            { value: 'se', label: 'Standard Edition' },
-            { value: 'xe', label: 'Express Edition' },
-            { value: 'cloud', label: 'Oracle Cloud (Autonomous)' },
+            { value: 'rac', label: 'Real Application Clusters (RAC)' },
+            { value: 'partitioning', label: 'Partitioning' },
+            { value: 'advanced_compression', label: 'Advanced Compression' },
+            { value: 'multitenant', label: 'Multitenant (CDB/PDB)' },
+            { value: 'golden_gate', label: 'GoldenGate' },
           ],
         },
-        { name: 'tableCount', label: 'Total Table Count', type: 'number', min: 0, defaultValue: 0 },
-        { name: 'viewCount', label: 'View Count', type: 'number', min: 0, defaultValue: 0 },
-        { name: 'totalDataSize', label: 'Total Data Size (TB)', type: 'number', min: 0 },
+
+        /* — 1.2 Database Object Inventory — */
+        { name: 'tableCount', label: 'Total Tables', type: 'number', min: 0, defaultValue: 0 },
         {
-          name: 'partitionedTables',
-          label: 'Partitioned Tables',
+          name: 'tableComplexity',
+          label: 'Schema Complexity',
+          type: 'range',
+          min: 1,
+          max: 5,
+          defaultValue: 3,
+        },
+        { name: 'viewCount', label: 'Total Views', type: 'number', min: 0, defaultValue: 0 },
+        {
+          name: 'viewComplexity',
+          label: 'View Logic Complexity',
+          type: 'range',
+          min: 1,
+          max: 5,
+          defaultValue: 2,
+        },
+        { name: 'schemaCount', label: 'Schemas/Users', type: 'number', min: 0, defaultValue: 0 },
+        { name: 'indexCount', label: 'Indexes', type: 'number', min: 0, defaultValue: 0 },
+        { name: 'mviewCount', label: 'Materialized Views', type: 'number', min: 0, defaultValue: 0 },
+        {
+          name: 'totalDataSize',
+          label: 'Total Data Size (TB)',
           type: 'number',
           min: 0,
         },
+
+        /* — 1.3 Data Features — */
+        {
+          name: 'dataTypes',
+          label: 'Data Types',
+          type: 'textarea',
+          placeholder:
+            'Note usage of CLOB, BLOB, XMLType, JSON, Spatial, or User Defined Types (UDTs).',
+        },
+        {
+          name: 'dbLinks',
+          label: 'DB Links',
+          type: 'textarea',
+          placeholder:
+            'Describe dependencies on DB Links to other Oracle instances or external systems.',
+        },
       ],
     },
+
+    /* ── 2. PL/SQL & Logic ─────────────────────────────────────────────── */
     {
       id: 'plsql',
-      title: 'PL/SQL & Code Objects',
+      title: '2. PL/SQL & Logic',
+      subtitle: 'Stored procedures, packages, functions, triggers, and advanced logic patterns.',
       canMarkNA: true,
       fields: [
-        { name: 'plsqlObjectCount', label: 'PL/SQL Packages + Procedures', type: 'number', min: 0, defaultValue: 0 },
-        { name: 'triggerCount', label: 'Triggers', type: 'number', min: 0 },
-        { name: 'mviewCount', label: 'Materialized Views', type: 'number', min: 0 },
-        { name: 'dbLinksCount', label: 'Database Links', type: 'number', min: 0 },
+        /* — 2.1 Stored Procedures & Packages — */
+        {
+          name: 'plsqlObjectCount',
+          label: 'Procedures & Packages',
+          type: 'number',
+          min: 0,
+          defaultValue: 0,
+          placeholder: 'Count standalone Procs + Package Bodies',
+        },
+        {
+          name: 'procComplexity',
+          label: 'PL/SQL Complexity',
+          type: 'range',
+          min: 1,
+          max: 5,
+          defaultValue: 3,
+        },
+        { name: 'funcCount', label: 'Functions', type: 'number', min: 0, defaultValue: 0 },
+        {
+          name: 'funcComplexity',
+          label: 'Function Complexity',
+          type: 'range',
+          min: 1,
+          max: 5,
+          defaultValue: 3,
+        },
+        { name: 'triggerCount', label: 'Triggers', type: 'number', min: 0, defaultValue: 0 },
+        { name: 'sequenceCount', label: 'Sequences', type: 'number', min: 0, defaultValue: 0 },
+        { name: 'synonymCount', label: 'Synonyms', type: 'number', min: 0, defaultValue: 0 },
+
+        /* — 2.2 Advanced Logic Patterns — */
+        {
+          name: 'logicPatterns',
+          label: 'Logic Patterns (Check all that apply)',
+          type: 'checkbox-group',
+          options: [
+            { value: 'dynamic_sql', label: 'Dynamic SQL (Execute Immediate)' },
+            { value: 'collections', label: 'PL/SQL Tables / Arrays / Collections' },
+            { value: 'utl_file', label: 'UTL_FILE / UTL_HTTP / UTL_SMTP' },
+            { value: 'scheduler', label: 'DBMS_SCHEDULER / DBMS_JOB' },
+            { value: 'java_stored', label: 'Java Stored Procedures' },
+          ],
+        },
+        {
+          name: 'externalTables',
+          label: 'External Tables & Loading',
+          type: 'textarea',
+          placeholder: 'Usage of SQL*Loader, External Tables, or Oracle Data Pump.',
+        },
       ],
     },
+
+    /* ── 3. Integration & ETL ──────────────────────────────────────────── */
     {
       id: 'etl',
-      title: 'ETL & Integration Layer',
+      title: '3. Integration & ETL',
+      subtitle: 'Data movement, ETL tools, upstream/downstream dependencies.',
       canMarkNA: true,
       fields: [
-        { name: 'pipelineCount', label: 'Number of ETL Pipelines', type: 'number', min: 0, defaultValue: 0 },
+        /* — 3.1 Data Movement — */
+        {
+          name: 'pipelineCount',
+          label: 'ETL Jobs / Interfaces',
+          type: 'number',
+          min: 0,
+          defaultValue: 0,
+          placeholder: 'ODI Mappings, GoldenGate, Informatica, etc.',
+        },
+        {
+          name: 'jobComplexity',
+          label: 'Integration Complexity',
+          type: 'range',
+          min: 1,
+          max: 5,
+          defaultValue: 3,
+        },
         {
           name: 'etlTools',
           label: 'ETL Tools Used',
@@ -83,8 +213,90 @@ export const oracleSchema: MigrationSchema = {
             { value: 'custom', label: 'Custom Scripts' },
           ],
         },
+
+        /* — 3.2 Dependencies — */
+        {
+          name: 'upstream',
+          label: 'Upstream Sources',
+          type: 'textarea',
+          placeholder: 'ERP, CRM, Mainframe, Flat Files...',
+        },
+        {
+          name: 'downstream',
+          label: 'Downstream Consumers',
+          type: 'textarea',
+          placeholder: 'Tableau, PowerBI, Custom Apps, Extracts...',
+        },
+        {
+          name: 'scriptsUsage',
+          label: 'Scripts (Shell/Python)',
+          type: 'textarea',
+          placeholder: 'Are shell scripts or Python used to orchestrate sqlplus or SQLcl?',
+        },
       ],
     },
+
+    /* ── 4. Target State & Priorities ──────────────────────────────────── */
+    {
+      id: 'target-state',
+      title: '4. Target State & Priorities',
+      subtitle: 'Target architecture, cloud provider, migration strategy, and Databricks features.',
+      canMarkNA: true,
+      fields: [
+        /* — 4.1 Architecture — */
+        {
+          name: 'targetCloudProvider',
+          label: 'Target Cloud',
+          type: 'select',
+          options: [
+            { value: 'aws', label: 'AWS' },
+            { value: 'azure', label: 'Azure' },
+            { value: 'gcp', label: 'GCP' },
+            { value: 'oci', label: 'OCI (Oracle Cloud)' },
+          ],
+        },
+        {
+          name: 'migrationStrategy',
+          label: 'Strategy',
+          type: 'select',
+          options: [
+            { value: 'replatform', label: 'Replatform (Automated Conversion to Databricks SQL)' },
+            { value: 'refactor', label: 'Refactor (Rewrite PL/SQL to PySpark)' },
+            { value: 'hybrid', label: 'Hybrid' },
+          ],
+        },
+        {
+          name: 'dbxFeatures',
+          label: 'Databricks Features',
+          type: 'checkbox-group',
+          options: [
+            { value: 'uc', label: 'Unity Catalog' },
+            { value: 'dbsql', label: 'Databricks SQL' },
+            { value: 'dlt', label: 'Delta Live Tables (DLT)' },
+            { value: 'autoloader', label: 'Auto Loader' },
+          ],
+        },
+      ],
+    },
+
+    /* ── 5. Cost & Success Criteria ────────────────────────────────────── */
+    {
+      id: 'budget',
+      title: '5. Cost & Success Criteria',
+      subtitle: 'Budgeting targets and key performance indicators.',
+      canMarkNA: true,
+      fields: [
+        /* — 5.1 Budgeting — */
+        { name: 'currentAnnualSpend', label: 'Current Annual Oracle Spend ($)', type: 'number', min: 0 },
+        { name: 'migrationBudget', label: 'Migration Services Budget ($)', type: 'number', min: 0 },
+
+        /* — 5.2 KPIs — */
+        { name: 'costSavingsTarget', label: 'Cost Savings Target (%)', type: 'number', min: 0 },
+        { name: 'performanceTarget', label: 'Performance Improvement (%)', type: 'number', min: 0 },
+      ],
+    },
+
+    /* ── Overall Complexity Assessment ─────────────────────────────────── */
     {
       id: 'complexity',
       title: 'Overall Complexity Assessment',
@@ -100,22 +312,15 @@ export const oracleSchema: MigrationSchema = {
         },
       ],
     },
-    {
-      id: 'budget',
-      title: 'Budget & Cost Information',
-      canMarkNA: true,
-      fields: [
-        { name: 'currentAnnualSpend', label: 'Current Annual Oracle Spend ($)', type: 'number', min: 0 },
-        { name: 'migrationBudget', label: 'Migration Services Budget ($)', type: 'number', min: 0 },
-      ],
-    },
+
+    /* ── Form Completion Details ───────────────────────────────────────── */
     {
       id: 'contact',
       title: 'Form Completion Details',
       canMarkNA: false,
       fields: [
-        { name: 'completedBy', label: 'Completed By', type: 'text', required: true },
-        { name: 'completionDate', label: 'Date', type: 'date' },
+        { name: 'completedBy', label: 'Questionnaire Completed By', type: 'text', required: true },
+        { name: 'completionDate', label: 'Date', type: 'date', required: true },
       ],
     },
   ],
