@@ -1,1 +1,0 @@
-import{r as n}from"./index-C6ytLmkY.js";function w(){const r=n(s=>s.push),t=n(s=>s.dismiss);return{push:r,dismiss:t,showSuccess:(s,o)=>{r({type:"success",title:s,message:o})},showError:(s,o)=>{r({type:"error",title:s,message:o})},showWarning:(s,o)=>{r({type:"warning",title:s,message:o})},showInfo:(s,o)=>{r({type:"info",title:s,message:o})}}}export{w as u};
