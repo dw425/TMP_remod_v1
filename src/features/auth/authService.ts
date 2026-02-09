@@ -16,12 +16,20 @@ const SESSION_KEY = 'blueprint_session';
 
 /**
  * Emails that are automatically assigned admin role on signup/login.
- * Add your email here to get admin access.
+ * Configured via VITE_ADMIN_EMAILS env var (comma-separated) or hardcoded below.
  */
-const ADMIN_EMAILS: string[] = (import.meta.env.VITE_ADMIN_EMAILS || '')
+const ENV_ADMIN_EMAILS: string[] = (import.meta.env.VITE_ADMIN_EMAILS || '')
   .split(',')
   .map((e: string) => e.trim().toLowerCase())
   .filter(Boolean);
+
+const HARDCODED_ADMIN_EMAILS: string[] = [
+  'dan@bpcs.com',
+];
+
+const ADMIN_EMAILS: string[] = [
+  ...new Set([...ENV_ADMIN_EMAILS, ...HARDCODED_ADMIN_EMAILS]),
+];
 
 function isAdminEmail(email: string): boolean {
   return ADMIN_EMAILS.includes(email.trim().toLowerCase());
@@ -165,6 +173,13 @@ export async function restoreSession(): Promise<{ user: User; token: string } | 
     const users = getStoredUsers();
     const entry = Object.values(users).find((u) => u.user.id === userId);
     if (!entry) return null;
+
+    // Auto-promote to admin if email is in ADMIN_EMAILS (handles deploy timing)
+    if (isAdminEmail(entry.user.email) && entry.user.role !== 'admin') {
+      entry.user.role = 'admin';
+      saveUsers(users);
+    }
+
     return { user: entry.user, token };
   } catch {
     return null;
