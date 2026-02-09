@@ -5,6 +5,7 @@ import { ProductGrid } from '@/components/composed/ProductGrid';
 import { ProductModal } from '@/components/composed/ProductModal';
 import { useCart } from '@/features/cart/useCart';
 import { useAlerts } from '@/features/notifications/useAlerts';
+import { SEO } from '@/components/SEO';
 import type { Product } from '@/types/product';
 
 export default function MarketplacePage() {
@@ -42,6 +43,11 @@ export default function MarketplacePage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
+      <SEO
+        title="Marketplace"
+        description="Production-ready Databricks solutions, migration accelerators, and AI frameworks from Blueprint Professional Consulting Services."
+        canonical="/"
+      />
       <div className="mb-12 text-center">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">Blueprint Marketplace</h1>
         <p className="text-lg text-gray-600 max-w-3xl mx-auto">

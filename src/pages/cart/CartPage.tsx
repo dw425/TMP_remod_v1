@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/Badge';
 import { CheckoutModal } from '@/components/modals/CheckoutModal';
 import { useAlerts } from '@/features/notifications/useAlerts';
 import { formatCurrency } from '@/lib/formatCurrency';
+import { SEO } from '@/components/SEO';
 import { ROUTES } from '@/config/routes';
 
 export default function CartPage() {
@@ -39,6 +40,7 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-16">
+        <SEO title="Cart" description="Review your selected Blueprint Marketplace items." canonical="/cart" />
         <SharpCard className="p-12 text-center">
           <svg
             className="w-16 h-16 text-gray-400 mx-auto mb-4"
@@ -65,6 +67,7 @@ export default function CartPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
+      <SEO title="Cart" description="Review your selected Blueprint Marketplace items." canonical="/cart" />
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Shopping Cart</h1>
 
       <div className="space-y-6">

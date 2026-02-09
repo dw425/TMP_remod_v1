@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { platforms } from '@/data/platforms';
 import { PlatformTile } from '@/components/composed/PlatformTile';
+import { SEO } from '@/components/SEO';
 import { ROUTES } from '@/config/routes';
 
 export default function MigrationLandingPage() {
@@ -12,6 +13,11 @@ export default function MigrationLandingPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
+      <SEO
+        title="Migration Assessment Suite"
+        description="Assess your data platform migration to Databricks. Covers 11 source platforms with automated complexity scoring and ROM estimates."
+        canonical="/migration"
+      />
       <div className="mb-12 text-center">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">
           Data Migration Assessment Suite

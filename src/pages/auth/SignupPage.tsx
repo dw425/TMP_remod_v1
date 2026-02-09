@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/features/auth/useAuth';
 import { Button } from '@/components/ui';
+import { SEO } from '@/components/SEO';
 import { ROUTES } from '@/config/routes';
 
 export default function SignupPage() {
@@ -58,6 +59,7 @@ export default function SignupPage() {
 
   return (
     <div className="w-full max-w-md">
+      <SEO title="Create Account" description="Create a Blueprint Marketplace account to access enterprise Databricks solutions." />
       <div className="bg-white border border-gray-300 border-t-4 border-t-blueprint-blue p-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-6">Create Account</h1>
 

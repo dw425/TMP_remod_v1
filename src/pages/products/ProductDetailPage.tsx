@@ -6,6 +6,7 @@ import { ReadinessChecklist } from '@/components/composed/ReadinessChecklist';
 import { YouTubeEmbed } from '@/components/ui/YouTubeEmbed';
 import { ImageLightbox } from '@/components/modals/ImageLightbox';
 import { Badge } from '@/components/ui/Badge';
+import { SEO } from '@/components/SEO';
 import { ROUTES } from '@/config/routes';
 
 export default function ProductDetailPage() {
@@ -19,6 +20,22 @@ export default function ProductDetailPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
+      <SEO
+        title={product.title}
+        description={product.description}
+        canonical={`/products/${product.slug}`}
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'Product',
+          name: product.title,
+          description: product.description,
+          offers: {
+            '@type': 'Offer',
+            price: product.priceMonthly,
+            priceCurrency: 'USD',
+          },
+        }}
+      />
       {/* Breadcrumb */}
       <nav className="mb-8 text-sm text-gray-600">
         <Link to={ROUTES.HOME} className="hover:text-blueprint-blue">

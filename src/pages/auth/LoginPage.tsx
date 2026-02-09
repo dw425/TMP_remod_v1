@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/features/auth/useAuth';
 import { Button } from '@/components/ui';
+import { SEO } from '@/components/SEO';
 import { ROUTES } from '@/config/routes';
 
 export default function LoginPage() {
@@ -32,6 +33,7 @@ export default function LoginPage() {
 
   return (
     <div className="w-full max-w-md">
+      <SEO title="Sign In" description="Sign in to your Blueprint Marketplace account." />
       <div className="bg-white border border-gray-300 border-t-4 border-t-blueprint-blue p-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-6">Sign In</h1>
 

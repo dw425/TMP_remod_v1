@@ -1,4 +1,5 @@
 import { type ReactNode } from 'react';
+import { HelmetProvider } from 'react-helmet-async';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { AuthProvider } from '@/features/auth/AuthProvider';
 import { AnalyticsProvider } from '@/features/analytics/AnalyticsProvider';
@@ -9,10 +10,12 @@ interface ProvidersProps {
 
 export function Providers({ children }: ProvidersProps) {
   return (
-    <ErrorBoundary>
-      <AnalyticsProvider>
-        <AuthProvider>{children}</AuthProvider>
-      </AnalyticsProvider>
-    </ErrorBoundary>
+    <HelmetProvider>
+      <ErrorBoundary>
+        <AnalyticsProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </AnalyticsProvider>
+      </ErrorBoundary>
+    </HelmetProvider>
   );
 }
