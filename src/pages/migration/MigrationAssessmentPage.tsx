@@ -35,7 +35,7 @@ export default function MigrationAssessmentPage() {
       };
 
       sessionStorage.setItem('lastAssessmentReport', JSON.stringify(report));
-      showSuccess('Assessment Complete', 'Your ROM estimate has been generated.');
+      showSuccess('Assessment Saved', 'Fine tune your estimate now on the ROM Calculator.');
       navigate('/migration/calculator');
     } catch {
       showError('Submission Failed', 'There was an error processing your assessment.');

@@ -144,19 +144,58 @@ export default function ROMCalculatorPage() {
     setShowModal(true);
   }
 
+  function formatMatrixForEmail(): string {
+    const allRows = [...DB_ROWS, ...CODE_ROWS, ...PRES_ROWS];
+    const sections = [
+      { title: 'DATABASE LAYER', rows: DB_ROWS },
+      { title: 'INTEGRATION & CODE', rows: CODE_ROWS },
+      { title: 'PRESENTATION LAYER', rows: PRES_ROWS },
+    ];
+
+    const lines: string[] = [];
+    for (const section of sections) {
+      lines.push(`\n--- ${section.title} ---`);
+      lines.push('Object Type | Simple | Medium | Complex | V.Complex | Total');
+      for (const row of section.rows) {
+        const r = matrix[row.key];
+        if (!r) continue;
+        const total = r.simple + r.medium + r.complex + r.veryComplex;
+        if (total > 0) {
+          lines.push(`${row.label}: ${r.simple} Simple, ${r.medium} Medium, ${r.complex} Complex, ${r.veryComplex} V.Complex (Total: ${total})`);
+        }
+      }
+    }
+
+    // Grand totals
+    let grandTotal = 0;
+    for (const row of allRows) {
+      const r = matrix[row.key];
+      if (r) grandTotal += r.simple + r.medium + r.complex + r.veryComplex;
+    }
+    lines.push(`\nTOTAL OBJECTS: ${grandTotal}`);
+    return lines.join('\n');
+  }
+
   async function handleRequestProposal() {
     setSubmitting(true);
     try {
+      const inventorySummary = formatMatrixForEmail();
       await submitForm('romCalculator', {
-        platform: report?.platform ?? 'unknown',
-        projectName,
-        stakeholder,
-        email,
-        matrix: JSON.stringify(matrix),
-        Calculated_Manual_Hours: manualHours,
-        Calculated_Accelerated_Hours: aiHours,
-        Calculated_Complexity: ratingText,
-        timestamp: new Date().toISOString(),
+        'Source Platform': platform?.name ?? report?.platform ?? 'Unknown',
+        'Project Name': projectName || '(not provided)',
+        'Primary Stakeholder': stakeholder || '(not provided)',
+        'Contact Email': email || '(not provided)',
+        'Team Expertise (1-5)': teamMaturity,
+        'Tool Familiarity (1-5)': toolFamiliarity,
+        'Infrastructure Config (1-5)': infraConfig,
+        'Env Complexity (1-5)': envComplexity,
+        'Object Inventory': inventorySummary,
+        'Complexity Rating': ratingText,
+        'Manual Effort (Hours)': manualHours.toLocaleString(),
+        'Manual Effort (Weeks)': Math.ceil(manualHours / weeklyVelocity),
+        'Blueprint Accelerated (Hours)': aiHours.toLocaleString(),
+        'Blueprint Accelerated (Weeks)': Math.ceil(aiHours / weeklyVelocity),
+        'Submitted At': new Date().toLocaleString(),
       });
       setShowModal(false);
       showSuccess('Details Sent!', 'Our team has received your migration inventory and ROM estimate.');
