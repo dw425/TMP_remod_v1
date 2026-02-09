@@ -13,6 +13,7 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false,
+    modulePreload: { polyfill: true },
     rollupOptions: {
       output: {
         manualChunks: {
