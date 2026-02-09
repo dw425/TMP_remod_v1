@@ -17,6 +17,7 @@ const ROMAdminPage = lazy(() => import('@/pages/admin/ROMAdminPage'));
 const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
 const UserManagement = lazy(() => import('@/pages/admin/UserManagement'));
 const OrderReports = lazy(() => import('@/pages/admin/OrderReports'));
+const AnalyticsDashboard = lazy(() => import('@/pages/admin/AnalyticsDashboard'));
 const AIFactoryPage = lazy(() => import('@/pages/content/AIFactoryPage'));
 const WhitepaperPage = lazy(() => import('@/pages/content/WhitepaperPage'));
 const NotFoundPage = lazy(() => import('@/pages/errors/NotFoundPage'));
@@ -126,6 +127,16 @@ const router = createBrowserRouter(
             <AdminGuard>
               <SuspenseWrap>
                 <ROMAdminPage />
+              </SuspenseWrap>
+            </AdminGuard>
+          ),
+        },
+        {
+          path: ROUTES.ADMIN_ANALYTICS,
+          element: (
+            <AdminGuard>
+              <SuspenseWrap>
+                <AnalyticsDashboard />
               </SuspenseWrap>
             </AdminGuard>
           ),

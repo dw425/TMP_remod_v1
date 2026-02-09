@@ -22,4 +22,5 @@ export const ROUTES = {
   ADMIN_USERS: '/admin/users',
   ADMIN_ORDERS: '/admin/orders',
   ROM_ADMIN: '/admin/rom-config',
+  ADMIN_ANALYTICS: '/admin/analytics',
 } as const;
