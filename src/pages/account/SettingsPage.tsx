@@ -51,22 +51,22 @@ export default function SettingsPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-              <input type="text" name="firstName" value={form.firstName} onChange={handleChange} required className={inputClass} />
+              <label htmlFor="settings-firstName" className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+              <input id="settings-firstName" type="text" name="firstName" value={form.firstName} onChange={handleChange} required autoComplete="given-name" className={inputClass} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-              <input type="text" name="lastName" value={form.lastName} onChange={handleChange} required className={inputClass} />
+              <label htmlFor="settings-lastName" className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+              <input id="settings-lastName" type="text" name="lastName" value={form.lastName} onChange={handleChange} required autoComplete="family-name" className={inputClass} />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input type="email" value={user.email} disabled className={`${inputClass} bg-gray-50 text-gray-400 cursor-not-allowed`} />
+            <label htmlFor="settings-email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input id="settings-email" type="email" value={user.email} disabled className={`${inputClass} bg-gray-50 text-gray-400 cursor-not-allowed`} />
             <p className="text-xs text-gray-400 mt-1">Email cannot be changed</p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Company</label>
-            <input type="text" name="company" value={form.company} onChange={handleChange} className={inputClass} />
+            <label htmlFor="settings-company" className="block text-sm font-medium text-gray-700 mb-1">Company</label>
+            <input id="settings-company" type="text" name="company" value={form.company} onChange={handleChange} autoComplete="organization" className={inputClass} />
           </div>
           <div className="pt-4">
             <Button type="submit" disabled={saving}>

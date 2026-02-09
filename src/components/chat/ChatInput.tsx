@@ -45,6 +45,7 @@ export function ChatInput({ onSend, quickActions, disabled }: ChatInputProps) {
           onChange={(e) => setText(e.target.value)}
           placeholder="Type a message..."
           disabled={disabled}
+          aria-label="Chat message"
           className="flex-1 border border-gray-300 px-3 py-1.5 text-sm text-gray-900 bg-white focus:outline-none focus:border-blueprint-blue"
         />
         <button

@@ -61,16 +61,26 @@ export function ChatWidget() {
           {/* Header */}
           <div className="bg-blueprint-blue text-white px-4 py-3 flex items-center justify-between">
             <div>
-              <p className="font-bold text-sm">Blueprint Assistant</p>
+              <p className="font-bold text-sm" id="chat-title">Blueprint Assistant</p>
               <p className="text-xs text-blue-200">Ask me anything about our products</p>
             </div>
-            <button onClick={handleToggle} className="text-white hover:text-blue-200 text-lg leading-none">
+            <button
+              onClick={handleToggle}
+              className="text-white hover:text-blue-200 text-lg leading-none"
+              aria-label="Close chat"
+            >
               &times;
             </button>
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-3" style={{ minHeight: '200px', maxHeight: '300px' }}>
+          <div
+            role="log"
+            aria-live="polite"
+            aria-label="Chat messages"
+            className="flex-1 overflow-y-auto p-3"
+            style={{ minHeight: '200px', maxHeight: '300px' }}
+          >
             {messages.length === 0 && (
               <div className="text-center text-gray-400 text-sm py-8">
                 <p className="mb-1 font-medium">Welcome!</p>
@@ -91,6 +101,8 @@ export function ChatWidget() {
 
       <button
         onClick={handleToggle}
+        aria-expanded={isOpen}
+        aria-label={isOpen ? 'Close chat assistant' : 'Open chat assistant'}
         className="bg-blueprint-blue text-white px-6 py-3 shadow-lg hover:bg-blue-800 transition-colors font-bold"
       >
         {isOpen ? 'Close Chat' : 'Chat with Us'}

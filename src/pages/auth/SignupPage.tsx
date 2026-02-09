@@ -62,7 +62,7 @@ export default function SignupPage() {
         <h1 className="text-2xl font-bold text-gray-900 mb-6">Create Account</h1>
 
         {displayError && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm">
+          <div role="alert" className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm">
             {displayError}
           </div>
         )}
@@ -70,29 +70,29 @@ export default function SignupPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-              <input type="text" name="firstName" value={form.firstName} onChange={handleChange} required className={inputClass} />
+              <label htmlFor="signup-firstName" className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+              <input id="signup-firstName" type="text" name="firstName" value={form.firstName} onChange={handleChange} required autoComplete="given-name" className={inputClass} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-              <input type="text" name="lastName" value={form.lastName} onChange={handleChange} required className={inputClass} />
+              <label htmlFor="signup-lastName" className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+              <input id="signup-lastName" type="text" name="lastName" value={form.lastName} onChange={handleChange} required autoComplete="family-name" className={inputClass} />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input type="email" name="email" value={form.email} onChange={handleChange} required className={inputClass} />
+            <label htmlFor="signup-email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input id="signup-email" type="email" name="email" value={form.email} onChange={handleChange} required autoComplete="email" className={inputClass} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Company</label>
-            <input type="text" name="company" value={form.company} onChange={handleChange} required className={inputClass} />
+            <label htmlFor="signup-company" className="block text-sm font-medium text-gray-700 mb-1">Company</label>
+            <input id="signup-company" type="text" name="company" value={form.company} onChange={handleChange} required autoComplete="organization" className={inputClass} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <input type="password" name="password" value={form.password} onChange={handleChange} required minLength={8} className={inputClass} />
+            <label htmlFor="signup-password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <input id="signup-password" type="password" name="password" value={form.password} onChange={handleChange} required minLength={8} autoComplete="new-password" className={inputClass} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
-            <input type="password" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} required className={inputClass} />
+            <label htmlFor="signup-confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+            <input id="signup-confirmPassword" type="password" name="confirmPassword" value={form.confirmPassword} onChange={handleChange} required autoComplete="new-password" className={inputClass} />
           </div>
           <Button type="submit" className="w-full" disabled={submitting}>
             {submitting ? 'Creating account...' : 'Create Account'}

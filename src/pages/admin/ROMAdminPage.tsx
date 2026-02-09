@@ -180,8 +180,9 @@ function PlatformEditor({
         </h3>
         <div className="grid grid-cols-2 gap-4 max-w-md">
           <div>
-            <label className="block text-xs text-gray-500 mb-1">Low</label>
+            <label htmlFor="rom-rate-low" className="block text-xs text-gray-500 mb-1">Low</label>
             <input
+              id="rom-rate-low"
               type="number"
               min={0}
               value={rate.low}
@@ -193,8 +194,9 @@ function PlatformEditor({
             <span className="text-xs text-gray-400">default: ${defaultRate.low}</span>
           </div>
           <div>
-            <label className="block text-xs text-gray-500 mb-1">High</label>
+            <label htmlFor="rom-rate-high" className="block text-xs text-gray-500 mb-1">High</label>
             <input
+              id="rom-rate-high"
               type="number"
               min={0}
               value={rate.high}

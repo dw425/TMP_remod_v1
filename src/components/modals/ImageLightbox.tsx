@@ -20,9 +20,16 @@ export function ImageLightbox({ imageUrl, alt, onClose }: ImageLightboxProps) {
   }, [onClose]);
 
   return (
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={alt}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4"
       onClick={onClose}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') onClose();
+      }}
     >
       <div className="relative max-w-7xl max-h-[90vh] w-full">
         <Button
@@ -32,6 +39,7 @@ export function ImageLightbox({ imageUrl, alt, onClose }: ImageLightboxProps) {
         >
           Close
         </Button>
+        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
         <img
           src={imageUrl}
           alt={alt}

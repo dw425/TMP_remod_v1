@@ -133,42 +133,48 @@ export default function AIFactoryPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
+                <label htmlFor="ai-factory-name" className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
                 <input
+                  id="ai-factory-name"
                   type="text"
                   name="name"
                   value={form.name}
                   onChange={handleChange}
                   required
+                  autoComplete="name"
                   className={inputClass}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                <label htmlFor="ai-factory-email" className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
                 <input
+                  id="ai-factory-email"
                   type="email"
                   name="email"
                   value={form.email}
                   onChange={handleChange}
                   required
+                  autoComplete="email"
                   className={inputClass}
                 />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Company *</label>
+              <label htmlFor="ai-factory-company" className="block text-sm font-medium text-gray-700 mb-1">Company *</label>
               <input
+                id="ai-factory-company"
                 type="text"
                 name="company"
                 value={form.company}
                 onChange={handleChange}
                 required
+                autoComplete="organization"
                 className={inputClass}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Interest</label>
-              <select name="interest" value={form.interest} onChange={handleChange} className={inputClass}>
+              <label htmlFor="ai-factory-interest" className="block text-sm font-medium text-gray-700 mb-1">Interest</label>
+              <select id="ai-factory-interest" name="interest" value={form.interest} onChange={handleChange} className={inputClass}>
                 <option value="">Select engagement type...</option>
                 <option value="workshop">1-Day Workshop</option>
                 <option value="sprint">6-Week Sprint</option>
@@ -177,8 +183,9 @@ export default function AIFactoryPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+              <label htmlFor="ai-factory-message" className="block text-sm font-medium text-gray-700 mb-1">Message</label>
               <textarea
+                id="ai-factory-message"
                 name="message"
                 value={form.message}
                 onChange={handleChange}

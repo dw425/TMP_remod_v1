@@ -6,8 +6,12 @@ export function CartBadge() {
   const totalCount = useCartStore((state) => state.totalCount());
 
   return (
-    <Link to={ROUTES.CART} className="relative inline-block">
-      <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <Link
+      to={ROUTES.CART}
+      className="relative inline-block"
+      aria-label={totalCount > 0 ? `Shopping cart, ${totalCount} item${totalCount === 1 ? '' : 's'}` : 'Shopping cart, empty'}
+    >
+      <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -16,7 +20,7 @@ export function CartBadge() {
         />
       </svg>
       {totalCount > 0 && (
-        <span className="badge-circle absolute -top-2 -right-2 bg-blueprint-blue text-white text-xs font-bold min-w-[1.25rem] h-5 flex items-center justify-center px-1">
+        <span aria-hidden="true" className="badge-circle absolute -top-2 -right-2 bg-blueprint-blue text-white text-xs font-bold min-w-[1.25rem] h-5 flex items-center justify-center px-1">
           {totalCount}
         </span>
       )}

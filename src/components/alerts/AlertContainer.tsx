@@ -8,10 +8,11 @@ export function AlertContainer() {
   if (alerts.length === 0) return null;
 
   return (
-    <div className="fixed top-20 right-4 z-50 space-y-2 max-w-md">
+    <div role="region" aria-label="Notifications" aria-live="assertive" className="fixed top-20 right-4 z-50 space-y-2 max-w-md">
       {alerts.map((alert) => (
         <div
           key={alert.id}
+          role="alert"
           className={cn(
             'bg-white border-l-4 shadow-lg p-4 animate-pop-in',
             {
@@ -29,6 +30,7 @@ export function AlertContainer() {
             </div>
             <button
               onClick={() => dismiss(alert.id)}
+              aria-label={`Dismiss ${alert.title}`}
               className="ml-4 text-gray-400 hover:text-gray-600 text-xl leading-none"
             >
               ×

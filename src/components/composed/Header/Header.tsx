@@ -13,7 +13,7 @@ export function Header() {
             Blueprint Marketplace
           </Link>
 
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav aria-label="Main navigation" className="hidden md:flex items-center space-x-8">
             {mainNav.map((link) => (
               <Link
                 key={link.href}
