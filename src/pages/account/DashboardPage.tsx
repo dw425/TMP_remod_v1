@@ -8,6 +8,7 @@ export default function DashboardPage() {
   if (!user) return null;
 
   const quickLinks = [
+    { label: 'Downloads', to: ROUTES.DOWNLOADS, desc: 'Access your purchased content and downloads' },
     { label: 'Order History', to: ROUTES.ORDERS, desc: 'View your PO requests and order status' },
     { label: 'Account Settings', to: ROUTES.SETTINGS, desc: 'Update your profile and password' },
     { label: 'Migration Suite', to: ROUTES.MIGRATION_HOME, desc: 'Start a platform migration assessment' },

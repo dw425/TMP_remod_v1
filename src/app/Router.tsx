@@ -26,6 +26,7 @@ const ForgotPasswordPage = lazy(() => import('@/pages/auth/ForgotPasswordPage'))
 const DashboardPage = lazy(() => import('@/pages/account/DashboardPage'));
 const SettingsPage = lazy(() => import('@/pages/account/SettingsPage'));
 const OrderHistoryPage = lazy(() => import('@/pages/account/OrderHistoryPage'));
+const DownloadsPage = lazy(() => import('@/pages/account/DownloadsPage'));
 
 const SuspenseWrap = ({ children }: { children: React.ReactNode }) => (
   <Suspense fallback={<Spinner className="min-h-[60vh]" />}>{children}</Suspense>
@@ -136,6 +137,14 @@ const router = createBrowserRouter(
           element: (
             <Protected>
               <SettingsPage />
+            </Protected>
+          ),
+        },
+        {
+          path: ROUTES.DOWNLOADS,
+          element: (
+            <Protected>
+              <DownloadsPage />
             </Protected>
           ),
         },

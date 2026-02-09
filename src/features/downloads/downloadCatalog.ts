@@ -1,0 +1,58 @@
+import type { DownloadableAsset } from './types';
+
+export const DOWNLOAD_CATALOG: DownloadableAsset[] = [
+  {
+    assetId: 'ciq-notebook-v2',
+    displayName: 'CampaignIQ Analytics Notebook',
+    fileName: 'campaigniq_analytics_v2.ipynb',
+    fileType: 'notebook',
+    productSlug: 'campaigniq',
+    version: '2.1.0',
+    sizeBytes: 245_000,
+  },
+  {
+    assetId: 'ciq-wheel-v2',
+    displayName: 'CampaignIQ Python Wheel',
+    fileName: 'campaigniq-2.1.0-py3-none-any.whl',
+    fileType: 'wheel',
+    productSlug: 'campaigniq',
+    version: '2.1.0',
+    sizeBytes: 1_200_000,
+  },
+  {
+    assetId: 'seg-notebook-v1',
+    displayName: 'Customer Segmentation Notebook',
+    fileName: 'customer_segmentation_v1.ipynb',
+    fileType: 'notebook',
+    productSlug: 'segmentation-suite',
+    version: '1.4.0',
+    sizeBytes: 180_000,
+  },
+  {
+    assetId: 'attr-bundle-v1',
+    displayName: 'Attribution Engine Bundle',
+    fileName: 'attribution_engine_v1.tar.gz',
+    fileType: 'bundle',
+    productSlug: 'attribution-engine',
+    version: '1.2.0',
+    sizeBytes: 3_400_000,
+  },
+  {
+    assetId: 'pipe-notebook-v1',
+    displayName: 'Data Pipeline Templates',
+    fileName: 'pipeline_templates_v1.ipynb',
+    fileType: 'notebook',
+    productSlug: 'pipeline-templates',
+    version: '1.0.0',
+    sizeBytes: 95_000,
+  },
+  {
+    assetId: 'migration-report',
+    displayName: 'Migration Assessment Report Template',
+    fileName: 'migration_report_template.ipynb',
+    fileType: 'report',
+    productSlug: 'migration-suite',
+    version: '1.0.0',
+    sizeBytes: 150_000,
+  },
+];
