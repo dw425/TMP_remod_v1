@@ -133,12 +133,22 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                   </button>
                 ))}
               </nav>
-              <div>
+              <div className="space-y-2">
                 <button
                   onClick={action.onClick}
-                  className="w-full px-4 py-3 bg-blueprint-blue text-white text-sm font-bold uppercase tracking-wider hover:bg-blue-800 transition-colors shadow-sm"
+                  className="w-full px-4 py-3 bg-blueprint-blue text-white text-sm font-bold uppercase tracking-wider hover:bg-blue-800 transition-colors shadow-sm btn-rounded"
                 >
                   {action.text}
+                </button>
+                <button
+                  onClick={() => {
+                    onClose();
+                    const target = product.detailPage || `/products/${product.slug}`;
+                    navigate(target);
+                  }}
+                  className="w-full px-4 py-2 text-xs font-bold text-blueprint-blue hover:underline uppercase tracking-wider"
+                >
+                  View Full Details &rarr;
                 </button>
               </div>
             </div>

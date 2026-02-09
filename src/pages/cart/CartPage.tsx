@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '@/features/cart/useCart';
+import { products } from '@/data/products';
 import { formatCurrency } from '@/lib/formatCurrency';
 import { SEO } from '@/components/SEO';
 import { ROUTES } from '@/config/routes';
@@ -11,16 +12,15 @@ import { useTrack } from '@/features/analytics/useTrack';
 import { EVENTS } from '@/features/analytics/events';
 
 export default function CartPage() {
-  const { items, remove, clear, totals } = useCart();
+  const { items, add, remove, decrement, clear, totals } = useCart();
   const [showPOForm, setShowPOForm] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const track = useTrack();
   usePageTag({ pageName: 'Cart', pageType: 'cart' });
 
-  // Compute summary values
   const monthlyTotal = totals.monthlyTotal;
-  const onetimeTotal = totals.annualTotal; // annual mapped as one-time in original
+  const onetimeTotal = totals.annualTotal;
   const grandTotal = monthlyTotal + onetimeTotal;
 
   const handlePOSuccess = () => {
@@ -28,10 +28,26 @@ export default function CartPage() {
     setShowConfirmation(true);
   };
 
+  // Recommended products: tools not in cart, max 3
+  const recommended = useMemo(() => {
+    const cartIds = new Set(items.map((i) => i.id));
+    return products
+      .filter((p) => p.type === 'tool' && p.priceMonthly > 0 && !cartIds.has(p.id))
+      .slice(0, 3);
+  }, [items]);
+
   return (
     <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <SEO title="Your Cart" description="Review your selected Blueprint Marketplace items." canonical="/cart" />
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Your Quote Cart</h1>
+
+      {/* Info Banner */}
+      <div className="mb-6 p-4 bg-blue-50 border border-blue-100 text-sm text-blue-800 flex items-start gap-3">
+        <svg className="w-5 h-5 text-blueprint-blue shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        All pricing is for estimation purposes. Final quotes will be provided by our sales team.
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         {/* Cart Items Table */}
@@ -50,11 +66,13 @@ export default function CartPage() {
                     <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
                       Billing
                     </th>
+                    <th className="text-center px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      Qty
+                    </th>
                     <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
                       Price
                     </th>
                     <th className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
-                      Action
                     </th>
                   </tr>
                 </thead>
@@ -62,24 +80,40 @@ export default function CartPage() {
                   {items.map((item) => {
                     const priceText =
                       item.billing === 'monthly'
-                        ? `${formatCurrency(item.price)} / mo`
-                        : formatCurrency(item.price);
+                        ? `${formatCurrency(item.price * item.quantity)} / mo`
+                        : formatCurrency(item.price * item.quantity);
 
                     return (
                       <tr key={item.id}>
                         <td className="py-4 px-6 border-b border-gray-100">
                           <div className="font-bold text-gray-900">{item.title}</div>
-                          {item.quantity > 1 && (
-                            <span className="text-xs font-bold text-blueprint-blue bg-blue-50 px-2 py-1 mt-1 inline-block">
-                              Qty: {item.quantity}
-                            </span>
-                          )}
                         </td>
                         <td className="py-4 px-6 border-b border-gray-100 text-sm text-gray-500">
                           {item.type || 'Software'}
                         </td>
                         <td className="py-4 px-6 border-b border-gray-100 text-sm text-gray-500 capitalize">
                           {item.billing || '-'}
+                        </td>
+                        <td className="py-4 px-6 border-b border-gray-100">
+                          <div className="flex items-center justify-center gap-2">
+                            <button
+                              onClick={() => decrement(item.id)}
+                              className="w-7 h-7 flex items-center justify-center border border-gray-300 text-gray-500 hover:border-blueprint-blue hover:text-blueprint-blue transition-colors text-sm font-bold"
+                              aria-label="Decrease quantity"
+                            >
+                              &minus;
+                            </button>
+                            <span className="w-8 text-center text-sm font-bold text-gray-900">
+                              {item.quantity}
+                            </span>
+                            <button
+                              onClick={() => add({ id: item.id, title: item.title, type: item.type, billing: item.billing, price: item.price })}
+                              className="w-7 h-7 flex items-center justify-center border border-gray-300 text-gray-500 hover:border-blueprint-blue hover:text-blueprint-blue transition-colors text-sm font-bold"
+                              aria-label="Increase quantity"
+                            >
+                              +
+                            </button>
+                          </div>
                         </td>
                         <td className="py-4 px-6 border-b border-gray-100 font-mono text-sm text-gray-900">
                           {priceText}
@@ -126,7 +160,7 @@ export default function CartPage() {
                 </p>
                 <Link
                   to={ROUTES.HOME}
-                  className="bg-blueprint-blue text-white font-bold py-3 px-6 uppercase tracking-widest text-xs hover:bg-blue-800 transition-colors inline-block"
+                  className="bg-blueprint-blue text-white font-bold py-3 px-6 uppercase tracking-widest text-xs hover:bg-blue-800 transition-colors inline-block btn-rounded"
                 >
                   Browse Marketplace
                 </Link>
@@ -159,20 +193,47 @@ export default function CartPage() {
             </div>
             <button
               onClick={() => {
-                if (items.length === 0) {
-                  alert('Cart is empty');
-                  return;
-                }
+                if (items.length === 0) return;
                 track(EVENTS.CHECKOUT_STARTED, { itemCount: items.length, total: grandTotal });
                 setShowPOForm(true);
               }}
-              className="w-full bg-blueprint-blue text-white font-bold py-4 uppercase tracking-widest text-xs hover:bg-blue-800 transition-colors"
+              disabled={items.length === 0}
+              className="w-full bg-blueprint-blue text-white font-bold py-4 uppercase tracking-widest text-xs hover:bg-blue-800 transition-colors btn-rounded disabled:opacity-40 disabled:cursor-not-allowed"
             >
               Request Quote / PO
             </button>
           </div>
         </div>
       </div>
+
+      {/* Recommended Products */}
+      {recommended.length > 0 && (
+        <section className="mt-16 border-t border-gray-200 pt-10">
+          <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6">
+            You Might Also Like
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {recommended.map((rp) => (
+              <Link
+                key={rp.id}
+                to={`/products/${rp.slug}`}
+                className="sharp-card p-6 bg-white hover:shadow-lg transition-all group"
+              >
+                <h3 className="text-lg font-bold text-gray-900 group-hover:text-blueprint-blue transition-colors mb-1">
+                  {rp.title}
+                </h3>
+                <p className="text-sm text-gray-500 mb-3 line-clamp-2">{rp.description}</p>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-bold text-gray-900">{formatCurrency(rp.priceMonthly)}/mo</span>
+                  <span className="text-xs font-bold text-blueprint-blue uppercase tracking-wide">
+                    View Details &rarr;
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* PO Form Modal */}
       {showPOForm && (

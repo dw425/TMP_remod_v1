@@ -5,6 +5,8 @@ export function useCart() {
   const items = useCartStore((state) => state.items);
   const add = useCartStore((state) => state.add);
   const remove = useCartStore((state) => state.remove);
+  const decrement = useCartStore((state) => state.decrement);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
   const clear = useCartStore((state) => state.clear);
   const totalCount = useCartStore((state) => state.totalCount);
 
@@ -25,6 +27,8 @@ export function useCart() {
     items,
     add,
     remove,
+    decrement,
+    updateQuantity,
     clear,
     totalCount,
     totals,

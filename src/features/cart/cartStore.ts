@@ -7,6 +7,8 @@ interface CartStore {
   items: CartItem[];
   add: (item: Omit<CartItem, 'quantity'>) => void;
   remove: (id: number) => void;
+  decrement: (id: number) => void;
+  updateQuantity: (id: number, quantity: number) => void;
   clear: () => void;
   totalCount: () => number;
 }
@@ -34,6 +36,31 @@ export const useCartStore = create<CartStore>()(
           items: state.items.filter((i) => i.id !== id),
         }));
         trackEvent('cart_item_removed', { productId: id });
+      },
+      decrement: (id) => {
+        set((state) => {
+          const item = state.items.find((i) => i.id === id);
+          if (!item) return state;
+          if (item.quantity <= 1) {
+            return { items: state.items.filter((i) => i.id !== id) };
+          }
+          return {
+            items: state.items.map((i) =>
+              i.id === id ? { ...i, quantity: i.quantity - 1 } : i
+            ),
+          };
+        });
+      },
+      updateQuantity: (id, quantity) => {
+        if (quantity <= 0) {
+          set((state) => ({ items: state.items.filter((i) => i.id !== id) }));
+          return;
+        }
+        set((state) => ({
+          items: state.items.map((i) =>
+            i.id === id ? { ...i, quantity } : i
+          ),
+        }));
       },
       clear: () => {
         const itemCount = get().items.length;

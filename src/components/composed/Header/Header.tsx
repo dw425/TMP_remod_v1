@@ -9,7 +9,7 @@ import { BPCS_LINKS } from '@/config/bpcs';
 
 export function Header() {
   return (
-    <header className="bg-white sticky top-0 z-40 border-b border-gray-200 shadow-sm">
+    <header className="bg-white sticky top-0 z-40 border-b border-gray-200 shadow-md">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Left: Logo + Divider + Marketplace */}
@@ -159,7 +159,7 @@ export function Header() {
               href={BPCS_LINKS.contact}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden sm:inline-block bg-blueprint-blue hover:bg-blue-800 text-white text-sm font-bold py-2.5 px-6 transition-colors tracking-wide rounded-sm shadow-sm"
+              className="hidden sm:inline-block bg-blueprint-blue hover:bg-blue-800 text-white text-sm font-bold py-2.5 px-6 transition-colors tracking-wide btn-rounded shadow-sm"
             >
               Connect
             </a>

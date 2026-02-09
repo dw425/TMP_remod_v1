@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { useParams, Navigate } from 'react-router-dom';
+import { useState, useMemo } from 'react';
+import { useParams, Navigate, Link } from 'react-router-dom';
 import { products } from '@/data/products';
+import { ROUTES } from '@/config/routes';
 import { SEO } from '@/components/SEO';
 import { useCart } from '@/features/cart/useCart';
 import { useAlerts } from '@/features/notifications/useAlerts';
@@ -66,6 +67,15 @@ export default function ProductDetailPage() {
   });
   useScrollDepthTracking();
 
+  // Related products: same category, exclude self, max 3
+  const relatedProducts = useMemo(() => {
+    if (!product) return [];
+    const cats = product.categories;
+    return products
+      .filter((p) => p.id !== product.id && p.type === 'tool' && cats.some((c) => p.categories.includes(c)))
+      .slice(0, 3);
+  }, [product]);
+
   if (!product) {
     return <Navigate to="/404" replace />;
   }
@@ -105,6 +115,17 @@ export default function ProductDetailPage() {
           },
         }}
       />
+
+      {/* Breadcrumb */}
+      <nav aria-label="Breadcrumb" className="mb-6 text-sm text-gray-500">
+        <ol className="flex items-center gap-1.5">
+          <li><Link to={ROUTES.HOME} className="hover:text-blueprint-blue transition-colors">Home</Link></li>
+          <li><span className="mx-1">/</span></li>
+          <li><Link to={ROUTES.HOME} className="hover:text-blueprint-blue transition-colors">Products</Link></li>
+          <li><span className="mx-1">/</span></li>
+          <li className="text-gray-900 font-medium">{product.title}</li>
+        </ol>
+      </nav>
 
       {/* Header */}
       <header className="mb-10">
@@ -262,6 +283,32 @@ export default function ProductDetailPage() {
           </div>
         </aside>
       </div>
+
+      {/* Related Products */}
+      {relatedProducts.length > 0 && (
+        <section className="mt-16 border-t border-gray-200 pt-10">
+          <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6">
+            You May Also Like
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {relatedProducts.map((rp) => (
+              <Link
+                key={rp.id}
+                to={`/products/${rp.slug}`}
+                className="sharp-card p-6 bg-white hover:shadow-lg transition-all group"
+              >
+                <h3 className="text-lg font-bold text-gray-900 group-hover:text-blueprint-blue transition-colors mb-1">
+                  {rp.title}
+                </h3>
+                <p className="text-sm text-gray-500 mb-3 line-clamp-2">{rp.description}</p>
+                <span className="text-xs font-bold text-blueprint-blue uppercase tracking-wide">
+                  View Details &rarr;
+                </span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ── Modals ── */}
       {showTechArch && product.architectureImage && (

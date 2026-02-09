@@ -44,12 +44,21 @@
       brightness(96%) contrast(95%);
   }
 
-  /* Card system — blue top border, white bg, sharp corners */
+  /* CTA buttons get slight rounding to match bpcs.com */
+  .btn-rounded {
+    border-radius: 4px !important;
+  }
+
+  /* Card system — blue top border, white bg, sharp corners, subtle shadow */
   .sharp-card {
     background: white;
     border: 1px solid #e5e7eb;
     border-top: 4px solid #1d4ed8;
     border-radius: 0px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  }
+  .sharp-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
   /* Category filter buttons */
