@@ -1,23 +1,70 @@
 import { useNavigate } from 'react-router-dom';
-import { useMemo, useState } from 'react';
+import { useState, useMemo } from 'react';
 import { getPlatformBySlug } from '@/data/platforms';
-import { formatCurrency } from '@/lib/formatCurrency';
-import { Button } from '@/components/ui';
 import { submitForm } from '@/features/integrations/formspree/formService';
 import { useAlerts } from '@/features/notifications/useAlerts';
-import type { ROMResult } from '@/types/migration';
 
 interface StoredReport {
   platform: string;
   formData: Record<string, unknown>;
-  rom: ROMResult;
+  rom: { totalObjects: number; breakdown: { simple: number; medium: number; complex: number; veryComplex: number }; estimatedHours: number; estimatedCost: { low: number; high: number } };
   timestamp: string;
+}
+
+/** Benchmarks: hours per object at each complexity level, by object type */
+const BENCHMARKS: Record<string, { s: number; m: number; c: number; v: number }> = {
+  table:  { s: 2,  m: 6,  c: 16, v: 40 },
+  view:   { s: 2,  m: 8,  c: 24, v: 40 },
+  proc:   { s: 4,  m: 12, c: 32, v: 60 },
+  func:   { s: 4,  m: 12, c: 32, v: 60 },
+  etl:    { s: 6,  m: 20, c: 50, v: 100 },
+  script: { s: 4,  m: 16, c: 40, v: 80 },
+  orch:   { s: 2,  m: 6,  c: 16, v: 32 },
+  bi:     { s: 4,  m: 16, c: 40, v: 80 },
+  excel:  { s: 2,  m: 8,  c: 24, v: 60 },
+  report: { s: 4,  m: 12, c: 32, v: 80 },
+};
+
+const PLATFORM_FACTORS: Record<string, number> = {
+  snowflake: 0.8, databricks: 0.8, synapse: 0.85, 'sql-server': 0.9,
+  oracle: 1.0, netezza: 1.1, teradata: 1.15, sap: 1.2, hadoop: 1.25,
+  gcp: 1.0, informatica: 1.0, redshift: 0.9, 'unity-catalog': 0.8, talend: 1.0,
+};
+
+const DB_ROWS = [
+  { key: 'table', label: 'Tables' },
+  { key: 'view',  label: 'Views' },
+  { key: 'proc',  label: 'Stored Procs' },
+  { key: 'func',  label: 'Functions' },
+];
+
+const CODE_ROWS = [
+  { key: 'etl',    label: 'ETL Pipelines' },
+  { key: 'script', label: 'Scripts' },
+  { key: 'orch',   label: 'Orchestration' },
+];
+
+const PRES_ROWS = [
+  { key: 'bi',     label: 'BI Dashboards' },
+  { key: 'excel',  label: 'Excel Sheets' },
+  { key: 'report', label: 'Reports' },
+];
+
+type MatrixData = Record<string, { simple: number; medium: number; complex: number; veryComplex: number }>;
+
+function initMatrix(): MatrixData {
+  const m: MatrixData = {};
+  [...DB_ROWS, ...CODE_ROWS, ...PRES_ROWS].forEach((r) => {
+    m[r.key] = { simple: 0, medium: 0, complex: 0, veryComplex: 0 };
+  });
+  return m;
 }
 
 export default function ROMCalculatorPage() {
   const navigate = useNavigate();
   const { showSuccess, showError } = useAlerts();
   const [submitting, setSubmitting] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const report = useMemo<StoredReport | null>(() => {
     const raw = sessionStorage.getItem('lastAssessmentReport');
@@ -29,41 +76,90 @@ export default function ROMCalculatorPage() {
     }
   }, []);
 
-  if (!report) {
-    return (
-      <div className="max-w-4xl mx-auto px-4 py-12 text-center">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">No Assessment Data</h1>
-        <p className="text-gray-600 mb-8">
-          Complete a migration assessment first to generate a ROM estimate.
-        </p>
-        <Button onClick={() => navigate('/migration')}>Go to Migration Suite</Button>
-      </div>
-    );
+  const platform = report ? getPlatformBySlug(report.platform) : undefined;
+
+  // Editable state
+  const [projectName, setProjectName] = useState(String(report?.formData?.projectName ?? ''));
+  const [stakeholder, setStakeholder] = useState(String(report?.formData?.stakeholder ?? ''));
+  const [email, setEmail] = useState(String(report?.formData?.contactEmail ?? ''));
+  const [matrix, setMatrix] = useState<MatrixData>(initMatrix);
+  const [teamMaturity, setTeamMaturity] = useState(3);
+  const [toolFamiliarity, setToolFamiliarity] = useState(3);
+  const [infraConfig, setInfraConfig] = useState(3);
+  const [envComplexity, setEnvComplexity] = useState(3);
+
+  // Calculation results
+  const [manualHours, setManualHours] = useState(0);
+  const [aiHours, setAiHours] = useState(0);
+  const [ratingText, setRatingText] = useState('');
+  const [ratingColor, setRatingColor] = useState('text-green-700');
+  const [barColor, setBarColor] = useState('bg-green-600');
+  const [barWidth, setBarWidth] = useState('25%');
+
+  function updateCell(key: string, level: keyof MatrixData[string], val: number) {
+    setMatrix((prev) => {
+      const row = prev[key] ?? { simple: 0, medium: 0, complex: 0, veryComplex: 0 };
+      const updated: MatrixData = { ...prev };
+      updated[key] = { ...row, [level]: val };
+      return updated;
+    });
   }
 
-  const platform = getPlatformBySlug(report.platform);
-  const { rom } = report;
-  const total = rom.totalObjects || 1;
-  const pctSimple = Math.round((rom.breakdown.simple / total) * 100);
-  const pctMedium = Math.round((rom.breakdown.medium / total) * 100);
-  const pctComplex = Math.round((rom.breakdown.complex / total) * 100);
-  const pctVeryComplex = Math.round((rom.breakdown.veryComplex / total) * 100);
+  function calculate() {
+    let rawHours = 0;
+    let totalCount = 0;
+    let complexCount = 0;
 
-  async function handleSubmitToBlueprint() {
+    for (const [cat, weights] of Object.entries(BENCHMARKS)) {
+      const row = matrix[cat];
+      if (!row) continue;
+      const { simple: s, medium: m, complex: c, veryComplex: v } = row;
+      rawHours += s * weights.s + m * weights.m + c * weights.c + v * weights.v;
+      totalCount += s + m + c + v;
+      complexCount += c + v;
+    }
+
+    const platformMult = PLATFORM_FACTORS[report?.platform ?? ''] ?? 1.0;
+    const avgMat = (teamMaturity + toolFamiliarity + infraConfig) / 3;
+    const maturityMult = 1.25 - (avgMat - 1) * 0.1125;
+    const envMult = 0.8 + (envComplexity - 1) * 0.1125;
+
+    const manual = Math.ceil(rawHours * platformMult * maturityMult * envMult);
+    const ai = Math.ceil(manual * 0.4);
+
+    setManualHours(manual);
+    setAiHours(ai);
+
+    const scoreMetric = manual * (1 + (totalCount > 0 ? complexCount / totalCount : 0));
+    if (scoreMetric > 25000) {
+      setRatingText('TRANSFORMATIONAL'); setRatingColor('text-red-900'); setBarColor('bg-red-900'); setBarWidth('100%');
+    } else if (scoreMetric > 10000) {
+      setRatingText('HIGH COMPLEXITY'); setRatingColor('text-red-600'); setBarColor('bg-red-600'); setBarWidth('75%');
+    } else if (scoreMetric > 2500) {
+      setRatingText('MODERATE'); setRatingColor('text-yellow-600'); setBarColor('bg-yellow-500'); setBarWidth('50%');
+    } else {
+      setRatingText('LOW'); setRatingColor('text-green-700'); setBarColor('bg-green-600'); setBarWidth('25%');
+    }
+
+    setShowModal(true);
+  }
+
+  async function handleRequestProposal() {
     setSubmitting(true);
     try {
       await submitForm('romCalculator', {
-        platform: report!.platform,
-        totalObjects: rom.totalObjects,
-        breakdown: JSON.stringify(rom.breakdown),
-        estimatedHours: rom.estimatedHours,
-        estimatedCostLow: rom.estimatedCost.low,
-        estimatedCostHigh: rom.estimatedCost.high,
-        contactEmail: report!.formData.contactEmail ?? '',
-        projectName: report!.formData.projectName ?? '',
-        timestamp: report!.timestamp,
+        platform: report?.platform ?? 'unknown',
+        projectName,
+        stakeholder,
+        email,
+        matrix: JSON.stringify(matrix),
+        Calculated_Manual_Hours: manualHours,
+        Calculated_Accelerated_Hours: aiHours,
+        Calculated_Complexity: ratingText,
+        timestamp: new Date().toISOString(),
       });
-      showSuccess('Submitted', 'Your ROM report has been sent to the Blueprint team.');
+      setShowModal(false);
+      showSuccess('Details Sent!', 'Our team has received your migration inventory and ROM estimate.');
     } catch {
       showError('Submission Failed', 'Could not send the report. Please try again.');
     } finally {
@@ -71,8 +167,10 @@ export default function ROMCalculatorPage() {
     }
   }
 
+  const weeklyVelocity = 160;
+
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
+    <div className="w-full max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <button
         onClick={() => navigate('/migration')}
         className="text-sm text-blueprint-blue hover:underline mb-6 inline-block"
@@ -80,158 +178,235 @@ export default function ROMCalculatorPage() {
         &larr; Back to Migration Suite
       </button>
 
-      <div className="mb-8">
-        <h1
-          className="text-3xl font-bold"
-          style={{ color: platform?.brandColor ?? '#1d4ed8' }}
-        >
-          ROM Estimate — {platform?.name ?? report.platform}
+      <div className="mb-10 border-b border-gray-200 pb-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight mb-3">
+          Comprehensive Migration ROM Calculator
         </h1>
-        <p className="text-gray-500 mt-1">
-          Generated {new Date(report.timestamp).toLocaleString()}
+        <p className="text-lg text-gray-600 font-medium">
+          Inventory your environment and assess maturity to generate a Rough Order of Magnitude (ROM) estimate.
         </p>
+        {platform && (
+          <p className="text-sm font-bold mt-2" style={{ color: platform.brandColor }}>
+            Source: {platform.name}
+          </p>
+        )}
       </div>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white border border-gray-300 border-t-4 border-t-blueprint-blue p-6">
-          <p className="text-sm text-gray-500 mb-1">Total Objects</p>
-          <p className="text-3xl font-bold text-gray-900">
-            {rom.totalObjects.toLocaleString()}
-          </p>
+      {/* Section 1: Organization & Tech Stack */}
+      <div className="bg-white border border-gray-300 shadow-sm mb-8">
+        <div className="bg-blueprint-blue text-white px-6 py-3 font-bold text-sm uppercase tracking-wide">
+          1. Organization &amp; Tech Stack
         </div>
-        <div className="bg-white border border-gray-300 border-t-4 border-t-blueprint-blue p-6">
-          <p className="text-sm text-gray-500 mb-1">Estimated Hours</p>
-          <p className="text-3xl font-bold text-gray-900">
-            {rom.estimatedHours.toLocaleString()}
-          </p>
-        </div>
-        <div className="bg-white border border-gray-300 border-t-4 border-t-blueprint-blue p-6">
-          <p className="text-sm text-gray-500 mb-1">Cost Range</p>
-          <p className="text-3xl font-bold text-gray-900">
-            {formatCurrency(rom.estimatedCost.low)} – {formatCurrency(rom.estimatedCost.high)}
-          </p>
-        </div>
-      </div>
-
-      {/* Complexity Breakdown */}
-      <div className="bg-white border border-gray-300 border-t-4 border-t-blueprint-blue p-6 mb-8">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Complexity Breakdown</h2>
-        <div className="space-y-4">
-          <BreakdownBar
-            label="Simple"
-            count={rom.breakdown.simple}
-            percent={pctSimple}
-            color="#22c55e"
-          />
-          <BreakdownBar
-            label="Medium"
-            count={rom.breakdown.medium}
-            percent={pctMedium}
-            color="#eab308"
-          />
-          <BreakdownBar
-            label="Complex"
-            count={rom.breakdown.complex}
-            percent={pctComplex}
-            color="#f97316"
-          />
-          <BreakdownBar
-            label="Very Complex"
-            count={rom.breakdown.veryComplex}
-            percent={pctVeryComplex}
-            color="#ef4444"
-          />
+        <div className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <label className="block">
+              <span className="block mb-1 font-bold text-gray-900 text-sm">Project Name</span>
+              <input type="text" value={projectName} onChange={(e) => setProjectName(e.target.value)} className="w-full px-3 py-2 border border-gray-400 text-sm focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue outline-none" />
+            </label>
+            <label className="block">
+              <span className="block mb-1 font-bold text-gray-900 text-sm">Primary Stakeholder</span>
+              <input type="text" value={stakeholder} onChange={(e) => setStakeholder(e.target.value)} className="w-full px-3 py-2 border border-gray-400 text-sm focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue outline-none" />
+            </label>
+            <label className="block">
+              <span className="block mb-1 font-bold text-gray-900 text-sm">Email</span>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-3 py-2 border border-gray-400 text-sm focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue outline-none" />
+            </label>
+          </div>
         </div>
       </div>
 
-      {/* Hours Breakdown Table */}
-      <div className="bg-white border border-gray-300 border-t-4 border-t-blueprint-blue p-6 mb-8">
-        <h2 className="text-xl font-bold text-gray-900 mb-4">Hours Estimate Detail</h2>
-        <table className="w-full text-sm">
+      {/* Section 2: Database Layer */}
+      <MatrixTable title="2. Database Layer" rows={DB_ROWS} matrix={matrix} onUpdate={updateCell} />
+
+      {/* Section 3: Integration & Code */}
+      <MatrixTable title="3. Integration &amp; Code" rows={CODE_ROWS} matrix={matrix} onUpdate={updateCell} />
+
+      {/* Section 4: Presentation Layer */}
+      <MatrixTable title="4. Presentation Layer" rows={PRES_ROWS} matrix={matrix} onUpdate={updateCell} />
+
+      {/* Section 5: Maturity & Complexity */}
+      <div className="bg-white border border-gray-300 shadow-sm mb-8">
+        <div className="bg-blueprint-blue text-white px-6 py-3 font-bold text-sm uppercase tracking-wide">
+          5. Maturity &amp; Complexity
+        </div>
+        <div className="p-6">
+          <p className="text-sm font-bold text-gray-500 mb-8 uppercase tracking-wide">
+            Rate your environment (1=Low/Novice, 5=High/Expert)
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <SliderField label="Team Expertise" value={teamMaturity} onChange={setTeamMaturity} lowLabel="1 (Novice)" highLabel="5 (Expert)" />
+            <SliderField label="Tool Familiarity" value={toolFamiliarity} onChange={setToolFamiliarity} lowLabel="1 (Low)" highLabel="5 (High)" />
+            <SliderField label="Infrastructure Config" value={infraConfig} onChange={setInfraConfig} lowLabel="1 (Manual)" highLabel="5 (IaC)" />
+            <SliderField label="Env. Complexity" value={envComplexity} onChange={setEnvComplexity} lowLabel="1 (Simple)" highLabel="5 (Chaotic)" />
+          </div>
+        </div>
+      </div>
+
+      {/* Calculate Button */}
+      <div className="text-center pb-12">
+        <button
+          type="button"
+          onClick={calculate}
+          className="bg-blueprint-blue text-white px-10 py-4 font-extrabold uppercase tracking-wide hover:bg-blue-800 transition-all hover:-translate-y-0.5 shadow-md"
+        >
+          Calculate Migration ROM
+        </button>
+      </div>
+
+      {/* Result Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-start justify-center z-50 overflow-y-auto pt-20 pb-12">
+          <div className="bg-white w-[90%] max-w-[900px] p-10 shadow-2xl border-t-8 border-blueprint-blue relative">
+            <button
+              onClick={() => setShowModal(false)}
+              className="absolute top-4 right-4 text-3xl font-bold text-gray-400 hover:text-gray-600"
+            >
+              &times;
+            </button>
+
+            <h2 className="text-3xl font-bold text-gray-900 mb-2 text-center">ROM Assessment Results</h2>
+            <div className="w-full bg-gray-200 h-1 mb-8" />
+
+            {/* Complexity Rating */}
+            <div className="mb-8 text-center">
+              <div className="text-sm font-bold text-gray-500 uppercase tracking-widest">Overall Complexity Rating</div>
+              <div className={`text-2xl font-black my-2 ${ratingColor}`}>{ratingText}</div>
+              <div className="w-1/2 mx-auto bg-gray-200 h-3 overflow-hidden">
+                <div className={`h-full ${barColor}`} style={{ width: barWidth }} />
+              </div>
+            </div>
+
+            {/* Hours Comparison */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+              <div className="p-8 bg-gray-50 border border-gray-300 text-center">
+                <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Standard Manual Effort</p>
+                <p className="text-4xl font-black text-gray-800">{manualHours.toLocaleString()}</p>
+                <p className="text-sm font-bold text-gray-500">Total Man-Hours</p>
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <span className="text-xl font-bold text-gray-800">{Math.ceil(manualHours / weeklyVelocity)}</span>{' '}
+                  <span className="text-gray-600">Weeks</span>
+                </div>
+              </div>
+              <div className="p-8 bg-green-50 border border-green-300 text-center relative shadow-sm">
+                <div className="absolute -top-3 right-0 left-0 mx-auto w-max bg-green-600 text-white text-[10px] px-3 py-1 font-bold uppercase">
+                  60% Acceleration
+                </div>
+                <p className="text-xs font-bold text-green-700 uppercase tracking-widest mb-2">Blueprint Accelerated</p>
+                <p className="text-4xl font-black text-green-700">{aiHours.toLocaleString()}</p>
+                <p className="text-sm font-bold text-green-600">Total Man-Hours</p>
+                <div className="mt-4 pt-4 border-t border-green-200">
+                  <span className="text-xl font-bold text-green-800">{Math.ceil(aiHours / weeklyVelocity)}</span>{' '}
+                  <span className="text-green-700">Weeks</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => setShowModal(false)}
+                className="px-6 py-3 border border-gray-300 font-bold text-gray-600 hover:bg-gray-50 transition-colors"
+              >
+                Adjust Inputs
+              </button>
+              <button
+                onClick={handleRequestProposal}
+                disabled={submitting}
+                className="bg-blueprint-blue text-white px-8 py-3 font-bold hover:bg-blue-800 transition-colors shadow-sm disabled:opacity-50"
+              >
+                {submitting ? 'Sending...' : 'Request Detailed Proposal'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Editable complexity matrix table */
+function MatrixTable({
+  title,
+  rows,
+  matrix,
+  onUpdate,
+}: {
+  title: string;
+  rows: { key: string; label: string }[];
+  matrix: MatrixData;
+  onUpdate: (key: string, level: keyof MatrixData[string], val: number) => void;
+}) {
+  return (
+    <div className="bg-white border border-gray-300 shadow-sm mb-8">
+      <div className="bg-blueprint-blue text-white px-6 py-3 font-bold text-sm uppercase tracking-wide">
+        {title}
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-left">
           <thead>
-            <tr className="border-b border-gray-200 text-left">
-              <th className="pb-2 font-medium text-gray-500">Complexity</th>
-              <th className="pb-2 font-medium text-gray-500">Objects</th>
-              <th className="pb-2 font-medium text-gray-500">Hrs/Object</th>
-              <th className="pb-2 font-medium text-gray-500 text-right">Total Hours</th>
+            <tr className="bg-gray-50 border-b-2 border-gray-200">
+              <th className="p-4 w-1/4 text-xs font-extrabold text-gray-500 uppercase">Object Type</th>
+              <th className="p-4 text-center text-xs font-extrabold text-green-700 uppercase">Simple</th>
+              <th className="p-4 text-center text-xs font-extrabold text-yellow-700 uppercase">Medium</th>
+              <th className="p-4 text-center text-xs font-extrabold text-red-700 uppercase">Complex</th>
+              <th className="p-4 text-center text-xs font-extrabold text-red-900 uppercase">V. Complex</th>
             </tr>
           </thead>
-          <tbody className="text-gray-900">
-            <HoursRow label="Simple" count={rom.breakdown.simple} rate={2} />
-            <HoursRow label="Medium" count={rom.breakdown.medium} rate={8} />
-            <HoursRow label="Complex" count={rom.breakdown.complex} rate={24} />
-            <HoursRow label="Very Complex" count={rom.breakdown.veryComplex} rate={60} />
-            <tr className="border-t border-gray-300 font-bold">
-              <td className="pt-2">Total</td>
-              <td className="pt-2">{rom.totalObjects.toLocaleString()}</td>
-              <td className="pt-2"></td>
-              <td className="pt-2 text-right">{rom.estimatedHours.toLocaleString()}</td>
-            </tr>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row.key} className="border-b border-gray-100">
+                <td className="p-4 font-bold text-sm text-gray-900">{row.label}</td>
+                {(['simple', 'medium', 'complex', 'veryComplex'] as const).map((level) => (
+                  <td key={level} className="p-4">
+                    <input
+                      type="number"
+                      min={0}
+                      placeholder="0"
+                      value={matrix[row.key]?.[level] || ''}
+                      onChange={(e) => onUpdate(row.key, level, parseInt(e.target.value) || 0)}
+                      className="w-full px-2 py-2 border border-gray-400 text-center font-semibold text-sm focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue outline-none"
+                    />
+                  </td>
+                ))}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
-
-      {/* Actions */}
-      <div className="flex gap-4">
-        <Button onClick={handleSubmitToBlueprint} disabled={submitting}>
-          {submitting ? 'Sending...' : 'Send Report to Blueprint'}
-        </Button>
-        <Button
-          variant="outline"
-          onClick={() => navigate(`/migration/${report.platform}`)}
-        >
-          Edit Assessment
-        </Button>
-        <Button variant="secondary" onClick={() => navigate('/migration')}>
-          New Assessment
-        </Button>
-      </div>
     </div>
   );
 }
 
-function BreakdownBar({
+/** Slider input for maturity scores */
+function SliderField({
   label,
-  count,
-  percent,
-  color,
+  value,
+  onChange,
+  lowLabel,
+  highLabel,
 }: {
   label: string;
-  count: number;
-  percent: number;
-  color: string;
+  value: number;
+  onChange: (v: number) => void;
+  lowLabel: string;
+  highLabel: string;
 }) {
   return (
-    <div>
-      <div className="flex justify-between text-sm mb-1">
-        <span className="text-gray-700 font-medium">{label}</span>
-        <span className="text-gray-500">
-          {count.toLocaleString()} ({percent}%)
-        </span>
+    <label className="block">
+      <span className="block mb-2 font-bold text-gray-900 text-sm">{label}</span>
+      <input
+        type="range"
+        min={1}
+        max={5}
+        value={value}
+        onChange={(e) => onChange(parseInt(e.target.value))}
+        className="w-full accent-blueprint-blue cursor-pointer"
+      />
+      <div className="flex justify-between text-xs font-extrabold text-gray-500 mt-1">
+        <span>{lowLabel}</span>
+        <span>{value}</span>
+        <span>{highLabel}</span>
       </div>
-      <div className="w-full bg-gray-200 h-3">
-        <div className="h-3" style={{ width: `${percent}%`, backgroundColor: color }} />
-      </div>
-    </div>
-  );
-}
-
-function HoursRow({
-  label,
-  count,
-  rate,
-}: {
-  label: string;
-  count: number;
-  rate: number;
-}) {
-  return (
-    <tr className="border-b border-gray-100">
-      <td className="py-2">{label}</td>
-      <td className="py-2">{count.toLocaleString()}</td>
-      <td className="py-2">{rate}</td>
-      <td className="py-2 text-right">{(count * rate).toLocaleString()}</td>
-    </tr>
+    </label>
   );
 }
