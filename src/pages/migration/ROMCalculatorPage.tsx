@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useMemo } from 'react';
 import { getPlatformBySlug } from '@/data/platforms';
+import { getSchemaByPlatform } from '@/data/migration-schemas';
 import { submitForm } from '@/features/integrations/formspree/formService';
 import { useAlerts } from '@/features/notifications/useAlerts';
 
@@ -244,18 +245,43 @@ export default function ROMCalculatorPage() {
     setShowModal(true);
   }
 
+  const schema = report ? getSchemaByPlatform(report.platform) : undefined;
+
+  /** Format a single assessment field value for display/email */
+  function formatFieldValue(value: unknown): string {
+    if (value === null || value === undefined || value === '') return '(not provided)';
+    if (Array.isArray(value)) return value.join(', ');
+    if (typeof value === 'boolean') return value ? 'Yes' : 'No';
+    return String(value);
+  }
+
+  /** Build labeled assessment answers grouped by section */
+  function getAssessmentSections(): { title: string; fields: { label: string; value: string }[] }[] {
+    if (!schema || !report?.formData) return [];
+    return schema.sections.map((section) => ({
+      title: section.title,
+      fields: section.fields
+        .map((field) => ({
+          label: field.label,
+          value: formatFieldValue(report.formData[field.name]),
+        }))
+        .filter((f) => f.value !== '(not provided)' && f.value !== '0' && f.value !== ''),
+    })).filter((s) => s.fields.length > 0);
+  }
+
+  const assessmentSections = useMemo(getAssessmentSections, [schema, report]);
+
   function formatMatrixForEmail(): string {
     const allRows = [...DB_ROWS, ...CODE_ROWS, ...PRES_ROWS];
-    const sections = [
+    const matrixSections = [
       { title: 'DATABASE LAYER', rows: DB_ROWS },
       { title: 'INTEGRATION & CODE', rows: CODE_ROWS },
       { title: 'PRESENTATION LAYER', rows: PRES_ROWS },
     ];
 
     const lines: string[] = [];
-    for (const section of sections) {
+    for (const section of matrixSections) {
       lines.push(`\n--- ${section.title} ---`);
-      lines.push('Object Type | Simple | Medium | Complex | V.Complex | Total');
       for (const row of section.rows) {
         const r = matrix[row.key];
         if (!r) continue;
@@ -266,7 +292,6 @@ export default function ROMCalculatorPage() {
       }
     }
 
-    // Grand totals
     let grandTotal = 0;
     for (const row of allRows) {
       const r = matrix[row.key];
@@ -276,10 +301,22 @@ export default function ROMCalculatorPage() {
     return lines.join('\n');
   }
 
+  function formatAssessmentForEmail(): string {
+    const lines: string[] = [];
+    for (const section of assessmentSections) {
+      lines.push(`\n=== ${section.title} ===`);
+      for (const field of section.fields) {
+        lines.push(`${field.label}: ${field.value}`);
+      }
+    }
+    return lines.join('\n');
+  }
+
   async function handleRequestProposal() {
     setSubmitting(true);
     try {
       const inventorySummary = formatMatrixForEmail();
+      const assessmentDetails = formatAssessmentForEmail();
       await submitForm('romCalculator', {
         'Source Platform': platform?.name ?? report?.platform ?? 'Unknown',
         'Project Name': projectName || '(not provided)',
@@ -289,12 +326,13 @@ export default function ROMCalculatorPage() {
         'Tool Familiarity (1-5)': toolFamiliarity,
         'Infrastructure Config (1-5)': infraConfig,
         'Env Complexity (1-5)': envComplexity,
-        'Object Inventory': inventorySummary,
+        'ROM Object Inventory': inventorySummary,
         'Complexity Rating': ratingText,
         'Manual Effort (Hours)': manualHours.toLocaleString(),
         'Manual Effort (Weeks)': Math.ceil(manualHours / weeklyVelocity),
         'Blueprint Accelerated (Hours)': aiHours.toLocaleString(),
         'Blueprint Accelerated (Weeks)': Math.ceil(aiHours / weeklyVelocity),
+        'Full Assessment Details': assessmentDetails,
         'Submitted At': new Date().toLocaleString(),
       });
       setShowModal(false);
@@ -330,6 +368,11 @@ export default function ROMCalculatorPage() {
           </p>
         )}
       </div>
+
+      {/* Assessment Details (persisted from previous page) */}
+      {assessmentSections.length > 0 && (
+        <AssessmentSummary sections={assessmentSections} platformColor={platform?.brandColor} />
+      )}
 
       {/* Section 1: Organization & Tech Stack */}
       <div className="bg-white border border-gray-300 shadow-sm mb-8">
@@ -512,6 +555,50 @@ function MatrixTable({
           </tbody>
         </table>
       </div>
+    </div>
+  );
+}
+
+/** Collapsible assessment summary showing all persisted data from the assessment form */
+function AssessmentSummary({
+  sections,
+  platformColor,
+}: {
+  sections: { title: string; fields: { label: string; value: string }[] }[];
+  platformColor?: string;
+}) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className="bg-white border border-gray-300 shadow-sm mb-8">
+      <button
+        type="button"
+        onClick={() => setExpanded((e) => !e)}
+        className="w-full flex items-center justify-between px-6 py-3 font-bold text-sm uppercase tracking-wide text-white"
+        style={{ backgroundColor: platformColor ?? '#1d4ed8' }}
+      >
+        <span>Assessment Details (from questionnaire)</span>
+        <span className="text-lg">{expanded ? '\u25B2' : '\u25BC'}</span>
+      </button>
+      {expanded && (
+        <div className="p-6 space-y-6 max-h-[500px] overflow-y-auto">
+          {sections.map((section) => (
+            <div key={section.title}>
+              <h4 className="text-xs font-extrabold text-gray-500 uppercase tracking-wider border-b border-gray-200 pb-2 mb-3">
+                {section.title}
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+                {section.fields.map((field) => (
+                  <div key={field.label} className="flex gap-2 text-sm py-1">
+                    <span className="font-bold text-gray-700 shrink-0">{field.label}:</span>
+                    <span className="text-gray-600 break-words">{field.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
