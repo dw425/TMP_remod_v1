@@ -1,8 +1,7 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { platforms } from '@/data/platforms';
 import { PlatformTile } from '@/components/composed/PlatformTile';
 import { SEO } from '@/components/SEO';
-import { ROUTES } from '@/config/routes';
 
 export default function MigrationLandingPage() {
   const navigate = useNavigate();
@@ -47,14 +46,6 @@ export default function MigrationLandingPage() {
         </div>
       </div>
 
-      <div className="mt-8 flex justify-end">
-        <Link
-          to={ROUTES.ROM_ADMIN}
-          className="text-sm text-blueprint-blue hover:underline font-medium"
-        >
-          ROM Calculator Settings &rarr;
-        </Link>
-      </div>
     </main>
   );
 }
