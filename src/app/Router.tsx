@@ -27,6 +27,8 @@ const DashboardPage = lazy(() => import('@/pages/account/DashboardPage'));
 const SettingsPage = lazy(() => import('@/pages/account/SettingsPage'));
 const OrderHistoryPage = lazy(() => import('@/pages/account/OrderHistoryPage'));
 const DownloadsPage = lazy(() => import('@/pages/account/DownloadsPage'));
+const DeploymentsPage = lazy(() => import('@/pages/account/DeploymentsPage'));
+const DatabricksCallbackPage = lazy(() => import('@/pages/databricks/DatabricksCallbackPage'));
 
 const SuspenseWrap = ({ children }: { children: React.ReactNode }) => (
   <Suspense fallback={<Spinner className="min-h-[60vh]" />}>{children}</Suspense>
@@ -146,6 +148,22 @@ const router = createBrowserRouter(
             <Protected>
               <DownloadsPage />
             </Protected>
+          ),
+        },
+        {
+          path: ROUTES.DEPLOYMENTS,
+          element: (
+            <Protected>
+              <DeploymentsPage />
+            </Protected>
+          ),
+        },
+        {
+          path: ROUTES.DATABRICKS_CALLBACK,
+          element: (
+            <SuspenseWrap>
+              <DatabricksCallbackPage />
+            </SuspenseWrap>
           ),
         },
         {
