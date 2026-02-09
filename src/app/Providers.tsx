@@ -1,4 +1,5 @@
 import { type ReactNode } from 'react';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { AuthProvider } from '@/features/auth/AuthProvider';
 import { AnalyticsProvider } from '@/features/analytics/AnalyticsProvider';
 
@@ -8,8 +9,10 @@ interface ProvidersProps {
 
 export function Providers({ children }: ProvidersProps) {
   return (
-    <AnalyticsProvider>
-      <AuthProvider>{children}</AuthProvider>
-    </AnalyticsProvider>
+    <ErrorBoundary>
+      <AnalyticsProvider>
+        <AuthProvider>{children}</AuthProvider>
+      </AnalyticsProvider>
+    </ErrorBoundary>
   );
 }
