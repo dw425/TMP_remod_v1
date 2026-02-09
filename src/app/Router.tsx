@@ -10,6 +10,7 @@ const ProductDetailPage = lazy(() => import('@/pages/products/ProductDetailPage'
 const MigrationLandingPage = lazy(() => import('@/pages/migration/MigrationLandingPage'));
 const MigrationAssessmentPage = lazy(() => import('@/pages/migration/MigrationAssessmentPage'));
 const ROMCalculatorPage = lazy(() => import('@/pages/migration/ROMCalculatorPage'));
+const ROMAdminPage = lazy(() => import('@/pages/admin/ROMAdminPage'));
 const NotFoundPage = lazy(() => import('@/pages/errors/NotFoundPage'));
 
 const SuspenseWrap = ({ children }: { children: React.ReactNode }) => (
@@ -58,6 +59,14 @@ const router = createBrowserRouter(
           element: (
             <SuspenseWrap>
               <ROMCalculatorPage />
+            </SuspenseWrap>
+          ),
+        },
+        {
+          path: ROUTES.ROM_ADMIN,
+          element: (
+            <SuspenseWrap>
+              <ROMAdminPage />
             </SuspenseWrap>
           ),
         },

@@ -4,6 +4,7 @@ import { getPlatformBySlug } from '@/data/platforms';
 import { getSchemaByPlatform } from '@/data/migration-schemas';
 import { AssessmentSection } from '@/components/composed/AssessmentSection';
 import { calculateROM } from '@/lib/romCalculator';
+import { getEffectiveConfig } from '@/lib/romConfigStore';
 import { Button } from '@/components/ui';
 import { useAlerts } from '@/features/notifications/useAlerts';
 
@@ -23,7 +24,8 @@ export default function MigrationAssessmentPage() {
 
   function onSubmit(data: Record<string, unknown>) {
     try {
-      const rom = calculateROM(data, schema!.romConfig);
+      const effectiveConfig = getEffectiveConfig(schema!.platform, schema!.romConfig);
+      const rom = calculateROM(data, effectiveConfig);
 
       const report = {
         platform: schema!.platform,

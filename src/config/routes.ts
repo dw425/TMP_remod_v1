@@ -17,4 +17,5 @@ export const ROUTES = {
   ORDERS: '/account/orders',
   SETTINGS: '/account/settings',
   DATABRICKS_CALLBACK: '/auth/databricks/callback',
+  ROM_ADMIN: '/admin/rom-config',
 } as const;
