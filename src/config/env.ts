@@ -8,6 +8,8 @@ const envSchema = z.object({
   VITE_FORMSPREE_AIFACTORY: z.string().default('xjkavwle'),
   VITE_FORMSPREE_CALC: z.string().default('mnnoelgb'),
   VITE_POSTHOG_KEY: z.string().optional(),
+  // SECURITY: Slack webhook URL is exposed to the client bundle.
+  // Do NOT set this in production until a backend proxy exists.
   VITE_SLACK_WEBHOOK_URL: z.string().optional(),
   VITE_ENABLE_CHAT: z
     .string()
