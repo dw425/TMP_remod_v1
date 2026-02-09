@@ -9,6 +9,8 @@ import {
   evaluatePasswordStrength,
   isCommonPassword,
 } from '@/features/auth/validation';
+import { useTrack } from '@/features/analytics/useTrack';
+import { EVENTS } from '@/features/analytics/events';
 
 const STRENGTH_COLORS: Record<number, string> = {
   0: 'bg-red-500',
@@ -29,6 +31,7 @@ const STRENGTH_WIDTHS: Record<number, string> = {
 export default function SignupPage() {
   const { signup, error } = useAuth();
   const navigate = useNavigate();
+  const track = useTrack();
 
   const [form, setForm] = useState({
     firstName: '',
@@ -97,6 +100,7 @@ export default function SignupPage() {
         lastName: form.lastName,
         company: form.company,
       });
+      track(EVENTS.SIGNUP_COMPLETED, { email: form.email, company: form.company });
       navigate(ROUTES.DASHBOARD, { replace: true });
     } catch {
       // error set in store

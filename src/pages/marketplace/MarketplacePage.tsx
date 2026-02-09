@@ -5,12 +5,19 @@ import { CategoryFilter } from '@/components/composed/CategoryFilter';
 import { ProductCard } from '@/components/composed/ProductCard';
 import { ProductModal } from '@/components/composed/ProductModal';
 import { SEO } from '@/components/SEO';
+import { usePageTag, useScrollDepthTracking } from '@/features/analytics/pageTagging';
+import { useTrack } from '@/features/analytics/useTrack';
+import { EVENTS } from '@/features/analytics/events';
 import type { Product } from '@/types/product';
 
 export default function MarketplacePage() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const track = useTrack();
+  usePageTag({ pageName: 'Marketplace', pageType: 'marketplace' });
+  useScrollDepthTracking();
 
   const filteredProducts =
     activeCategory === 'all'
@@ -23,6 +30,7 @@ export default function MarketplacePage() {
   const handleViewDetails = (product: Product) => {
     setSelectedProduct(product);
     setIsModalOpen(true);
+    track(EVENTS.PRODUCT_CARD_CLICKED, { productId: product.id, productName: product.title });
   };
 
   return (
@@ -33,7 +41,10 @@ export default function MarketplacePage() {
         canonical="/"
       />
 
-      <CategoryFilter activeCategory={activeCategory} onCategoryChange={setActiveCategory} />
+      <CategoryFilter activeCategory={activeCategory} onCategoryChange={(cat) => {
+        setActiveCategory(cat);
+        track(EVENTS.CATEGORY_FILTERED, { category: cat, resultCount: cat === 'all' ? products.length : products.filter(p => p.categories.includes(cat)).length });
+      }} />
 
       <section>
         <div className="flex items-center justify-between mb-8">

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useScrollLock } from '@/hooks/useScrollLock';
 import { formatCurrency } from '@/lib/formatCurrency';
+import { useTrack } from '@/features/analytics/useTrack';
 import type { Product } from '@/types/product';
 
 interface ProductModalProps {
@@ -22,6 +23,7 @@ const TOOL_TABS: { id: TabId; label: string }[] = [
 export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
   const [activeTab, setActiveTab] = useState<TabId>('overview');
   const navigate = useNavigate();
+  const track = useTrack();
   useScrollLock(isOpen);
 
   // React-recommended pattern: adjust state during render when props change
@@ -120,7 +122,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
+                    onClick={() => { setActiveTab(tab.id); track('product_modal_tab_changed', { tab: tab.id, productName: product.title }); }}
                     className={`w-full text-left px-4 py-3 font-bold text-sm transition-colors border-l-4 ${
                       activeTab === tab.id
                         ? 'bg-white border-blueprint-blue text-blueprint-blue shadow-sm'

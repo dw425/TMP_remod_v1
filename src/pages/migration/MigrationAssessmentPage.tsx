@@ -1,4 +1,5 @@
-import { useParams, Navigate, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams, Navigate, useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { getPlatformBySlug } from '@/data/platforms';
 import { getSchemaByPlatform } from '@/data/migration-schemas';
@@ -7,11 +8,70 @@ import { calculateROM } from '@/lib/romCalculator';
 import { getEffectiveConfig } from '@/lib/romConfigStore';
 import { Button } from '@/components/ui';
 import { useAlerts } from '@/features/notifications/useAlerts';
+import { useTrack } from '@/features/analytics/useTrack';
+import { EVENTS } from '@/features/analytics/events';
+import { useAuth } from '@/features/auth/useAuth';
+import { dbPutAssessment } from '@/lib/db';
+import { ROUTES } from '@/config/routes';
+import { useScrollLock } from '@/hooks/useScrollLock';
+
+function SignupPromptModal({ onClose }: { onClose: () => void }) {
+  useScrollLock(true);
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 bg-black/50" onClick={onClose} onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }} role="button" tabIndex={-1} aria-label="Close modal" />
+      <div className="relative bg-white w-full max-w-md border-t-4 border-blueprint-blue p-8 shadow-2xl">
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600" aria-label="Close">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        <div className="text-center mb-6">
+          <svg className="w-14 h-14 mx-auto text-blueprint-blue mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <h2 className="text-xl font-bold text-gray-900">Assessment Saved!</h2>
+          <p className="text-sm text-gray-500 mt-2">
+            Your ROM estimate has been generated and saved to the calculator.
+          </p>
+        </div>
+        <div className="bg-blue-50 border border-blue-100 p-4 mb-6">
+          <p className="text-sm text-gray-700">
+            <strong>Create a free account</strong> to save your assessments to your dashboard, track multiple migrations, and access your results anytime.
+          </p>
+        </div>
+        <div className="space-y-3">
+          <Link
+            to={ROUTES.SIGNUP}
+            className="block w-full bg-blueprint-blue text-white font-bold py-3 text-center uppercase tracking-widest text-xs hover:bg-blue-800 transition-colors"
+          >
+            Create Account
+          </Link>
+          <Link
+            to={ROUTES.LOGIN}
+            className="block w-full text-center text-sm text-blueprint-blue hover:underline"
+          >
+            Already have an account? Sign in
+          </Link>
+          <Link
+            to="/migration/calculator"
+            className="block w-full text-center text-sm text-gray-500 hover:text-gray-700"
+          >
+            Continue to Calculator &rarr;
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function MigrationAssessmentPage() {
   const { platform } = useParams<{ platform: string }>();
   const navigate = useNavigate();
   const { showSuccess, showError } = useAlerts();
+  const track = useTrack();
+  const { user, isAuthenticated } = useAuth();
+  const [showSignupPrompt, setShowSignupPrompt] = useState(false);
 
   const platformConfig = platform ? getPlatformBySlug(platform) : undefined;
   const schema = platform ? getSchemaByPlatform(platform) : undefined;
@@ -22,7 +82,7 @@ export default function MigrationAssessmentPage() {
     return <Navigate to="/migration" replace />;
   }
 
-  function onSubmit(data: Record<string, unknown>) {
+  async function onSubmit(data: Record<string, unknown>) {
     try {
       const effectiveConfig = getEffectiveConfig(schema!.platform, schema!.romConfig);
       const rom = calculateROM(data, effectiveConfig);
@@ -34,9 +94,42 @@ export default function MigrationAssessmentPage() {
         timestamp: new Date().toISOString(),
       };
 
+      // Always save to sessionStorage for the calculator page
       sessionStorage.setItem('lastAssessmentReport', JSON.stringify(report));
-      showSuccess('Assessment Saved', 'Fine tune your estimate now on the ROM Calculator.');
-      navigate('/migration/calculator');
+
+      // Derive dashboard-friendly totals from ROMResult
+      const WEEKLY_VELOCITY = 160;
+      const ACCELERATOR_FACTOR = 0.4; // 60% reduction with Blueprint accelerators
+      const totalHours = rom.estimatedHours;
+      const totalWeeks = Math.ceil(totalHours / WEEKLY_VELOCITY);
+      const acceleratedHours = Math.ceil(totalHours * ACCELERATOR_FACTOR);
+      const acceleratedWeeks = Math.ceil(acceleratedHours / WEEKLY_VELOCITY);
+
+      track(EVENTS.MIGRATION_ROM_GENERATED, { platform: schema!.platform, totalHours });
+
+      if (isAuthenticated && user) {
+        // Save to IndexedDB for the user's dashboard
+        await dbPutAssessment({
+          id: crypto.randomUUID(),
+          userId: user.id,
+          platform: schema!.platform,
+          platformName: platformConfig!.name,
+          formData: data,
+          rom: {
+            totalHours,
+            totalWeeks,
+            acceleratedHours,
+            acceleratedWeeks,
+          },
+          submittedAt: new Date().toISOString(),
+        });
+
+        showSuccess('Assessment Saved', 'Redirecting to your dashboard...');
+        setTimeout(() => navigate(ROUTES.DASHBOARD), 1000);
+      } else {
+        // Not logged in — show signup prompt modal
+        setShowSignupPrompt(true);
+      }
     } catch {
       showError('Submission Failed', 'There was an error processing your assessment.');
     }
@@ -74,6 +167,10 @@ export default function MigrationAssessmentPage() {
           </Button>
         </div>
       </form>
+
+      {showSignupPrompt && (
+        <SignupPromptModal onClose={() => setShowSignupPrompt(false)} />
+      )}
     </div>
   );
 }

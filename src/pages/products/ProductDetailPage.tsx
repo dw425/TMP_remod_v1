@@ -9,6 +9,9 @@ import { AmIReadyModal } from '@/components/composed/AmIReadyModal';
 import { ContactSalesModal } from '@/components/composed/ContactSalesModal';
 import { MessageSentModal } from '@/components/composed/MessageSentModal';
 import { formatCurrency } from '@/lib/formatCurrency';
+import { usePageTag, useScrollDepthTracking } from '@/features/analytics/pageTagging';
+import { useTrack } from '@/features/analytics/useTrack';
+import { EVENTS } from '@/features/analytics/events';
 
 /* SVG placeholder icons for products without video */
 function PlaceholderIcon({ type }: { type?: string }) {
@@ -48,11 +51,20 @@ export default function ProductDetailPage() {
   const product = products.find((p) => p.slug === slug);
   const { add } = useCart();
   const { showSuccess } = useAlerts();
+  const track = useTrack();
 
   const [showTechArch, setShowTechArch] = useState(false);
   const [showAmIReady, setShowAmIReady] = useState(false);
   const [showContactSales, setShowContactSales] = useState(false);
   const [showMessageSent, setShowMessageSent] = useState(false);
+
+  usePageTag({
+    pageName: product?.title ?? 'Product',
+    pageType: 'product',
+    productId: product?.id,
+    productName: product?.title,
+  });
+  useScrollDepthTracking();
 
   if (!product) {
     return <Navigate to="/404" replace />;
@@ -72,6 +84,7 @@ export default function ProductDetailPage() {
       price: product.priceMonthly,
     });
     showSuccess(`${product.title} added to cart`);
+    track(EVENTS.CART_ITEM_ADDED, { productId: product.id, productName: product.title, price: product.priceMonthly });
   };
 
   return (
@@ -201,7 +214,7 @@ export default function ProductDetailPage() {
                     <h4 className="text-md font-bold text-gray-900">Team Account</h4>
                     <p className="text-sm text-gray-500 mt-1">Starting at $5,000.00/mo</p>
                     <button
-                      onClick={() => setShowContactSales(true)}
+                      onClick={() => { setShowContactSales(true); track(EVENTS.MODAL_INTERACTION, { modal: 'contact_sales', action: 'open', productName: product.title }); }}
                       className="w-full mt-3 bg-black text-white font-bold py-3 uppercase tracking-widest text-[10px] hover:bg-gray-800 transition-colors"
                     >
                       Contact Sales
@@ -209,7 +222,7 @@ export default function ProductDetailPage() {
                   </div>
 
                   <button
-                    onClick={() => setShowAmIReady(true)}
+                    onClick={() => { setShowAmIReady(true); track(EVENTS.MODAL_INTERACTION, { modal: 'am_i_ready', action: 'open', productName: product.title }); }}
                     className="w-full bg-gray-200 text-gray-800 font-bold py-3 uppercase tracking-widest text-[10px] hover:bg-gray-300 transition-colors"
                   >
                     Am I Ready?
@@ -227,7 +240,7 @@ export default function ProductDetailPage() {
                 {product.architectureImage && (
                   <li>
                     <button
-                      onClick={() => setShowTechArch(true)}
+                      onClick={() => { setShowTechArch(true); track(EVENTS.MODAL_INTERACTION, { modal: 'tech_architecture', action: 'open', productName: product.title }); }}
                       className="text-sm font-bold text-blueprint-blue hover:underline"
                     >
                       View Technical Architecture

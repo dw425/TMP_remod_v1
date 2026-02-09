@@ -6,11 +6,17 @@ import { SEO } from '@/components/SEO';
 import { ROUTES } from '@/config/routes';
 import { POFormModal } from '@/components/composed/POFormModal';
 import { POConfirmationModal } from '@/components/composed/POConfirmationModal';
+import { usePageTag } from '@/features/analytics/pageTagging';
+import { useTrack } from '@/features/analytics/useTrack';
+import { EVENTS } from '@/features/analytics/events';
 
 export default function CartPage() {
   const { items, remove, clear, totals } = useCart();
   const [showPOForm, setShowPOForm] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const track = useTrack();
+  usePageTag({ pageName: 'Cart', pageType: 'cart' });
 
   // Compute summary values
   const monthlyTotal = totals.monthlyTotal;
@@ -80,7 +86,7 @@ export default function CartPage() {
                         </td>
                         <td className="py-4 px-6 border-b border-gray-100">
                           <button
-                            onClick={() => remove(item.id)}
+                            onClick={() => { track(EVENTS.CART_ITEM_REMOVED, { productId: item.id, productName: item.title }); remove(item.id); }}
                             className="text-gray-400 hover:text-red-600 transition-colors"
                             aria-label={`Remove ${item.title}`}
                           >
@@ -157,6 +163,7 @@ export default function CartPage() {
                   alert('Cart is empty');
                   return;
                 }
+                track(EVENTS.CHECKOUT_STARTED, { itemCount: items.length, total: grandTotal });
                 setShowPOForm(true);
               }}
               className="w-full bg-blueprint-blue text-white font-bold py-4 uppercase tracking-widest text-xs hover:bg-blue-800 transition-colors"

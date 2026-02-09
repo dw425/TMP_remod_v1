@@ -49,6 +49,16 @@ export interface DBInteraction {
   page: string;
 }
 
+export interface DBAssessment {
+  id: string;
+  userId: string;
+  platform: string;
+  platformName: string;
+  formData: Record<string, unknown>;
+  rom: { totalHours: number; totalWeeks: number; acceleratedHours: number; acceleratedWeeks: number };
+  submittedAt: string;
+}
+
 interface BlueprintDB extends DBSchema {
   users: {
     key: string;
@@ -75,10 +85,15 @@ interface BlueprintDB extends DBSchema {
     value: DBInteraction;
     indexes: { 'by-userId': string; 'by-event': string; 'by-timestamp': string };
   };
+  assessments: {
+    key: string;
+    value: DBAssessment;
+    indexes: { 'by-userId': string; 'by-platform': string; 'by-submittedAt': string };
+  };
 }
 
 const DB_NAME = 'blueprint_db';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 let dbInstance: IDBPDatabase<BlueprintDB> | null = null;
 
@@ -122,6 +137,14 @@ export async function getDB(): Promise<IDBPDatabase<BlueprintDB>> {
         interactionStore.createIndex('by-userId', 'userId');
         interactionStore.createIndex('by-event', 'event');
         interactionStore.createIndex('by-timestamp', 'timestamp');
+      }
+
+      // Assessments store (added in v2)
+      if (!db.objectStoreNames.contains('assessments')) {
+        const assessmentStore = db.createObjectStore('assessments', { keyPath: 'id' });
+        assessmentStore.createIndex('by-userId', 'userId');
+        assessmentStore.createIndex('by-platform', 'platform');
+        assessmentStore.createIndex('by-submittedAt', 'submittedAt');
       }
     },
   });
@@ -210,6 +233,23 @@ export async function dbGetRecentInteractions(limit = 100): Promise<DBInteractio
   return all
     .sort((a, b) => b.timestamp.localeCompare(a.timestamp))
     .slice(0, limit);
+}
+
+// ─── Assessments ────────────────────────────────────────
+
+export async function dbPutAssessment(assessment: DBAssessment): Promise<void> {
+  const db = await getDB();
+  await db.put('assessments', assessment);
+}
+
+export async function dbGetAssessmentsByUser(userId: string): Promise<DBAssessment[]> {
+  const db = await getDB();
+  return db.getAllFromIndex('assessments', 'by-userId', userId);
+}
+
+export async function dbGetAllAssessments(): Promise<DBAssessment[]> {
+  const db = await getDB();
+  return db.getAll('assessments');
 }
 
 // ─── Migration from localStorage ────────────────────────

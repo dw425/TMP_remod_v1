@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { CartItem } from '@/types/cart';
+import { trackEvent } from '@/features/analytics/analytics';
 
 interface CartStore {
   items: CartItem[];
@@ -14,7 +15,7 @@ export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
-      add: (item) =>
+      add: (item) => {
         set((state) => {
           const existing = state.items.find((i) => i.id === item.id && i.billing === item.billing);
           if (existing) {
@@ -25,12 +26,20 @@ export const useCartStore = create<CartStore>()(
             };
           }
           return { items: [...state.items, { ...item, quantity: 1 }] };
-        }),
-      remove: (id) =>
+        });
+        trackEvent('cart_item_added', { productId: item.id, title: item.title, price: item.price, billing: item.billing });
+      },
+      remove: (id) => {
         set((state) => ({
           items: state.items.filter((i) => i.id !== id),
-        })),
-      clear: () => set({ items: [] }),
+        }));
+        trackEvent('cart_item_removed', { productId: id });
+      },
+      clear: () => {
+        const itemCount = get().items.length;
+        set({ items: [] });
+        trackEvent('checkout_completed', { itemCount });
+      },
       totalCount: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
     }),
     { name: 'blueprint_cart_v2' }

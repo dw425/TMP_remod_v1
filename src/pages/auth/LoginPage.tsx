@@ -5,10 +5,13 @@ import { Button } from '@/components/ui';
 import { SEO } from '@/components/SEO';
 import { ROUTES } from '@/config/routes';
 import { checkLoginRateLimit } from '@/features/auth/validation';
+import { useTrack } from '@/features/analytics/useTrack';
+import { EVENTS } from '@/features/analytics/events';
 
 export default function LoginPage() {
   const { login, error } = useAuth();
   const navigate = useNavigate();
+  const track = useTrack();
   const [searchParams] = useSearchParams();
   const returnTo = searchParams.get('returnTo') || ROUTES.DASHBOARD;
 
@@ -56,6 +59,7 @@ export default function LoginPage() {
     setSubmitting(true);
     try {
       await login({ email, password });
+      track(EVENTS.LOGIN_COMPLETED, { email });
       navigate(returnTo, { replace: true });
     } catch {
       // error is set in store — re-check lockout
