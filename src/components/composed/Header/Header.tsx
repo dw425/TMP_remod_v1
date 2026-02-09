@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { CartBadge } from './CartBadge';
+import { UserMenu } from './UserMenu';
 import { mainNav } from '@/data/navigation';
 import { ROUTES } from '@/config/routes';
 
@@ -26,6 +27,7 @@ export function Header() {
 
           <div className="flex items-center space-x-4">
             <CartBadge />
+            <UserMenu />
           </div>
         </div>
       </div>
