@@ -6,6 +6,4 @@ export const categories = [
   { id: 'media', name: 'Media' },
   { id: 'oil-gas', name: 'Oil & Gas' },
   { id: 'defense', name: 'Defense' },
-  { id: 'accelerators', name: 'Accelerators' },
-  { id: 'migration-tools', name: 'Migration Tools' },
 ] as const;

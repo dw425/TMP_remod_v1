@@ -2,9 +2,10 @@ import { useEffect, useRef } from 'react';
 import { trackEvent } from './analytics';
 
 export function SessionTracker() {
-  const startRef = useRef(Date.now());
+  const startRef = useRef(0);
 
   useEffect(() => {
+    startRef.current = Date.now();
     const start = startRef.current;
 
     const handleUnload = () => {

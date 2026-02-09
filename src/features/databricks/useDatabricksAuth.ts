@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { useTrack } from '@/features/analytics/useTrack';
 import * as deploymentService from './deploymentService';
 import type { DatabricksConnection } from './types';
@@ -20,20 +20,19 @@ async function generateCodeChallenge(verifier: string): Promise<string> {
 }
 
 export function useDatabricksAuth() {
-  const [connection, setConnection] = useState<DatabricksConnection | null>(null);
-  const [isConnecting, setIsConnecting] = useState(false);
-  const track = useTrack();
-
-  useEffect(() => {
+  const [connection, setConnection] = useState<DatabricksConnection | null>(() => {
     const saved = deploymentService.getSavedConnection();
     if (saved) {
-      setConnection({
+      return {
         workspaceUrl: saved.workspaceUrl,
         accessToken: 'demo-token',
         tokenExpiry: saved.connectedAt + 3600000,
-      });
+      };
     }
-  }, []);
+    return null;
+  });
+  const [isConnecting, setIsConnecting] = useState(false);
+  const track = useTrack();
 
   const connect = useCallback(
     async (workspaceUrl: string) => {

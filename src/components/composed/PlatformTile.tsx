@@ -5,29 +5,35 @@ interface PlatformTileProps {
   onClick: (slug: string) => void;
 }
 
-function getContrastColor(hex: string): string {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  return luminance > 0.5 ? '#111827' : '#ffffff';
-}
-
 export function PlatformTile({ platform, onClick }: PlatformTileProps) {
-  const textColor = getContrastColor(platform.brandColor);
-
   return (
     <button
       onClick={() => onClick(platform.slug)}
-      className="w-full text-left p-6 border border-gray-300 hover:shadow-md transition-shadow"
-      style={{ backgroundColor: platform.brandColor }}
+      className="tile-card"
+      data-brand={platform.id === 'unity-catalog' ? 'databricks' : platform.id === 'synapse' ? 'azure' : platform.id === 'sql-server' ? 'microsoft' : platform.id === 'redshift' ? 'aws' : platform.slug}
     >
-      <h3 className="text-xl font-bold mb-2" style={{ color: textColor }}>
-        {platform.name}
-      </h3>
-      <p className="text-sm opacity-90" style={{ color: textColor }}>
-        {platform.description}
-      </p>
+      <div className="logo-container">
+        {platform.logoType === 'svg-text' ? (
+          <svg viewBox="0 0 100 30" xmlns="http://www.w3.org/2000/svg">
+            <text
+              x="0"
+              y="24"
+              fontFamily="Arial, sans-serif"
+              fontWeight="800"
+              fontSize="28"
+              fill={platform.brandColor}
+            >
+              talend
+            </text>
+          </svg>
+        ) : platform.logo ? (
+          <img src={platform.logo} alt={platform.name} />
+        ) : null}
+      </div>
+      <div>
+        <h3 className="card-title">{platform.name}</h3>
+        <div className="card-tag">{platform.tag}</div>
+      </div>
     </button>
   );
 }

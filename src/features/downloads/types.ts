@@ -6,6 +6,9 @@ export interface DownloadableAsset {
   productSlug: string;
   version: string;
   sizeBytes: number;
+  githubRepo?: string;
+  githubPath?: string;
+  githubBranch?: string;
 }
 
 export interface DownloadRecord {

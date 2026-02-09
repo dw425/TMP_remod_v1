@@ -12,6 +12,11 @@ export function useTrack() {
         ...properties,
         userId,
         timestamp: new Date().toISOString(),
+        pageUrl: window.location.pathname,
+        pageTitle: document.title,
+        referrer: document.referrer || undefined,
+        viewportWidth: window.innerWidth,
+        viewportHeight: window.innerHeight,
       });
     },
     [userId],

@@ -84,4 +84,9 @@ export interface Platform {
   name: string;
   brandColor: string;
   description: string;
+  /** Short tag label shown below platform name on tile (e.g. "Cloud Platform") */
+  tag: string;
+  logo?: string;
+  /** 'svg-text' for Talend's inline SVG text element */
+  logoType?: 'url' | 'svg-text';
 }

@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAuth } from '@/features/auth/useAuth';
 import { useSecureDownload } from '@/features/downloads/useSecureDownload';
 import { useEntitlements } from '@/features/downloads/useEntitlements';
 import { DownloadTermsModal } from '@/components/modals/DownloadTermsModal';
 import { DOWNLOAD_CATALOG } from '@/features/downloads/downloadCatalog';
 import * as downloadService from '@/features/downloads/downloadService';
+import { isGitHubConfigured } from '@/features/downloads/githubService';
 import { Button } from '@/components/ui';
 import type { DownloadRecord } from '@/features/downloads/types';
 
@@ -19,11 +20,9 @@ export default function DownloadsPage() {
   const { user } = useAuth();
   const { download, showTerms, onAcceptTerms, onDeclineTerms } = useSecureDownload();
   const { isEntitled } = useEntitlements();
-  const [history, setHistory] = useState<DownloadRecord[]>([]);
-
-  useEffect(() => {
-    if (user) setHistory(downloadService.getDownloadHistory(user.id));
-  }, [user]);
+  const [history, setHistory] = useState<DownloadRecord[]>(() =>
+    user ? downloadService.getDownloadHistory(user.id) : [],
+  );
 
   if (!user) return null;
 
@@ -39,7 +38,13 @@ export default function DownloadsPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
-      <h1 className="text-2xl font-bold text-gray-900 mb-8">Downloads</h1>
+      <h1 className="text-2xl font-bold text-gray-900 mb-4">Downloads</h1>
+
+      {!isGitHubConfigured() && (
+        <div className="mb-6 p-3 bg-blue-50 border border-blue-200 text-blue-800 text-sm">
+          <span className="font-medium">Demo Mode</span> — Real downloads available after deployment configuration.
+        </div>
+      )}
 
       {availableAssets.length > 0 && (
         <div className="mb-10">

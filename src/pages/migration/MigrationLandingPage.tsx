@@ -12,24 +12,25 @@ export default function MigrationLandingPage() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <SEO
-        title="Migration Assessment Suite"
+        title="Migration Assessments | Blueprint"
         description="Assess your data platform migration to Databricks. Covers 11 source platforms with automated complexity scoring and ROM estimates."
         canonical="/migration"
       />
-      <div className="mb-12 text-center">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Data Migration Assessment Suite
+
+      <div className="mb-12 border-b border-gray-200 pb-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight mb-4">
+          Migration Assessments
         </h1>
-        <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-          Select your source platform to begin a comprehensive migration assessment.
-          Our assessments generate a Rough Order of Magnitude (ROM) estimate for
-          migrating to Databricks Lakehouse.
+        <p className="text-lg text-gray-600 max-w-3xl">
+          Select your current platform to access specific migration assessments,
+          questionnaires, and accelerator tools designed to speed up your move to
+          the Lakehouse.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="button-grid">
         {platforms.map((platform) => (
           <PlatformTile
             key={platform.id}
@@ -37,6 +38,13 @@ export default function MigrationLandingPage() {
             onClick={handlePlatformClick}
           />
         ))}
+
+        {/* Coming Soon placeholder tile */}
+        <div className="tile-card placeholder">
+          <h3 className="card-title" style={{ color: '#9ca3af', fontWeight: 500 }}>
+            (Coming Soon)
+          </h3>
+        </div>
       </div>
 
       <div className="mt-8 flex justify-end">
@@ -47,36 +55,6 @@ export default function MigrationLandingPage() {
           ROM Calculator Settings &rarr;
         </Link>
       </div>
-
-      <div className="mt-4 bg-white border border-gray-300 border-t-4 border-t-blueprint-blue p-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">How It Works</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div>
-            <div className="text-3xl font-bold text-blueprint-blue mb-2">1</div>
-            <h3 className="font-bold text-gray-900 mb-1">Select Platform</h3>
-            <p className="text-sm text-gray-600">
-              Choose your source platform from the tiles above to load the
-              platform-specific assessment form.
-            </p>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-blueprint-blue mb-2">2</div>
-            <h3 className="font-bold text-gray-900 mb-1">Complete Assessment</h3>
-            <p className="text-sm text-gray-600">
-              Fill in your environment details — table counts, pipeline inventory,
-              complexity ratings, and budget information.
-            </p>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-blueprint-blue mb-2">3</div>
-            <h3 className="font-bold text-gray-900 mb-1">Get ROM Estimate</h3>
-            <p className="text-sm text-gray-600">
-              Receive an instant Rough Order of Magnitude estimate with complexity
-              breakdown, hours, and cost range.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+    </main>
   );
 }

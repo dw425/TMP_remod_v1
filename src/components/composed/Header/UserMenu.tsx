@@ -56,6 +56,7 @@ export function UserMenu() {
   const menuItems = [
     { label: 'Dashboard', to: ROUTES.DASHBOARD },
     { label: 'Orders', to: ROUTES.ORDERS },
+    { label: 'Wishlist', to: ROUTES.WISHLIST },
     { label: 'Settings', to: ROUTES.SETTINGS },
   ];
 
@@ -93,12 +94,12 @@ export function UserMenu() {
           ))}
           {user.role === 'admin' && (
             <Link
-              to={ROUTES.ROM_ADMIN}
+              to={ROUTES.ADMIN_DASHBOARD}
               role="menuitem"
               onClick={() => setOpen(false)}
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blueprint-blue"
+              className="block px-4 py-2 text-sm text-blueprint-blue font-bold hover:bg-blue-50"
             >
-              ROM Admin
+              Admin Portal
             </Link>
           )}
           <button

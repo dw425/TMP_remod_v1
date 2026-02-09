@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAuth } from '@/features/auth/useAuth';
 import type { Order } from '@/types/auth';
 
@@ -22,11 +22,9 @@ const statusColors: Record<string, string> = {
 
 export default function OrderHistoryPage() {
   const { user } = useAuth();
-  const [orders, setOrders] = useState<Order[]>([]);
-
-  useEffect(() => {
-    if (user) setOrders(getOrders(user.email));
-  }, [user]);
+  const [orders] = useState<Order[]>(() =>
+    user ? getOrders(user.email) : [],
+  );
 
   if (!user) return null;
 

@@ -9,6 +9,9 @@ export const DOWNLOAD_CATALOG: DownloadableAsset[] = [
     productSlug: 'campaigniq',
     version: '2.1.0',
     sizeBytes: 245_000,
+    githubRepo: 'blueprint-notebooks',
+    githubPath: 'campaigniq/main.ipynb',
+    githubBranch: 'main',
   },
   {
     assetId: 'ciq-wheel-v2',
@@ -18,6 +21,9 @@ export const DOWNLOAD_CATALOG: DownloadableAsset[] = [
     productSlug: 'campaigniq',
     version: '2.1.0',
     sizeBytes: 1_200_000,
+    githubRepo: 'blueprint-notebooks',
+    githubPath: 'campaigniq/dist/campaigniq-2.1.0-py3-none-any.whl',
+    githubBranch: 'main',
   },
   {
     assetId: 'seg-notebook-v1',
@@ -27,6 +33,9 @@ export const DOWNLOAD_CATALOG: DownloadableAsset[] = [
     productSlug: 'segmentation-suite',
     version: '1.4.0',
     sizeBytes: 180_000,
+    githubRepo: 'blueprint-notebooks',
+    githubPath: 'segmentation/main.ipynb',
+    githubBranch: 'main',
   },
   {
     assetId: 'attr-bundle-v1',
@@ -36,6 +45,9 @@ export const DOWNLOAD_CATALOG: DownloadableAsset[] = [
     productSlug: 'attribution-engine',
     version: '1.2.0',
     sizeBytes: 3_400_000,
+    githubRepo: 'blueprint-notebooks',
+    githubPath: 'attribution/bundle.tar.gz',
+    githubBranch: 'main',
   },
   {
     assetId: 'pipe-notebook-v1',
@@ -45,6 +57,9 @@ export const DOWNLOAD_CATALOG: DownloadableAsset[] = [
     productSlug: 'pipeline-templates',
     version: '1.0.0',
     sizeBytes: 95_000,
+    githubRepo: 'blueprint-notebooks',
+    githubPath: 'pipelines/templates.ipynb',
+    githubBranch: 'main',
   },
   {
     assetId: 'migration-report',
@@ -54,5 +69,8 @@ export const DOWNLOAD_CATALOG: DownloadableAsset[] = [
     productSlug: 'migration-suite',
     version: '1.0.0',
     sizeBytes: 150_000,
+    githubRepo: 'blueprint-notebooks',
+    githubPath: 'migration/report_template.ipynb',
+    githubBranch: 'main',
   },
 ];

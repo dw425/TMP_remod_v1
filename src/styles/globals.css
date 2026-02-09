@@ -43,4 +43,249 @@
     filter: brightness(0) saturate(100%) invert(25%) sepia(98%) saturate(1600%) hue-rotate(219deg)
       brightness(96%) contrast(95%);
   }
+
+  /* Card system — blue top border, white bg, sharp corners */
+  .sharp-card {
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-top: 4px solid #1d4ed8;
+    border-radius: 0px;
+  }
+
+  /* Category filter buttons */
+  .filter-btn {
+    background: transparent;
+    color: #64748b;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.5rem 1.25rem;
+    border-radius: 0px;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .filter-btn:hover {
+    color: #1d4ed8;
+  }
+  .filter-btn.active {
+    color: #1d4ed8;
+    border-bottom: 2px solid #1d4ed8;
+  }
+
+  /* Form error text */
+  .form-error {
+    color: #dc2626;
+    font-size: 0.75rem;
+  }
+
+  /* Cart item styling */
+  .cart-item {
+    border: 1px solid #e5e7eb;
+    padding: 1rem;
+    transition: border-color 0.2s;
+  }
+  .cart-item:hover {
+    border-color: #1d4ed8;
+  }
+
+  /* Checkout / PO button */
+  .checkout-btn {
+    background: #1d4ed8;
+    color: white;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.75rem 2rem;
+    border-radius: 0px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .checkout-btn:hover {
+    background: #1e40af;
+    transform: translateY(-1px);
+  }
+
+  /* Article / whitepaper body typography */
+  .article-body h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+  .article-body h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1d4ed8;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .article-body p {
+    line-height: 1.75;
+    color: #374151;
+    margin-bottom: 1rem;
+  }
+  .article-body ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .article-body li {
+    margin-bottom: 0.4rem;
+    color: #374151;
+  }
+
+  /* Migration assessment tile cards */
+  .button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+  }
+
+  .tile-card {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    padding: 24px;
+    text-decoration: none;
+    color: #1f2937;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 180px;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0px !important;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .tile-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background-color: #d1d5db;
+    transition: height 0.2s;
+  }
+
+  .tile-card[data-brand="gcp"]::before { background-color: #4285F4; }
+  .tile-card[data-brand="aws"]::before { background-color: #232F3E; }
+  .tile-card[data-brand="informatica"]::before { background-color: #FF4D00; }
+  .tile-card[data-brand="snowflake"]::before { background-color: #29B5E8; }
+  .tile-card[data-brand="teradata"]::before { background-color: #F37421; }
+  .tile-card[data-brand="databricks"]::before { background-color: #FF3621; }
+  .tile-card[data-brand="sap"]::before { background-color: #008FD3; }
+  .tile-card[data-brand="azure"]::before { background-color: #0078D4; }
+  .tile-card[data-brand="microsoft"]::before { background-color: #737373; }
+  .tile-card[data-brand="oracle"]::before { background-color: #C74634; }
+  .tile-card[data-brand="talend"]::before { background-color: #FF6D70; }
+
+  .tile-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border-color: #9ca3af;
+  }
+  .tile-card:hover::before {
+    height: 8px;
+  }
+
+  .logo-container {
+    height: 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 24px;
+  }
+
+  .logo-container img,
+  .logo-container svg {
+    max-height: 100%;
+    width: auto;
+    max-width: 140px;
+    object-fit: contain;
+    object-position: left;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    color: #111827;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .card-tag {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+  }
+
+  .tile-card.placeholder {
+    border: 2px dashed #d1d5db;
+    background-color: transparent;
+    cursor: default;
+    align-items: center;
+    justify-content: center;
+  }
+  .tile-card.placeholder::before { display: none; }
+  .tile-card.placeholder:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: #d1d5db;
+  }
+
+  /* Grid item pop-in animation */
+  .grid-item {
+    animation: popIn 0.4s ease-out forwards;
+  }
+
+  /* Modal animation classes */
+  .modal-enter {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+  .modal-leave {
+    animation: fadeOut 0.3s ease-in forwards;
+  }
+}
+
+/* Keyframe animations */
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
 }

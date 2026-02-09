@@ -15,7 +15,11 @@ export const ROUTES = {
   DOWNLOADS: '/account/downloads',
   DEPLOYMENTS: '/account/deployments',
   ORDERS: '/account/orders',
+  WISHLIST: '/account/wishlist',
   SETTINGS: '/account/settings',
   DATABRICKS_CALLBACK: '/auth/databricks/callback',
+  ADMIN_DASHBOARD: '/admin',
+  ADMIN_USERS: '/admin/users',
+  ADMIN_ORDERS: '/admin/orders',
   ROM_ADMIN: '/admin/rom-config',
 } as const;

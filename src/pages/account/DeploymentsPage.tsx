@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAuth } from '@/features/auth/useAuth';
 import { useDatabricksAuth } from '@/features/databricks/useDatabricksAuth';
 import { useDatabricksDeploy } from '@/features/databricks/useDatabricksDeploy';
@@ -15,11 +15,9 @@ export default function DeploymentsPage() {
   const { deploy, deploying } = useDatabricksDeploy();
   const { isEntitled } = useEntitlements();
   const [showConnect, setShowConnect] = useState(false);
-  const [history, setHistory] = useState<DeploymentRecord[]>([]);
-
-  useEffect(() => {
-    if (user) setHistory(deploymentService.getDeployments(user.id));
-  }, [user]);
+  const [history, setHistory] = useState<DeploymentRecord[]>(() =>
+    user ? deploymentService.getDeployments(user.id) : [],
+  );
 
   if (!user) return null;
 

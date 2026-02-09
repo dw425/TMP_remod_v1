@@ -4,7 +4,19 @@ import { useTrack } from '@/features/analytics/useTrack';
 import { useAlerts } from '@/features/notifications/useAlerts';
 import { EVENTS } from '@/features/analytics/events';
 import * as downloadService from './downloadService';
+import * as githubService from './githubService';
 import type { DownloadableAsset } from './types';
+
+function triggerBrowserDownload(blob: Blob, fileName: string) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
 
 export function useSecureDownload() {
   const { user, isAuthenticated } = useAuth();
@@ -14,7 +26,7 @@ export function useSecureDownload() {
   const [showTerms, setShowTerms] = useState(false);
 
   const executeDownload = useCallback(
-    (asset: DownloadableAsset) => {
+    async (asset: DownloadableAsset) => {
       if (!user) return;
 
       downloadService.recordRateLimit(user.id);
@@ -22,23 +34,38 @@ export function useSecureDownload() {
 
       track(EVENTS.DOWNLOAD_INITIATED, { assetId: asset.assetId, fileType: asset.fileType });
 
-      // Demo mode: simulate download with a generated file
-      const licenseHeader = `# Licensed to: ${user.email}\n# Download ID: ${crypto.randomUUID()}\n# Date: ${new Date().toISOString()}\n# PROPRIETARY - DO NOT DISTRIBUTE\n\n`;
+      const downloadId = crypto.randomUUID();
+
+      // Try GitHub download if configured
+      if (asset.githubRepo && asset.githubPath && githubService.isGitHubConfigured()) {
+        try {
+          let blob = await githubService.fetchAsset(asset);
+
+          // Apply watermark to text-based files
+          if (githubService.isWatermarkable(asset)) {
+            blob = await githubService.applyWatermark(blob, user.email, downloadId);
+          }
+
+          triggerBrowserDownload(blob, asset.fileName);
+          showSuccess('Download complete', asset.displayName);
+          track(EVENTS.DOWNLOAD_COMPLETED, { assetId: asset.assetId, source: 'github' });
+          return;
+        } catch {
+          // Fall through to demo mode
+          showInfo('Using demo download', 'GitHub source unavailable — generating demo file.');
+        }
+      }
+
+      // Demo mode: generate watermarked placeholder file
+      const licenseHeader = `# Licensed to: ${user.email}\n# Download ID: ${downloadId}\n# Date: ${new Date().toISOString()}\n# PROPRIETARY - DO NOT DISTRIBUTE\n\n`;
       const content = `${licenseHeader}# ${asset.displayName} v${asset.version}\n# This is a demo download.\n`;
       const blob = new Blob([content], { type: 'application/octet-stream' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = asset.fileName;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      triggerBrowserDownload(blob, asset.fileName);
 
       showSuccess('Download complete', asset.displayName);
-      track(EVENTS.DOWNLOAD_COMPLETED, { assetId: asset.assetId });
+      track(EVENTS.DOWNLOAD_COMPLETED, { assetId: asset.assetId, source: 'demo' });
     },
-    [user, track, showSuccess],
+    [user, track, showSuccess, showInfo],
   );
 
   const download = useCallback(

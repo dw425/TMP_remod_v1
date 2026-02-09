@@ -1,4 +1,6 @@
-import { Modal, Button, Badge } from '@/components/ui';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useScrollLock } from '@/hooks/useScrollLock';
 import { formatCurrency } from '@/lib/formatCurrency';
 import type { Product } from '@/types/product';
 
@@ -6,66 +8,242 @@ interface ProductModalProps {
   product: Product | null;
   isOpen: boolean;
   onClose: () => void;
-  onAddToCart: (product: Product) => void;
 }
 
-export function ProductModal({ product, isOpen, onClose, onAddToCart }: ProductModalProps) {
-  if (!product) return null;
+type TabId = 'overview' | 'video-demo' | 'pricing' | 'prerequisites';
 
-  const hasPrice = product.priceMonthly > 0 || product.priceAnnual > 0;
+const TOOL_TABS: { id: TabId; label: string }[] = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'video-demo', label: 'Video Demo' },
+  { id: 'pricing', label: 'Pricing' },
+  { id: 'prerequisites', label: 'Prerequisites' },
+];
+
+export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
+  const [activeTab, setActiveTab] = useState<TabId>('overview');
+  const navigate = useNavigate();
+  useScrollLock(isOpen);
+
+  // React-recommended pattern: adjust state during render when props change
+  const [prevProductId, setPrevProductId] = useState(product?.id);
+  if (prevProductId !== product?.id) {
+    setPrevProductId(product?.id);
+    if (activeTab !== 'overview') {
+      setActiveTab('overview');
+    }
+  }
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+    }
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
+
+  if (!product || !isOpen) return null;
+
+  const isTool = product.type === 'tool';
+  const hasPricing = product.priceMonthly > 0;
+  const tabs = isTool ? TOOL_TABS : [{ id: 'overview' as TabId, label: 'Overview' }];
+
+  // Determine action button text and behavior
+  const getActionButton = () => {
+    if (product.detailPage) {
+      return {
+        text: product.id === 7 ? 'Go to Insight' : 'Get Started',
+        onClick: () => {
+          onClose();
+          navigate(product.detailPage!);
+        },
+      };
+    }
+    if (isTool && product.slug) {
+      return {
+        text: 'Get Started',
+        onClick: () => {
+          onClose();
+          navigate(`/products/${product.slug}`);
+        },
+      };
+    }
+    return {
+      text: 'Contact Us Today',
+      onClick: () => {
+        // Could open contact modal — for now navigate to product page
+        onClose();
+        navigate(`/products/${product.slug}`);
+      },
+    };
+  };
+
+  const action = getActionButton();
+
+  // Determine modal title
+  const modalTitle = product.id === 7
+    ? 'Stop guessing: Why AI forecasting is your new marketing strategy'
+    : product.title;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={product.title}>
-      <div className="space-y-6">
-        <div className="flex items-center gap-3">
-          <Badge variant="primary">{product.type}</Badge>
-          <span className="text-sm text-gray-600">{product.subtitle}</span>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-label={product.title}
+    >
+      <div className="fixed inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={onClose} aria-hidden="true" />
+      <div
+        className="relative bg-white w-full max-w-[53rem] h-[480px] overflow-hidden flex flex-col modal-enter shadow-2xl"
+      >
+        {/* Header */}
+        <div className="flex items-start justify-between p-6 border-b border-gray-100 shrink-0">
+          <h4 className="text-2xl font-bold text-gray-900">{modalTitle}</h4>
+          <button
+            onClick={onClose}
+            className="p-1 hover:bg-gray-100 transition-colors"
+            aria-label="Close"
+          >
+            <svg className="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
 
-        <p className="text-gray-700">{product.description}</p>
+        {/* Body */}
+        <div className="flex-grow overflow-hidden">
+          <div className="flex flex-col md:flex-row h-full">
+            {/* Left Sidebar with Tabs */}
+            <div className="w-full md:w-1/4 bg-gray-50 border-r border-gray-100 p-6 flex flex-col shrink-0">
+              <nav className="flex flex-col space-y-1 mb-4">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`w-full text-left px-4 py-3 font-bold text-sm transition-colors border-l-4 ${
+                      activeTab === tab.id
+                        ? 'bg-white border-blueprint-blue text-blueprint-blue shadow-sm'
+                        : 'border-transparent text-gray-500 hover:bg-white hover:text-gray-800'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </nav>
+              <div>
+                <button
+                  onClick={action.onClick}
+                  className="w-full px-4 py-3 bg-blueprint-blue text-white text-sm font-bold uppercase tracking-wider hover:bg-blue-800 transition-colors shadow-sm"
+                >
+                  {action.text}
+                </button>
+              </div>
+            </div>
 
-        {product.features.length > 0 && (
-          <div>
-            <h3 className="font-bold text-lg mb-3">Key Features</h3>
-            <ul className="space-y-2">
-              {product.features.map((feature, index) => (
-                <li key={index} className="flex items-start">
-                  <span className="text-blueprint-blue mr-2">✓</span>
-                  <span className="text-gray-700">{feature}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+            {/* Right Content Area */}
+            <div className="w-full md:w-3/4 p-4 bg-white overflow-y-auto">
+              {/* Overview Tab */}
+              {activeTab === 'overview' && (
+                <div>
+                  {product.id === 7 ? (
+                    /* Special overview for Top Trending Insight */
+                    <div className="prose prose-sm max-w-none text-gray-600">
+                      <h5 className="font-bold text-gray-900 text-lg mb-2">The Challenge</h5>
+                      <p className="mb-4">The pressure on marketing leaders to prove ROI has never been greater. Yet, disconnected data sources and manual spreadsheets force critical budget decisions based on incomplete information. This reactive approach leads to wasted spend and missed opportunities.</p>
+                      <h5 className="font-bold text-gray-900 text-lg mb-2">The Solution: A Factory for Intelligence</h5>
+                      <p className="mb-4">Winning demands a shift from hindsight to foresight. The &quot;AI Factory&quot; model unifies your data using Unity Catalog and predicts outcomes with precision. By embedding AI-driven forecasting into your planning, marketing transforms from a cost center into a predictable revenue engine.</p>
+                      <h5 className="font-bold text-gray-900 text-lg mb-2">Key Takeaways</h5>
+                      <ul className="list-disc pl-5 space-y-1 mb-6">
+                        <li><strong>Unify Data:</strong> Connect siloed campaign data for a single source of truth.</li>
+                        <li><strong>Predict ROAS:</strong> Use AI agents to generate 7- and 14-day revenue projections.</li>
+                        <li><strong>Simulate Strategy:</strong> Answer &quot;what-if&quot; questions to optimize budget before spending.</li>
+                      </ul>
+                    </div>
+                  ) : (
+                    <div>
+                      <h5 className="font-bold text-lg mb-4 text-gray-900 uppercase tracking-wide text-xs">
+                        Solution Overview
+                      </h5>
+                      <div className="prose prose-sm max-w-none text-gray-600 leading-relaxed">
+                        {product.description.split('\n').filter(Boolean).map((para, i) => (
+                          <p key={i} className="mb-3">{para}</p>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
 
-        {hasPrice && (
-          <div className="bg-gray-50 p-4">
-            <h3 className="font-bold mb-2">Pricing</h3>
-            <div className="space-y-1">
-              <p>Monthly: {formatCurrency(product.priceMonthly)}</p>
-              <p>Annual: {formatCurrency(product.priceAnnual)}</p>
+              {/* Video Demo Tab */}
+              {activeTab === 'video-demo' && (
+                <div className="h-full w-full">
+                  {product.videoUrl ? (
+                    <div className="w-full h-full bg-black shadow-lg">
+                      <iframe
+                        src={product.videoUrl}
+                        title={`${product.title} Demo`}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="w-full h-full"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-full h-full bg-gray-100 flex items-center justify-center border border-gray-200 shadow-inner">
+                      <p className="text-gray-500 font-medium">Video Preview Unavailable</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Pricing Tab */}
+              {activeTab === 'pricing' && (
+                <div>
+                  {hasPricing ? (
+                    <>
+                      <h5 className="font-bold text-sm uppercase tracking-wide mb-6">Pricing Models</h5>
+                      <div className="grid gap-4">
+                        <div className="p-6 border border-gray-200 bg-gray-50">
+                          <h6 className="font-bold text-gray-900">Single User</h6>
+                          <p className="text-gray-600 text-sm mt-1">{formatCurrency(product.priceMonthly)}/mo</p>
+                        </div>
+                        <div className="p-6 border border-gray-200 bg-gray-50">
+                          <h6 className="font-bold text-gray-900">Team Account</h6>
+                          <p className="text-gray-600 text-sm mt-1">Starting at $5,000.00/mo</p>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="p-6 border border-gray-200 text-center bg-gray-50">
+                      <h6 className="font-bold text-gray-900 mb-2">Enterprise Pricing</h6>
+                      <p className="text-gray-600 text-sm mb-4">Contact us for a custom quote based on your environment and requirements.</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Prerequisites Tab */}
+              {activeTab === 'prerequisites' && (
+                <div>
+                  <h5 className="font-bold text-sm uppercase tracking-wide mb-4">System Requirements</h5>
+                  <ul className="list-disc list-inside text-sm text-gray-600 space-y-2 border-l-2 border-yellow-400 pl-4 bg-yellow-50 p-4">
+                    {product.readinessChecklist && product.readinessChecklist.length > 0 ? (
+                      product.readinessChecklist.map((item, i) => (
+                        <li key={i}>{item}</li>
+                      ))
+                    ) : (
+                      <>
+                        <li>Databricks Workspace</li>
+                        <li>Unity Catalog</li>
+                      </>
+                    )}
+                  </ul>
+                </div>
+              )}
             </div>
           </div>
-        )}
-
-        <div className="flex gap-3">
-          {hasPrice && (
-            <Button
-              variant="primary"
-              onClick={() => {
-                onAddToCart(product);
-                onClose();
-              }}
-              className="flex-1"
-            >
-              Add to Cart
-            </Button>
-          )}
-          <Button variant="outline" onClick={onClose} className="flex-1">
-            Close
-          </Button>
         </div>
       </div>
-    </Modal>
+    </div>
   );
 }

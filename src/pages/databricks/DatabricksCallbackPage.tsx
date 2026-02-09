@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDatabricksAuth } from '@/features/databricks/useDatabricksAuth';
 import { Spinner } from '@/components/ui';
@@ -8,25 +8,24 @@ export default function DatabricksCallbackPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { handleCallback } = useDatabricksAuth();
-  const [error, setError] = useState<string | null>(null);
+
+  const initialError = useMemo(() => {
+    const errorParam = searchParams.get('error');
+    if (errorParam) return searchParams.get('error_description') || 'Authentication failed';
+    if (!searchParams.get('code')) return 'No authorization code received';
+    return null;
+  }, [searchParams]);
+
+  const [error, setError] = useState<string | null>(initialError);
 
   useEffect(() => {
     const code = searchParams.get('code');
-    const errorParam = searchParams.get('error');
-
-    if (errorParam) {
-      setError(searchParams.get('error_description') || 'Authentication failed');
-      return;
-    }
-
-    if (code) {
+    if (code && !initialError) {
       handleCallback(code)
         .then(() => navigate(ROUTES.DEPLOYMENTS, { replace: true }))
         .catch(() => setError('Failed to complete authentication'));
-    } else {
-      setError('No authorization code received');
     }
-  }, [searchParams, handleCallback, navigate]);
+  }, [searchParams, handleCallback, navigate, initialError]);
 
   if (error) {
     return (

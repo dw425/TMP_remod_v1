@@ -17,11 +17,17 @@ export function SessionTimeoutModal({
 }: SessionTimeoutModalProps) {
   const [secondsLeft, setSecondsLeft] = useState(countdownSeconds);
 
-  useEffect(() => {
-    if (!isOpen) {
+  // React-recommended pattern: adjust state during render when props change
+  const [prevIsOpen, setPrevIsOpen] = useState(isOpen);
+  if (prevIsOpen !== isOpen) {
+    setPrevIsOpen(isOpen);
+    if (secondsLeft !== countdownSeconds) {
       setSecondsLeft(countdownSeconds);
-      return;
     }
+  }
+
+  useEffect(() => {
+    if (!isOpen) return;
 
     const interval = setInterval(() => {
       setSecondsLeft((prev) => {

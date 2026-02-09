@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/features/auth/useAuth';
 import { Button } from '@/components/ui';
 import { SEO } from '@/components/SEO';
 import { ROUTES } from '@/config/routes';
+import { checkLoginRateLimit } from '@/features/auth/validation';
 
 export default function LoginPage() {
   const { login, error } = useAuth();
@@ -14,19 +15,59 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [lockoutMs, setLockoutMs] = useState(0);
+
+  const checkLockout = useCallback(() => {
+    if (!email) return;
+    const result = checkLoginRateLimit(email);
+    if (!result.allowed && result.retryAfterMs) {
+      setLockoutMs(result.retryAfterMs);
+    } else {
+      setLockoutMs(0);
+    }
+  }, [email]);
+
+  // Countdown timer for lockout
+  useEffect(() => {
+    if (lockoutMs <= 0) return;
+    const timer = setInterval(() => {
+      setLockoutMs((prev) => {
+        const next = prev - 1000;
+        if (next <= 0) {
+          clearInterval(timer);
+          return 0;
+        }
+        return next;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [lockoutMs]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Re-check lockout before attempting
+    const rateCheck = checkLoginRateLimit(email);
+    if (!rateCheck.allowed) {
+      setLockoutMs(rateCheck.retryAfterMs || 0);
+      return;
+    }
+
     setSubmitting(true);
     try {
       await login({ email, password });
       navigate(returnTo, { replace: true });
     } catch {
-      // error is set in store
+      // error is set in store — re-check lockout
+      checkLockout();
     } finally {
       setSubmitting(false);
     }
   };
+
+  const isLockedOut = lockoutMs > 0;
+  const lockoutMinutes = Math.ceil(lockoutMs / 60000);
+  const lockoutSeconds = Math.ceil(lockoutMs / 1000);
 
   const inputClass =
     'w-full border border-gray-300 px-3 py-2 text-gray-900 bg-white focus:outline-none focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue';
@@ -37,7 +78,19 @@ export default function LoginPage() {
       <div className="bg-white border border-gray-300 border-t-4 border-t-blueprint-blue p-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-6">Sign In</h1>
 
-        {error && (
+        {isLockedOut && (
+          <div role="alert" className="mb-4 p-3 bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm">
+            <p className="font-medium">Account temporarily locked</p>
+            <p className="mt-1">
+              Too many failed attempts. Try again in{' '}
+              {lockoutSeconds > 60
+                ? `${lockoutMinutes} minute${lockoutMinutes !== 1 ? 's' : ''}`
+                : `${lockoutSeconds} second${lockoutSeconds !== 1 ? 's' : ''}`}.
+            </p>
+          </div>
+        )}
+
+        {error && !isLockedOut && (
           <div role="alert" className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm">
             {error}
           </div>
@@ -51,9 +104,11 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onBlur={checkLockout}
               required
               autoComplete="email"
               className={inputClass}
+              disabled={isLockedOut}
             />
           </div>
           <div>
@@ -67,10 +122,11 @@ export default function LoginPage() {
               minLength={6}
               autoComplete="current-password"
               className={inputClass}
+              disabled={isLockedOut}
             />
           </div>
-          <Button type="submit" className="w-full" disabled={submitting}>
-            {submitting ? 'Signing in...' : 'Sign In'}
+          <Button type="submit" className="w-full" disabled={submitting || isLockedOut}>
+            {submitting ? 'Signing in...' : isLockedOut ? 'Locked Out' : 'Sign In'}
           </Button>
         </form>
 

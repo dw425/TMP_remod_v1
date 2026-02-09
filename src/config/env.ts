@@ -11,6 +11,8 @@ const envSchema = z.object({
   // SECURITY: Slack webhook URL is exposed to the client bundle.
   // Do NOT set this in production until a backend proxy exists.
   VITE_SLACK_WEBHOOK_URL: z.string().optional(),
+  VITE_GITHUB_ORG: z.string().default('dw425'),
+  VITE_GITHUB_DOWNLOAD_TOKEN: z.string().optional(),
   VITE_ENABLE_CHAT: z
     .string()
     .transform((v) => v === 'true')
@@ -18,7 +20,7 @@ const envSchema = z.object({
   VITE_ENABLE_ANALYTICS: z
     .string()
     .transform((v) => v === 'true')
-    .default('false'),
+    .default('true'),
   VITE_SESSION_TIMEOUT_MINUTES: z.coerce.number().default(30),
 });
 

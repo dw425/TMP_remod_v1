@@ -3,6 +3,7 @@ import { lazy, Suspense } from 'react';
 import { RootLayout } from '@/layouts/RootLayout';
 import { AuthLayout } from '@/layouts/AuthLayout';
 import { ProtectedRoute } from '@/features/auth/ProtectedRoute';
+import { AdminGuard } from '@/components/auth/AdminGuard';
 import { Spinner } from '@/components/ui';
 import { ROUTES } from '@/config/routes';
 
@@ -13,6 +14,9 @@ const MigrationLandingPage = lazy(() => import('@/pages/migration/MigrationLandi
 const MigrationAssessmentPage = lazy(() => import('@/pages/migration/MigrationAssessmentPage'));
 const ROMCalculatorPage = lazy(() => import('@/pages/migration/ROMCalculatorPage'));
 const ROMAdminPage = lazy(() => import('@/pages/admin/ROMAdminPage'));
+const AdminDashboard = lazy(() => import('@/pages/admin/AdminDashboard'));
+const UserManagement = lazy(() => import('@/pages/admin/UserManagement'));
+const OrderReports = lazy(() => import('@/pages/admin/OrderReports'));
 const AIFactoryPage = lazy(() => import('@/pages/content/AIFactoryPage'));
 const WhitepaperPage = lazy(() => import('@/pages/content/WhitepaperPage'));
 const NotFoundPage = lazy(() => import('@/pages/errors/NotFoundPage'));
@@ -27,6 +31,7 @@ const DashboardPage = lazy(() => import('@/pages/account/DashboardPage'));
 const SettingsPage = lazy(() => import('@/pages/account/SettingsPage'));
 const OrderHistoryPage = lazy(() => import('@/pages/account/OrderHistoryPage'));
 const DownloadsPage = lazy(() => import('@/pages/account/DownloadsPage'));
+const WishlistPage = lazy(() => import('@/pages/account/WishlistPage'));
 const DeploymentsPage = lazy(() => import('@/pages/account/DeploymentsPage'));
 const DatabricksCallbackPage = lazy(() => import('@/pages/databricks/DatabricksCallbackPage'));
 
@@ -86,11 +91,43 @@ const router = createBrowserRouter(
           ),
         },
         {
+          path: ROUTES.ADMIN_DASHBOARD,
+          element: (
+            <AdminGuard>
+              <SuspenseWrap>
+                <AdminDashboard />
+              </SuspenseWrap>
+            </AdminGuard>
+          ),
+        },
+        {
+          path: ROUTES.ADMIN_USERS,
+          element: (
+            <AdminGuard>
+              <SuspenseWrap>
+                <UserManagement />
+              </SuspenseWrap>
+            </AdminGuard>
+          ),
+        },
+        {
+          path: ROUTES.ADMIN_ORDERS,
+          element: (
+            <AdminGuard>
+              <SuspenseWrap>
+                <OrderReports />
+              </SuspenseWrap>
+            </AdminGuard>
+          ),
+        },
+        {
           path: ROUTES.ROM_ADMIN,
           element: (
-            <SuspenseWrap>
-              <ROMAdminPage />
-            </SuspenseWrap>
+            <AdminGuard>
+              <SuspenseWrap>
+                <ROMAdminPage />
+              </SuspenseWrap>
+            </AdminGuard>
           ),
         },
         {
@@ -147,6 +184,14 @@ const router = createBrowserRouter(
           element: (
             <Protected>
               <DownloadsPage />
+            </Protected>
+          ),
+        },
+        {
+          path: ROUTES.WISHLIST,
+          element: (
+            <Protected>
+              <WishlistPage />
             </Protected>
           ),
         },
