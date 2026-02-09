@@ -52,11 +52,110 @@ const PRES_ROWS = [
 
 type MatrixData = Record<string, { simple: number; medium: number; complex: number; veryComplex: number }>;
 
-function initMatrix(): MatrixData {
+/** Default complexity distribution weights (slider value 1-5). */
+const DIST_WEIGHTS: Record<number, [number, number, number, number]> = {
+  1: [0.8, 0.2, 0, 0],
+  2: [0.6, 0.3, 0.1, 0],
+  3: [0.4, 0.4, 0.2, 0],
+  4: [0.2, 0.4, 0.3, 0.1],
+  5: [0.1, 0.2, 0.4, 0.3],
+};
+
+function distribute(total: number, complexity: number): { simple: number; medium: number; complex: number; veryComplex: number } {
+  const key = Math.min(5, Math.max(1, Math.round(complexity || 3)));
+  const w = DIST_WEIGHTS[key] ?? [0.4, 0.4, 0.2, 0];
+  return {
+    simple: Math.round(total * (w[0] ?? 0)),
+    medium: Math.round(total * (w[1] ?? 0)),
+    complex: Math.round(total * (w[2] ?? 0)),
+    veryComplex: Math.round(total * (w[3] ?? 0)),
+  };
+}
+
+/**
+ * Maps assessment form field names to ROM calculator matrix rows.
+ * Each entry: assessmentCountField → { matrixRow, complexityField? }
+ * Covers all 11 platforms' varying naming conventions.
+ */
+const FIELD_TO_MATRIX: Record<string, { row: string; complexityField?: string }> = {
+  // Tables
+  tableCount: { row: 'table', complexityField: 'tableComplexity' },
+  // Views
+  viewCount: { row: 'view', complexityField: 'viewComplexity' },
+  // Stored Procedures
+  spCount: { row: 'proc', complexityField: 'spComplexity' },
+  totalProcs: { row: 'proc', complexityField: 'procComplexity' },
+  plsqlObjectCount: { row: 'proc', complexityField: 'procComplexity' },
+  macroCount: { row: 'proc' },
+  // Functions
+  udfCount: { row: 'func', complexityField: 'udfComplexity' },
+  udfTotalCount: { row: 'func', complexityField: 'udfComplexity' },
+  funcCount: { row: 'func', complexityField: 'funcComplexity' },
+  functionCount: { row: 'func' },
+  abapCount: { row: 'func', complexityField: 'abapComplexity' },
+  // ETL / Pipelines
+  pipelineCount: { row: 'etl', complexityField: 'ingestComplexity' },
+  dataflowJobCount: { row: 'etl' },
+  etlCount: { row: 'etl', complexityField: 'etlComplexity' },
+  mappingCount: { row: 'etl', complexityField: 'mappingComplexity' },
+  jobCount: { row: 'etl' },
+  dataFlowCount: { row: 'etl', complexityField: 'dataFlowComplexity' },
+  bwObjectCount: { row: 'etl', complexityField: 'bwComplexity' },
+  // Scripts
+  scriptCount: { row: 'script', complexityField: 'scriptComplexity' },
+  totalScripts: { row: 'script', complexityField: 'scriptComplexity' },
+  notebookCount: { row: 'script', complexityField: 'notebookComplexity' },
+  bteqCount: { row: 'script', complexityField: 'scriptComplexity' },
+  fastloadCount: { row: 'script' },
+  tptCount: { row: 'script' },
+  routineCount: { row: 'script', complexityField: 'routineComplexity' },
+  sessionCount: { row: 'script' },
+  // Orchestration
+  taskCount: { row: 'orch', complexityField: 'orchComplexity' },
+  composerDagCount: { row: 'orch' },
+  orchCount: { row: 'orch', complexityField: 'orchComplexity' },
+  dagCount: { row: 'orch', complexityField: 'orchComplexity' },
+  triggerCount: { row: 'orch', complexityField: 'triggerComplexity' },
+  workflowCount: { row: 'orch', complexityField: 'workflowComplexity' },
+};
+
+function initMatrixFromAssessment(formData?: Record<string, unknown>): MatrixData {
   const m: MatrixData = {};
   [...DB_ROWS, ...CODE_ROWS, ...PRES_ROWS].forEach((r) => {
     m[r.key] = { simple: 0, medium: 0, complex: 0, veryComplex: 0 };
   });
+
+  if (!formData) return m;
+
+  // Accumulate counts per matrix row (some platforms have multiple fields mapping to same row)
+  const accumulated: Record<string, { total: number; complexity: number; complexityCount: number }> = {};
+
+  for (const [fieldName, mapping] of Object.entries(FIELD_TO_MATRIX)) {
+    const count = Number(formData[fieldName]) || 0;
+    if (count <= 0) continue;
+
+    if (!accumulated[mapping.row]) {
+      accumulated[mapping.row] = { total: 0, complexity: 0, complexityCount: 0 };
+    }
+    const acc = accumulated[mapping.row]!;
+    acc.total += count;
+
+    if (mapping.complexityField) {
+      const cVal = Number(formData[mapping.complexityField]);
+      if (cVal > 0) {
+        acc.complexity += cVal;
+        acc.complexityCount += 1;
+      }
+    }
+  }
+
+  // Distribute accumulated totals across complexity levels
+  for (const [rowKey, acc] of Object.entries(accumulated)) {
+    if (!m[rowKey]) continue;
+    const avgComplexity = acc.complexityCount > 0 ? acc.complexity / acc.complexityCount : 3;
+    m[rowKey] = distribute(acc.total, avgComplexity);
+  }
+
   return m;
 }
 
@@ -78,15 +177,16 @@ export default function ROMCalculatorPage() {
 
   const platform = report ? getPlatformBySlug(report.platform) : undefined;
 
-  // Editable state
+  // Editable state — pre-filled from assessment data
   const [projectName, setProjectName] = useState(String(report?.formData?.projectName ?? ''));
   const [stakeholder, setStakeholder] = useState(String(report?.formData?.stakeholder ?? ''));
   const [email, setEmail] = useState(String(report?.formData?.contactEmail ?? ''));
-  const [matrix, setMatrix] = useState<MatrixData>(initMatrix);
-  const [teamMaturity, setTeamMaturity] = useState(3);
+  const [matrix, setMatrix] = useState<MatrixData>(() => initMatrixFromAssessment(report?.formData));
+  const overallC = Number(report?.formData?.overallComplexity) || 3;
+  const [teamMaturity, setTeamMaturity] = useState(overallC);
   const [toolFamiliarity, setToolFamiliarity] = useState(3);
   const [infraConfig, setInfraConfig] = useState(3);
-  const [envComplexity, setEnvComplexity] = useState(3);
+  const [envComplexity, setEnvComplexity] = useState(overallC);
 
   // Calculation results
   const [manualHours, setManualHours] = useState(0);
