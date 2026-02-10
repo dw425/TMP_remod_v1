@@ -30,23 +30,23 @@ export default function OrderHistoryPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
-      <h1 className="text-2xl font-bold text-gray-900 mb-8">Order History</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-8">Order History</h1>
 
       {orders.length === 0 ? (
-        <div className="bg-white border border-gray-300 p-12 text-center">
-          <p className="text-gray-500 text-lg mb-2">No orders yet</p>
-          <p className="text-gray-400 text-sm">
+        <div className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 p-12 text-center">
+          <p className="text-gray-500 dark:text-gray-400 text-lg mb-2">No orders yet</p>
+          <p className="text-gray-400 dark:text-gray-400 text-sm">
             Your PO requests and order history will appear here.
           </p>
         </div>
       ) : (
         <div className="space-y-4">
           {orders.map((order) => (
-            <div key={order.id} className="bg-white border border-gray-300 p-6">
+            <div key={order.id} className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 p-6">
               <div className="flex items-start justify-between mb-4">
                 <div>
-                  <p className="font-bold text-gray-900">Order #{order.id.slice(0, 8)}</p>
-                  <p className="text-sm text-gray-500">
+                  <p className="font-bold text-gray-900 dark:text-gray-100">Order #{order.id.slice(0, 8)}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     {new Date(order.createdAt).toLocaleDateString()} &middot; {order.companyName}
                   </p>
                 </div>
@@ -54,14 +54,14 @@ export default function OrderHistoryPage() {
                   {order.status}
                 </span>
               </div>
-              <div className="border-t border-gray-200 pt-3">
+              <div className="border-t border-gray-200 dark:border-slate-700 pt-3">
                 {order.items.map((item, i) => (
                   <div key={i} className="flex justify-between text-sm py-1">
-                    <span className="text-gray-700">{item.title}</span>
-                    <span className="text-gray-500">${item.price.toLocaleString()}/{item.billing}</span>
+                    <span className="text-gray-700 dark:text-gray-300">{item.title}</span>
+                    <span className="text-gray-500 dark:text-gray-400">${item.price.toLocaleString()}/{item.billing}</span>
                   </div>
                 ))}
-                <div className="flex justify-between font-bold text-gray-900 border-t border-gray-200 pt-2 mt-2">
+                <div className="flex justify-between font-bold text-gray-900 dark:text-gray-100 border-t border-gray-200 dark:border-slate-700 pt-2 mt-2">
                   <span>Total</span>
                   <span>${order.total.toLocaleString()}</span>
                 </div>

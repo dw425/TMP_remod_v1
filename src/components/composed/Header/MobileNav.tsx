@@ -78,7 +78,7 @@ export function MobileNav() {
             <Link
               to={ROUTES.HOME}
               onClick={closeNav}
-              className="block px-4 py-3 text-sm font-bold text-gray-900 hover:text-blueprint-blue hover:bg-gray-50 transition-colors"
+              className="block px-4 py-3 text-sm font-bold text-gray-900 dark:text-gray-100 hover:text-blueprint-blue hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
             >
               Marketplace
             </Link>
@@ -87,7 +87,7 @@ export function MobileNav() {
             <Link
               to={ROUTES.MIGRATION_HOME}
               onClick={closeNav}
-              className="block px-4 py-3 text-sm font-bold text-gray-900 hover:text-blueprint-blue hover:bg-gray-50 transition-colors"
+              className="block px-4 py-3 text-sm font-bold text-gray-900 dark:text-gray-100 hover:text-blueprint-blue hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
             >
               AI-Migration
             </Link>
@@ -96,7 +96,7 @@ export function MobileNav() {
             <div>
               <button
                 onClick={() => toggleSection('whatwedo')}
-                className="w-full flex items-center justify-between px-4 py-3 text-sm font-bold text-gray-900 hover:text-blueprint-blue hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center justify-between px-4 py-3 text-sm font-bold text-gray-900 dark:text-gray-100 hover:text-blueprint-blue hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
               >
                 <span>What we do</span>
                 <svg
@@ -122,7 +122,7 @@ export function MobileNav() {
                             href={link.href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="block px-4 py-2 text-sm text-gray-600 hover:text-blueprint-blue transition-colors"
+                            className="block px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-blueprint-blue transition-colors"
                           >
                             {link.label}
                           </a>
@@ -131,7 +131,7 @@ export function MobileNav() {
                             key={link.label}
                             to={link.href}
                             onClick={closeNav}
-                            className="block px-4 py-2 text-sm text-gray-600 hover:text-blueprint-blue transition-colors"
+                            className="block px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-blueprint-blue transition-colors"
                           >
                             {link.label}
                           </Link>
@@ -147,7 +147,7 @@ export function MobileNav() {
             <div>
               <button
                 onClick={() => toggleSection('databricks')}
-                className="w-full flex items-center justify-between px-4 py-3 text-sm font-bold text-gray-900 hover:text-blueprint-blue hover:bg-gray-50 transition-colors"
+                className="w-full flex items-center justify-between px-4 py-3 text-sm font-bold text-gray-900 dark:text-gray-100 hover:text-blueprint-blue hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
               >
                 <span>Databricks</span>
                 <svg
@@ -168,7 +168,7 @@ export function MobileNav() {
                         href={item.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block px-4 py-2 text-sm text-gray-600 hover:text-blueprint-blue transition-colors"
+                        className="block px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-blueprint-blue transition-colors"
                       >
                         {item.title}
                       </a>
@@ -177,7 +177,7 @@ export function MobileNav() {
                         key={item.title}
                         to={item.href}
                         onClick={closeNav}
-                        className="block px-4 py-2 text-sm text-gray-600 hover:text-blueprint-blue transition-colors"
+                        className="block px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-blueprint-blue transition-colors"
                       >
                         {item.title}
                       </Link>
@@ -192,7 +192,7 @@ export function MobileNav() {
               href="https://bpcs.com/case-studies"
               target="_blank"
               rel="noopener noreferrer"
-              className="block px-4 py-3 text-sm font-bold text-gray-900 hover:text-blueprint-blue hover:bg-gray-50 transition-colors"
+              className="block px-4 py-3 text-sm font-bold text-gray-900 dark:text-gray-100 hover:text-blueprint-blue hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
             >
               Our Work
             </a>
@@ -202,7 +202,7 @@ export function MobileNav() {
               href="https://dw425.github.io/StrategyHub_test/"
               target="_blank"
               rel="noopener noreferrer"
-              className="block px-4 py-3 text-sm font-bold text-gray-900 hover:text-blueprint-blue hover:bg-gray-50 transition-colors"
+              className="block px-4 py-3 text-sm font-bold text-gray-900 dark:text-gray-100 hover:text-blueprint-blue hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
             >
               StrategyHub
             </a>

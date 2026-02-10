@@ -163,17 +163,17 @@ export function SearchBar() {
             <button
               key={result.id}
               onClick={() => handleSelect(result)}
-              className={`w-full text-left px-4 py-3 border-b border-gray-100 last:border-0 hover:bg-blue-50 ${
-                i === selectedIndex ? 'bg-blue-50' : ''
+              className={`w-full text-left px-4 py-3 border-b border-gray-100 dark:border-slate-700 last:border-0 hover:bg-blue-50 dark:hover:bg-slate-700 ${
+                i === selectedIndex ? 'bg-blue-50 dark:bg-slate-700' : ''
               }`}
             >
               <div className="flex items-center gap-2">
-                <span className="font-medium text-sm text-gray-900">{result.title}</span>
-                <span className="text-[10px] font-bold uppercase text-gray-400 px-1.5 py-0.5 bg-gray-100">
+                <span className="font-medium text-sm text-gray-900 dark:text-gray-100">{result.title}</span>
+                <span className="text-[10px] font-bold uppercase text-gray-400 px-1.5 py-0.5 bg-gray-100 dark:bg-slate-700">
                   {result.type}
                 </span>
               </div>
-              <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">{result.description}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-1">{result.description}</p>
             </button>
           ))}
         </div>

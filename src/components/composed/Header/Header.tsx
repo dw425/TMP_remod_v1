@@ -29,11 +29,11 @@ export function Header() {
               />
             </a>
 
-            <div className="h-6 w-px bg-gray-300 mx-2" />
+            <div className="h-6 w-px bg-gray-300 dark:bg-slate-600 mx-2" />
 
             <Link
               to={ROUTES.HOME}
-              className="text-lg font-medium text-gray-500 tracking-tight hover:text-blueprint-blue transition-colors"
+              className="text-lg font-medium text-gray-500 dark:text-gray-400 tracking-tight hover:text-blueprint-blue transition-colors"
             >
               Marketplace
             </Link>

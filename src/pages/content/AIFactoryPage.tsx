@@ -39,19 +39,19 @@ function AmIReadyModal({
     >
       <div className="fixed inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(2px)' }} onClick={onClose} aria-hidden="true" />
       <div
-        className="relative bg-white shadow-xl w-full max-w-3xl max-h-[95vh] flex flex-col border-t-8 border-amber-500"
+        className="relative bg-white dark:bg-slate-800 shadow-xl w-full max-w-3xl max-h-[95vh] flex flex-col border-t-8 border-amber-500"
       >
-        <header className="p-6 border-b border-gray-100 flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-900">Are You Ready for the AI Factory?</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-900 text-3xl">&times;</button>
+        <header className="p-6 border-b border-gray-100 dark:border-slate-700 flex justify-between items-center">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Are You Ready for the AI Factory?</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 text-3xl">&times;</button>
         </header>
         <div className="p-6 overflow-y-auto text-sm space-y-3">
-          <p className="text-gray-500 mb-4">
+          <p className="text-gray-500 dark:text-gray-400 mb-4">
             To maximize the value of the AI Factory, please confirm the following readiness indicators:
           </p>
-          <div className="grid grid-cols-1 gap-y-4 text-gray-800">
+          <div className="grid grid-cols-1 gap-y-4 text-gray-800 dark:text-gray-200">
             {items.map((label, i) => (
-              <div key={i} className="flex items-start bg-gray-50 p-3 border border-gray-100">
+              <div key={i} className="flex items-start bg-gray-50 dark:bg-slate-700 p-3 border border-gray-100 dark:border-slate-600">
                 <input
                   type="checkbox"
                   checked={checks[i]}
@@ -65,10 +65,10 @@ function AmIReadyModal({
             ))}
           </div>
         </div>
-        <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-100">
+        <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-100 dark:border-slate-700">
           <button
             onClick={onClose}
-            className="px-6 py-2 text-xs font-bold uppercase text-gray-500 hover:text-gray-800"
+            className="px-6 py-2 text-xs font-bold uppercase text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
           >
             Close
           </button>
@@ -138,25 +138,25 @@ function ContactSalesModal({
     >
       <div className="fixed inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(2px)' }} onClick={onClose} aria-hidden="true" />
       <div
-        className="relative bg-white shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col border-t-8 border-black"
+        className="relative bg-white dark:bg-slate-800 shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col border-t-8 border-black"
       >
-        <header className="p-6 border-b border-gray-100 flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-900">Contact Sales</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-900 text-2xl">&times;</button>
+        <header className="p-6 border-b border-gray-100 dark:border-slate-700 flex justify-between items-center">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Contact Sales</h2>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 text-2xl">&times;</button>
         </header>
         <form onSubmit={handleSubmit} className="p-8 space-y-4">
           <input type="hidden" name="form_subject" value="New Sales Inquiry from AI Factory Page" />
           <div>
-            <label htmlFor="af-fullName" className="block text-xs font-bold text-gray-500 uppercase mb-1">Full Name</label>
-            <input id="af-fullName" type="text" name="fullName" required className="w-full border border-gray-300 p-3 focus:border-blueprint-blue focus:outline-none" />
+            <label htmlFor="af-fullName" className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">Full Name</label>
+            <input id="af-fullName" type="text" name="fullName" required className="w-full border border-gray-300 dark:border-slate-600 p-3 focus:border-blueprint-blue focus:outline-none bg-white dark:bg-slate-700 dark:text-gray-100" />
           </div>
           <div>
-            <label htmlFor="af-email" className="block text-xs font-bold text-gray-500 uppercase mb-1">Business Email</label>
-            <input id="af-email" type="email" name="email" required className="w-full border border-gray-300 p-3 focus:border-blueprint-blue focus:outline-none" />
+            <label htmlFor="af-email" className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">Business Email</label>
+            <input id="af-email" type="email" name="email" required className="w-full border border-gray-300 dark:border-slate-600 p-3 focus:border-blueprint-blue focus:outline-none bg-white dark:bg-slate-700 dark:text-gray-100" />
           </div>
           <div>
-            <label htmlFor="af-message" className="block text-xs font-bold text-gray-500 uppercase mb-1">Message</label>
-            <textarea id="af-message" name="message" rows={4} required className="w-full border border-gray-300 p-3 focus:border-blueprint-blue focus:outline-none" />
+            <label htmlFor="af-message" className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">Message</label>
+            <textarea id="af-message" name="message" rows={4} required className="w-full border border-gray-300 dark:border-slate-600 p-3 focus:border-blueprint-blue focus:outline-none bg-white dark:bg-slate-700 dark:text-gray-100" />
           </div>
           <div className="flex flex-col gap-2 mt-4">
             <button
@@ -169,7 +169,7 @@ function ContactSalesModal({
             <button
               type="button"
               onClick={onClose}
-              className="w-full py-2 text-xs font-bold uppercase text-gray-400 hover:text-gray-800"
+              className="w-full py-2 text-xs font-bold uppercase text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
             >
               Cancel
             </button>
@@ -200,15 +200,15 @@ function MessageSentModal({ onClose }: { onClose: () => void }) {
     >
       <div className="fixed inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(2px)' }} onClick={onClose} aria-hidden="true" />
       <div
-        className="relative bg-white shadow-xl w-full max-w-md text-center p-8 border-t-8 border-green-500"
+        className="relative bg-white dark:bg-slate-800 shadow-xl w-full max-w-md text-center p-8 border-t-8 border-green-500"
       >
-        <div className="mx-auto flex items-center justify-center h-16 w-16 bg-green-100 mb-4" style={{ borderRadius: '9999px' }}>
+        <div className="mx-auto flex items-center justify-center h-16 w-16 bg-green-100 dark:bg-green-900/30 mb-4" style={{ borderRadius: '9999px' }}>
           <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h2 className="text-xl font-bold text-gray-900 mb-2">Message Sent!</h2>
-        <p className="text-gray-500 mb-6 text-sm">Our AI specialists will get back to you shortly.</p>
+        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">Message Sent!</h2>
+        <p className="text-gray-500 dark:text-gray-400 mb-6 text-sm">Our AI specialists will get back to you shortly.</p>
         <button onClick={onClose} className="mt-4 text-xs font-bold uppercase text-blueprint-blue hover:underline">
           Close
         </button>
@@ -236,7 +236,7 @@ function TechArchModal({ onClose }: { onClose: () => void }) {
       aria-modal="true"
     >
       <div className="fixed inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(2px)' }} onClick={onClose} aria-hidden="true" />
-      <div className="relative bg-white p-2 border border-gray-200 shadow-xl w-1/2">
+      <div className="relative bg-white dark:bg-slate-800 p-2 border border-gray-200 dark:border-slate-700 shadow-xl w-1/2">
         <button
           onClick={onClose}
           className="absolute -top-3 -right-3 text-white bg-black hover:bg-gray-800 w-8 h-8 flex items-center justify-center text-xl z-10"
@@ -244,7 +244,7 @@ function TechArchModal({ onClose }: { onClose: () => void }) {
         >
           &times;
         </button>
-        <div className="bg-gray-100 w-full h-96 flex items-center justify-center text-gray-500 font-mono text-xs border border-dashed border-gray-300">
+        <div className="bg-gray-100 dark:bg-slate-700 w-full h-96 flex items-center justify-center text-gray-500 dark:text-gray-400 font-mono text-xs border border-dashed border-gray-300 dark:border-slate-600">
           [AI Factory Architecture Diagram]
         </div>
       </div>
@@ -312,14 +312,14 @@ export default function AIFactoryPage() {
               </div>
             </section>
 
-            <section className="bg-white p-6 border border-gray-200 flex flex-col justify-center">
-              <h2 className="text-lg font-bold text-gray-900 border-b border-gray-100 pb-2 mb-3">
+            <section className="bg-white dark:bg-slate-800 p-6 border border-gray-200 dark:border-slate-700 flex flex-col justify-center">
+              <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 border-b border-gray-100 dark:border-slate-700 pb-2 mb-3">
                 Why the AI Factory?
               </h2>
               <h3 className="text-xs font-bold text-blueprint-blue uppercase tracking-wider mb-2">
                 The assembly line for business-ready AI
               </h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                 AI factories are essential because they shift enterprises from experimentation to
                 industrialized delivery — reducing risk, aligning teams, and accelerating value. By
                 starting with use case identification, organizations avoid wasted investment and ensure AI
@@ -332,32 +332,32 @@ export default function AIFactoryPage() {
 
           {/* Gartner Quote */}
           <section className="w-full">
-            <div className="bg-gray-50 border-l-4 border-blueprint-blue p-6 shadow-sm">
-              <blockquote className="text-lg font-medium text-gray-800 italic mb-2">
+            <div className="bg-gray-50 dark:bg-slate-800 border-l-4 border-blueprint-blue p-6 shadow-sm">
+              <blockquote className="text-lg font-medium text-gray-800 dark:text-gray-200 italic mb-2">
                 &quot;By 2029,{' '}
                 <span className="text-blueprint-blue font-bold">70%</span> of large enterprises
                 failing to effectively utilize AI factories will cease to exist.&quot;
               </blockquote>
-              <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">
+              <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
                 — Gartner, 2025
               </p>
             </div>
           </section>
 
           {/* Modular Engagements */}
-          <section className="bg-white p-8 border border-gray-200">
-            <div className="flex justify-between items-end mb-6 border-b border-gray-100 pb-4">
-              <h2 className="text-xl font-bold text-gray-900">Modular Engagements</h2>
-              <span className="text-xs text-gray-500 font-medium">Modular by design. Built for speed.</span>
+          <section className="bg-white dark:bg-slate-800 p-8 border border-gray-200 dark:border-slate-700">
+            <div className="flex justify-between items-end mb-6 border-b border-gray-100 dark:border-slate-700 pb-4">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Modular Engagements</h2>
+              <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">Modular by design. Built for speed.</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-gray-50 border border-gray-200 p-5 flex flex-col h-full hover:border-blueprint-blue transition-colors">
+              <div className="bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 p-5 flex flex-col h-full hover:border-blueprint-blue transition-colors">
                 <div className="mb-3">
                   <span className="bg-black text-white text-[10px] font-bold px-2 py-1 uppercase">Step 1</span>
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-3">1-Day Readiness Workshop</h3>
-                <p className="text-xs text-gray-600 leading-relaxed flex-grow">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">1-Day Readiness Workshop</h3>
+                <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed flex-grow">
                   This session is designed to identify high-value use cases and quickly assess your
                   organization&apos;s readiness to begin leveraging Databricks for AI. It includes enabling
                   access, validating data sources, reviewing current governance and skills. You&apos;ll
@@ -366,12 +366,12 @@ export default function AIFactoryPage() {
                 </p>
               </div>
 
-              <div className="bg-gray-50 border border-gray-200 p-5 flex flex-col h-full hover:border-blueprint-blue transition-colors">
+              <div className="bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 p-5 flex flex-col h-full hover:border-blueprint-blue transition-colors">
                 <div className="mb-3">
                   <span className="bg-black text-white text-[10px] font-bold px-2 py-1 uppercase">Step 2</span>
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-3">6-Week Foundations Engagement</h3>
-                <p className="text-xs text-gray-600 leading-relaxed flex-grow">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">6-Week Foundations Engagement</h3>
+                <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed flex-grow">
                   This engagement builds the groundwork for successful AI delivery by evaluating your
                   environment, refining governance, and designing a user experience tailored to your use
                   case. It includes defining success criteria, reviewing Center of Excellence maturity, and
@@ -379,12 +379,12 @@ export default function AIFactoryPage() {
                 </p>
               </div>
 
-              <div className="bg-gray-50 border border-gray-200 p-5 flex flex-col h-full hover:border-blueprint-blue transition-colors">
+              <div className="bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 p-5 flex flex-col h-full hover:border-blueprint-blue transition-colors">
                 <div className="mb-3">
                   <span className="bg-black text-white text-[10px] font-bold px-2 py-1 uppercase">Step 3</span>
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-3">12-Week Build & Deploy</h3>
-                <p className="text-xs text-gray-600 leading-relaxed flex-grow">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-3">12-Week Build & Deploy</h3>
+                <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed flex-grow">
                   This engagement takes your AI use cases into production with governance, orchestration,
                   and user experience fully implemented. It includes building models or agents, deploying
                   them using Databricks tools, and integrating them into automated workflows and
@@ -396,8 +396,8 @@ export default function AIFactoryPage() {
           </section>
 
           {/* 90-Day Delivery Framework */}
-          <section className="bg-white p-8 border border-gray-200">
-            <h2 className="text-xl font-bold text-gray-900 border-b border-gray-100 pb-3 mb-6">
+          <section className="bg-white dark:bg-slate-800 p-8 border border-gray-200 dark:border-slate-700">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 border-b border-gray-100 dark:border-slate-700 pb-3 mb-6">
               90-Day Delivery Framework
             </h2>
 
@@ -408,28 +408,28 @@ export default function AIFactoryPage() {
                 { num: '3', title: 'MVP', desc: 'Deploy working solution to test ROI.' },
                 { num: '4', title: 'Pre-Prod', desc: 'Operationalize governance & observability.' },
               ].map((step) => (
-                <div key={step.num} className="bg-gray-50 border border-gray-200 p-3 text-center relative">
-                  <div className="text-2xl font-bold text-gray-200 absolute top-1 right-2">{step.num}</div>
+                <div key={step.num} className="bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 p-3 text-center relative">
+                  <div className="text-2xl font-bold text-gray-200 dark:text-slate-600 absolute top-1 right-2">{step.num}</div>
                   <h4 className="text-xs font-bold text-blueprint-blue uppercase mb-1 relative z-10">
                     {step.title}
                   </h4>
-                  <p className="text-[10px] text-gray-600 leading-tight relative z-10">{step.desc}</p>
+                  <p className="text-[10px] text-gray-600 dark:text-gray-400 leading-tight relative z-10">{step.desc}</p>
                 </div>
               ))}
-              <div className="bg-gray-50 border-l-4 border-l-blueprint-blue border-t border-r border-b border-gray-200 p-3 text-center relative shadow-sm">
-                <div className="text-2xl font-bold text-gray-200 absolute top-1 right-2">5</div>
+              <div className="bg-gray-50 dark:bg-slate-700 border-l-4 border-l-blueprint-blue border-t border-r border-b border-gray-200 dark:border-slate-600 p-3 text-center relative shadow-sm">
+                <div className="text-2xl font-bold text-gray-200 dark:text-slate-600 absolute top-1 right-2">5</div>
                 <h4 className="text-xs font-bold text-blueprint-blue uppercase mb-1 relative z-10">
                   Production
                 </h4>
-                <p className="text-[10px] text-gray-600 leading-tight relative z-10">
+                <p className="text-[10px] text-gray-600 dark:text-gray-400 leading-tight relative z-10">
                   Launch KPI-tied AI with measurable value.
                 </p>
               </div>
             </div>
 
-            <div className="mt-8 bg-gray-50 p-6 border border-gray-100">
-              <h3 className="text-sm font-bold text-gray-900 mb-2">Why we deliver in 90 days</h3>
-              <p className="text-xs text-gray-600 mb-4">
+            <div className="mt-8 bg-gray-50 dark:bg-slate-700 p-6 border border-gray-100 dark:border-slate-600">
+              <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 mb-2">Why we deliver in 90 days</h3>
+              <p className="text-xs text-gray-600 dark:text-gray-400 mb-4">
                 Blueprint&apos;s AI Factory doesn&apos;t just promise speed. It&apos;s purpose built for it.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
@@ -439,7 +439,7 @@ export default function AIFactoryPage() {
                   'Modular delivery',
                   'Cross functional teams deliver with governance, cost control, and user centric design',
                 ].map((item) => (
-                  <div key={item} className="flex items-start gap-2 text-xs text-gray-600">
+                  <div key={item} className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-400">
                     <CheckIcon />
                     <span>{item}</span>
                   </div>
@@ -449,8 +449,8 @@ export default function AIFactoryPage() {
           </section>
 
           {/* Built to Scale */}
-          <section className="bg-white p-8 border border-gray-200">
-            <h2 className="text-xl font-bold text-gray-900 border-b border-gray-100 pb-3 mb-5">
+          <section className="bg-white dark:bg-slate-800 p-8 border border-gray-200 dark:border-slate-700">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 border-b border-gray-100 dark:border-slate-700 pb-3 mb-5">
               Built to scale with the right tools
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -472,9 +472,9 @@ export default function AIFactoryPage() {
                   desc: 'Lifecycle governance, observability, versioning, and cost control are embedded in every production deployment.',
                 },
               ].map((tool) => (
-                <div key={tool.title} className="p-5 bg-gray-50 border-l-4 border-black">
-                  <p className="font-bold text-sm text-gray-900 mb-2">{tool.title}</p>
-                  <p className="text-xs text-gray-600 leading-relaxed">{tool.desc}</p>
+                <div key={tool.title} className="p-5 bg-gray-50 dark:bg-slate-700 border-l-4 border-black dark:border-gray-400">
+                  <p className="font-bold text-sm text-gray-900 dark:text-gray-100 mb-2">{tool.title}</p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">{tool.desc}</p>
                 </div>
               ))}
             </div>
@@ -485,14 +485,14 @@ export default function AIFactoryPage() {
         <aside className="lg:col-span-3">
           <div className="sticky top-28 space-y-8">
             {/* Engagement Pricing */}
-            <div className="sharp-card p-6">
+            <div className="sharp-card p-6 dark:bg-slate-800">
               <h3 className="text-xs font-bold uppercase tracking-widest text-blueprint-blue mb-6">
                 Engagement Pricing
               </h3>
               <div className="space-y-6">
-                <div className="pb-6 border-b border-gray-100">
-                  <h4 className="text-md font-bold text-gray-900">Enterprise AI Factory</h4>
-                  <p className="text-sm text-gray-500 mt-2">
+                <div className="pb-6 border-b border-gray-100 dark:border-slate-700">
+                  <h4 className="text-md font-bold text-gray-900 dark:text-gray-100">Enterprise AI Factory</h4>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
                     Custom scoped engagements based on maturity and use cases.
                   </p>
                   <button
@@ -514,8 +514,8 @@ export default function AIFactoryPage() {
             </div>
 
             {/* Resources */}
-            <div className="bg-white p-6 border border-gray-200">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">
+            <div className="bg-white dark:bg-slate-800 p-6 border border-gray-200 dark:border-slate-700">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">
                 Resources
               </h3>
               <ul className="space-y-4">
@@ -541,15 +541,15 @@ export default function AIFactoryPage() {
             </div>
 
             {/* Sample Use Cases */}
-            <div className="sharp-card p-6 border-t-4 border-gray-400">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">
+            <div className="sharp-card p-6 border-t-4 border-gray-400 dark:bg-slate-800">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">
                 Sample Use Cases
               </h3>
               <div className="flex flex-wrap gap-2">
                 {useCases.map((uc) => (
                   <span
                     key={uc}
-                    className="px-2 py-1 bg-gray-100 text-[10px] text-gray-600 border border-gray-200"
+                    className="px-2 py-1 bg-gray-100 dark:bg-slate-700 text-[10px] text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-slate-600"
                   >
                     {uc}
                   </span>

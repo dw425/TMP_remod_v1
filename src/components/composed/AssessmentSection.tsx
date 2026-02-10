@@ -61,8 +61,8 @@ export function AssessmentSection({ section, form, index, total, brandColor }: A
               onClick={(e) => { e.stopPropagation(); setIsNA(!isNA); }}
               className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 border transition-colors ${
                 isNA
-                  ? 'bg-gray-200 text-gray-600 border-gray-300'
-                  : 'bg-white text-gray-400 border-gray-200 hover:border-gray-400'
+                  ? 'bg-gray-200 dark:bg-slate-600 text-gray-600 dark:text-gray-300 border-gray-300 dark:border-slate-500'
+                  : 'bg-white dark:bg-slate-800 text-gray-400 border-gray-200 dark:border-slate-600 hover:border-gray-400'
               }`}
             >
               N/A

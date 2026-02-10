@@ -355,11 +355,11 @@ export default function ROMCalculatorPage() {
         &larr; Back to Migration Suite
       </button>
 
-      <div className="mb-10 border-b border-gray-200 pb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight mb-3">
+      <div className="mb-10 border-b border-gray-200 dark:border-slate-700 pb-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 tracking-tight mb-3">
           Comprehensive Migration ROM Calculator
         </h1>
-        <p className="text-lg text-gray-600 font-medium">
+        <p className="text-lg text-gray-600 dark:text-gray-400 font-medium">
           Inventory your environment and assess maturity to generate a Rough Order of Magnitude (ROM) estimate.
         </p>
         {platform && (
@@ -375,23 +375,23 @@ export default function ROMCalculatorPage() {
       )}
 
       {/* Section 1: Organization & Tech Stack */}
-      <div className="bg-white border border-gray-300 shadow-sm mb-8">
+      <div className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 shadow-sm mb-8">
         <div className="bg-blueprint-blue text-white px-6 py-3 font-bold text-sm uppercase tracking-wide">
           1. Organization &amp; Tech Stack
         </div>
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <label className="block">
-              <span className="block mb-1 font-bold text-gray-900 text-sm">Project Name</span>
-              <input type="text" value={projectName} onChange={(e) => setProjectName(e.target.value)} className="w-full px-3 py-2 border border-gray-400 text-sm focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue outline-none" />
+              <span className="block mb-1 font-bold text-gray-900 dark:text-gray-100 text-sm">Project Name</span>
+              <input type="text" value={projectName} onChange={(e) => setProjectName(e.target.value)} className="w-full px-3 py-2 border border-gray-400 dark:border-slate-600 text-sm focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue outline-none bg-white dark:bg-slate-700 dark:text-gray-100" />
             </label>
             <label className="block">
-              <span className="block mb-1 font-bold text-gray-900 text-sm">Primary Stakeholder</span>
-              <input type="text" value={stakeholder} onChange={(e) => setStakeholder(e.target.value)} className="w-full px-3 py-2 border border-gray-400 text-sm focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue outline-none" />
+              <span className="block mb-1 font-bold text-gray-900 dark:text-gray-100 text-sm">Primary Stakeholder</span>
+              <input type="text" value={stakeholder} onChange={(e) => setStakeholder(e.target.value)} className="w-full px-3 py-2 border border-gray-400 dark:border-slate-600 text-sm focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue outline-none bg-white dark:bg-slate-700 dark:text-gray-100" />
             </label>
             <label className="block">
-              <span className="block mb-1 font-bold text-gray-900 text-sm">Email</span>
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-3 py-2 border border-gray-400 text-sm focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue outline-none" />
+              <span className="block mb-1 font-bold text-gray-900 dark:text-gray-100 text-sm">Email</span>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-3 py-2 border border-gray-400 dark:border-slate-600 text-sm focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue outline-none bg-white dark:bg-slate-700 dark:text-gray-100" />
             </label>
           </div>
         </div>
@@ -407,12 +407,12 @@ export default function ROMCalculatorPage() {
       <MatrixTable title="4. Presentation Layer" rows={PRES_ROWS} matrix={matrix} onUpdate={updateCell} />
 
       {/* Section 5: Maturity & Complexity */}
-      <div className="bg-white border border-gray-300 shadow-sm mb-8">
+      <div className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 shadow-sm mb-8">
         <div className="bg-blueprint-blue text-white px-6 py-3 font-bold text-sm uppercase tracking-wide">
           5. Maturity &amp; Complexity
         </div>
         <div className="p-6">
-          <p className="text-sm font-bold text-gray-500 mb-8 uppercase tracking-wide">
+          <p className="text-sm font-bold text-gray-500 dark:text-gray-400 mb-8 uppercase tracking-wide">
             Rate your environment (1=Low/Novice, 5=High/Expert)
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -438,45 +438,45 @@ export default function ROMCalculatorPage() {
       {/* Result Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-start justify-center z-50 overflow-y-auto pt-20 pb-12">
-          <div className="bg-white w-[90%] max-w-[900px] p-10 shadow-2xl border-t-8 border-blueprint-blue relative">
+          <div className="bg-white dark:bg-slate-800 w-[90%] max-w-[900px] p-10 shadow-2xl border-t-8 border-blueprint-blue relative">
             <button
               onClick={() => setShowModal(false)}
-              className="absolute top-4 right-4 text-3xl font-bold text-gray-400 hover:text-gray-600"
+              className="absolute top-4 right-4 text-3xl font-bold text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
             >
               &times;
             </button>
 
-            <h2 className="text-3xl font-bold text-gray-900 mb-2 text-center">ROM Assessment Results</h2>
-            <div className="w-full bg-gray-200 h-1 mb-8" />
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2 text-center">ROM Assessment Results</h2>
+            <div className="w-full bg-gray-200 dark:bg-slate-700 h-1 mb-8" />
 
             {/* Complexity Rating */}
             <div className="mb-8 text-center">
-              <div className="text-sm font-bold text-gray-500 uppercase tracking-widest">Overall Complexity Rating</div>
+              <div className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest">Overall Complexity Rating</div>
               <div className={`text-2xl font-black my-2 ${ratingColor}`}>{ratingText}</div>
-              <div className="w-1/2 mx-auto bg-gray-200 h-3 overflow-hidden">
+              <div className="w-1/2 mx-auto bg-gray-200 dark:bg-slate-700 h-3 overflow-hidden">
                 <div className={`h-full ${barColor}`} style={{ width: barWidth }} />
               </div>
             </div>
 
             {/* Hours Comparison */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-              <div className="p-8 bg-gray-50 border border-gray-300 text-center">
-                <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Standard Manual Effort</p>
-                <p className="text-4xl font-black text-gray-800">{manualHours.toLocaleString()}</p>
-                <p className="text-sm font-bold text-gray-500">Total Man-Hours</p>
-                <div className="mt-4 pt-4 border-t border-gray-200">
-                  <span className="text-xl font-bold text-gray-800">{Math.ceil(manualHours / weeklyVelocity)}</span>{' '}
-                  <span className="text-gray-600">Weeks</span>
+              <div className="p-8 bg-gray-50 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 text-center">
+                <p className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-widest mb-2">Standard Manual Effort</p>
+                <p className="text-4xl font-black text-gray-800 dark:text-gray-100">{manualHours.toLocaleString()}</p>
+                <p className="text-sm font-bold text-gray-500 dark:text-gray-400">Total Man-Hours</p>
+                <div className="mt-4 pt-4 border-t border-gray-200 dark:border-slate-600">
+                  <span className="text-xl font-bold text-gray-800 dark:text-gray-100">{Math.ceil(manualHours / weeklyVelocity)}</span>{' '}
+                  <span className="text-gray-600 dark:text-gray-400">Weeks</span>
                 </div>
               </div>
-              <div className="p-8 bg-green-50 border border-green-300 text-center relative shadow-sm">
+              <div className="p-8 bg-green-50 dark:bg-green-900/20 border border-green-300 dark:border-green-700 text-center relative shadow-sm">
                 <div className="absolute -top-3 right-0 left-0 mx-auto w-max bg-green-600 text-white text-[10px] px-3 py-1 font-bold uppercase">
                   60% Acceleration
                 </div>
                 <p className="text-xs font-bold text-green-700 uppercase tracking-widest mb-2">Blueprint Accelerated</p>
                 <p className="text-4xl font-black text-green-700">{aiHours.toLocaleString()}</p>
                 <p className="text-sm font-bold text-green-600">Total Man-Hours</p>
-                <div className="mt-4 pt-4 border-t border-green-200">
+                <div className="mt-4 pt-4 border-t border-green-200 dark:border-green-700">
                   <span className="text-xl font-bold text-green-800">{Math.ceil(aiHours / weeklyVelocity)}</span>{' '}
                   <span className="text-green-700">Weeks</span>
                 </div>
@@ -487,7 +487,7 @@ export default function ROMCalculatorPage() {
             <div className="flex justify-center gap-4">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-6 py-3 border border-gray-300 font-bold text-gray-600 hover:bg-gray-50 transition-colors"
+                className="px-6 py-3 border border-gray-300 dark:border-slate-600 font-bold text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
               >
                 Adjust Inputs
               </button>
@@ -519,15 +519,15 @@ function MatrixTable({
   onUpdate: (key: string, level: keyof MatrixData[string], val: number) => void;
 }) {
   return (
-    <div className="bg-white border border-gray-300 shadow-sm mb-8">
+    <div className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 shadow-sm mb-8">
       <div className="bg-blueprint-blue text-white px-6 py-3 font-bold text-sm uppercase tracking-wide">
         {title}
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead>
-            <tr className="bg-gray-50 border-b-2 border-gray-200">
-              <th className="p-4 w-1/4 text-xs font-extrabold text-gray-500 uppercase">Object Type</th>
+            <tr className="bg-gray-50 dark:bg-slate-700 border-b-2 border-gray-200 dark:border-slate-600">
+              <th className="p-4 w-1/4 text-xs font-extrabold text-gray-500 dark:text-gray-400 uppercase">Object Type</th>
               <th className="p-4 text-center text-xs font-extrabold text-green-700 uppercase">Simple</th>
               <th className="p-4 text-center text-xs font-extrabold text-yellow-700 uppercase">Medium</th>
               <th className="p-4 text-center text-xs font-extrabold text-red-700 uppercase">Complex</th>
@@ -536,8 +536,8 @@ function MatrixTable({
           </thead>
           <tbody>
             {rows.map((row) => (
-              <tr key={row.key} className="border-b border-gray-100">
-                <td className="p-4 font-bold text-sm text-gray-900">{row.label}</td>
+              <tr key={row.key} className="border-b border-gray-100 dark:border-slate-700">
+                <td className="p-4 font-bold text-sm text-gray-900 dark:text-gray-100">{row.label}</td>
                 {(['simple', 'medium', 'complex', 'veryComplex'] as const).map((level) => (
                   <td key={level} className="p-4">
                     <input
@@ -546,7 +546,7 @@ function MatrixTable({
                       placeholder="0"
                       value={matrix[row.key]?.[level] || ''}
                       onChange={(e) => onUpdate(row.key, level, parseInt(e.target.value) || 0)}
-                      className="w-full px-2 py-2 border border-gray-400 text-center font-semibold text-sm focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue outline-none"
+                      className="w-full px-2 py-2 border border-gray-400 dark:border-slate-600 text-center font-semibold text-sm focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue outline-none bg-white dark:bg-slate-700 dark:text-gray-100"
                     />
                   </td>
                 ))}
@@ -570,7 +570,7 @@ function AssessmentSummary({
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="bg-white border border-gray-300 shadow-sm mb-8">
+    <div className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 shadow-sm mb-8">
       <button
         type="button"
         onClick={() => setExpanded((e) => !e)}
@@ -584,14 +584,14 @@ function AssessmentSummary({
         <div className="p-6 space-y-6 max-h-[500px] overflow-y-auto">
           {sections.map((section) => (
             <div key={section.title}>
-              <h4 className="text-xs font-extrabold text-gray-500 uppercase tracking-wider border-b border-gray-200 pb-2 mb-3">
+              <h4 className="text-xs font-extrabold text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-200 dark:border-slate-700 pb-2 mb-3">
                 {section.title}
               </h4>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
                 {section.fields.map((field) => (
                   <div key={field.label} className="flex gap-2 text-sm py-1">
-                    <span className="font-bold text-gray-700 shrink-0">{field.label}:</span>
-                    <span className="text-gray-600 break-words">{field.value}</span>
+                    <span className="font-bold text-gray-700 dark:text-gray-300 shrink-0">{field.label}:</span>
+                    <span className="text-gray-600 dark:text-gray-400 break-words">{field.value}</span>
                   </div>
                 ))}
               </div>
@@ -619,7 +619,7 @@ function SliderField({
 }) {
   return (
     <label className="block">
-      <span className="block mb-2 font-bold text-gray-900 text-sm">{label}</span>
+      <span className="block mb-2 font-bold text-gray-900 dark:text-gray-100 text-sm">{label}</span>
       <input
         type="range"
         min={1}
@@ -628,7 +628,7 @@ function SliderField({
         onChange={(e) => onChange(parseInt(e.target.value))}
         className="w-full accent-blueprint-blue cursor-pointer"
       />
-      <div className="flex justify-between text-xs font-extrabold text-gray-500 mt-1">
+      <div className="flex justify-between text-xs font-extrabold text-gray-500 dark:text-gray-400 mt-1">
         <span>{lowLabel}</span>
         <span>{value}</span>
         <span>{highLabel}</span>

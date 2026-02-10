@@ -24,13 +24,13 @@ export function DatabricksConnectionModal({
   };
 
   const inputClass =
-    'w-full border border-gray-300 px-3 py-2 text-gray-900 bg-white focus:outline-none focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue';
+    'w-full border border-gray-300 dark:border-slate-600 px-3 py-2 text-gray-900 dark:text-gray-100 bg-white dark:bg-slate-800 focus:outline-none focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue';
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Connect to Databricks">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="databricks-url" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="databricks-url" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Workspace URL
           </label>
           <input
@@ -47,7 +47,7 @@ export function DatabricksConnectionModal({
           </p>
         </div>
 
-        <div className="bg-blue-50 border border-blue-200 p-3 text-sm text-blue-700">
+        <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 p-3 text-sm text-blue-700 dark:text-blue-200">
           You'll be redirected to authenticate with your Databricks credentials.
           Your credentials are never stored by Blueprint Marketplace.
         </div>

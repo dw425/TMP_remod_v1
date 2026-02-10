@@ -1,6 +1,6 @@
 export function Skeleton({ className = '' }: { className?: string }) {
   return (
-    <div className={`animate-pulse bg-gray-200 ${className}`} />
+    <div className={`animate-pulse bg-gray-200 dark:bg-slate-700 ${className}`} />
   );
 }
 
@@ -12,7 +12,7 @@ export function ProductCardSkeleton() {
       <Skeleton className="h-3 w-full mb-2" />
       <Skeleton className="h-3 w-full mb-2" />
       <Skeleton className="h-3 w-2/3 mb-6" />
-      <div className="mt-auto pt-3 border-t border-gray-100">
+      <div className="mt-auto pt-3 border-t border-gray-100 dark:border-slate-700">
         <Skeleton className="h-4 w-24" />
       </div>
     </div>

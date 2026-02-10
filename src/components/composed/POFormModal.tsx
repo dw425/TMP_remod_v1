@@ -104,13 +104,13 @@ export function POFormModal({ cartItems, estimatedTotal, onClose, onSuccess }: P
     >
       <div className="fixed inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={onClose} aria-hidden="true" />
       <div
-        className="relative bg-white w-full max-w-4xl max-h-[95vh] flex flex-col border-t-8 border-blueprint-blue shadow-2xl"
+        className="relative bg-white dark:bg-slate-900 w-full max-w-4xl max-h-[95vh] flex flex-col border-t-8 border-blueprint-blue shadow-2xl"
       >
-        <header className="p-6 border-b border-gray-100 flex justify-between items-center flex-shrink-0">
-          <h2 className="text-2xl font-bold text-gray-900">Request Quote / PO</h2>
+        <header className="p-6 border-b border-gray-100 dark:border-slate-700 flex justify-between items-center flex-shrink-0">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Request Quote / PO</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-900 text-3xl"
+            className="text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 text-3xl"
             aria-label="Close"
           >
             &times;
@@ -125,39 +125,39 @@ export function POFormModal({ cartItems, estimatedTotal, onClose, onSuccess }: P
             {/* Top-level fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 mb-6">
               <div>
-                <label htmlFor="po-number" className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                <label htmlFor="po-number" className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">
                   PO Number (Optional)
                 </label>
                 <input
                   id="po-number"
                   type="text"
                   name="po_number"
-                  className="w-full border border-gray-300 p-2 focus:border-blueprint-blue focus:outline-none"
+                  className="w-full border border-gray-300 dark:border-slate-600 p-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:border-blueprint-blue focus:outline-none"
                 />
               </div>
               <div>
-                <label htmlFor="po-date" className="block text-xs font-bold text-gray-500 uppercase mb-1">Date</label>
+                <label htmlFor="po-date" className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">Date</label>
                 <input
                   id="po-date"
                   type="date"
                   name="po_date"
                   required
                   defaultValue={today}
-                  className="w-full border border-gray-300 p-2 text-gray-900 focus:border-blueprint-blue focus:outline-none"
+                  className="w-full border border-gray-300 dark:border-slate-600 p-2 text-gray-900 dark:text-gray-100 bg-white dark:bg-slate-800 focus:border-blueprint-blue focus:outline-none"
                 />
               </div>
             </div>
 
             <div className="space-y-6">
               {/* Fieldset 1: Customer Information */}
-              <fieldset className="border border-gray-200 p-4 bg-gray-50">
+              <fieldset className="border border-gray-200 dark:border-slate-700 p-4 bg-gray-50 dark:bg-slate-800">
                 <legend className="text-sm font-bold text-blueprint-blue px-2 uppercase tracking-wide">
                   1. Customer Information
                 </legend>
                 <div className="space-y-4 pt-2">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor="po-legal-name" className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                      <label htmlFor="po-legal-name" className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">
                         Legal Entity Name
                       </label>
                       <input
@@ -165,11 +165,11 @@ export function POFormModal({ cartItems, estimatedTotal, onClose, onSuccess }: P
                         type="text"
                         name="legal_name"
                         required
-                        className="w-full border border-gray-300 p-2 focus:border-blueprint-blue focus:outline-none"
+                        className="w-full border border-gray-300 dark:border-slate-600 p-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:border-blueprint-blue focus:outline-none"
                       />
                     </div>
                     <div>
-                      <label htmlFor="po-email" className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                      <label htmlFor="po-email" className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">
                         Contact Email
                       </label>
                       <input
@@ -177,13 +177,13 @@ export function POFormModal({ cartItems, estimatedTotal, onClose, onSuccess }: P
                         type="email"
                         name="email"
                         required
-                        className="w-full border border-gray-300 p-2 focus:border-blueprint-blue focus:outline-none"
+                        className="w-full border border-gray-300 dark:border-slate-600 p-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:border-blueprint-blue focus:outline-none"
                       />
                     </div>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="md:col-span-3">
-                      <label htmlFor="po-address" className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                      <label htmlFor="po-address" className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">
                         Street Address
                       </label>
                       <input
@@ -191,32 +191,32 @@ export function POFormModal({ cartItems, estimatedTotal, onClose, onSuccess }: P
                         type="text"
                         name="address"
                         required
-                        className="w-full border border-gray-300 p-2 focus:border-blueprint-blue focus:outline-none"
+                        className="w-full border border-gray-300 dark:border-slate-600 p-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:border-blueprint-blue focus:outline-none"
                       />
                     </div>
                     <div>
-                      <label htmlFor="po-city" className="block text-xs font-bold text-gray-500 uppercase mb-1">City</label>
+                      <label htmlFor="po-city" className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">City</label>
                       <input
                         id="po-city"
                         type="text"
                         name="city"
                         required
-                        className="w-full border border-gray-300 p-2 focus:border-blueprint-blue focus:outline-none"
+                        className="w-full border border-gray-300 dark:border-slate-600 p-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:border-blueprint-blue focus:outline-none"
                       />
                     </div>
                     <div>
-                      <label htmlFor="po-state" className="block text-xs font-bold text-gray-500 uppercase mb-1">State</label>
+                      <label htmlFor="po-state" className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">State</label>
                       <input
                         id="po-state"
                         type="text"
                         name="state"
                         required
                         maxLength={2}
-                        className="w-full border border-gray-300 p-2 focus:border-blueprint-blue focus:outline-none"
+                        className="w-full border border-gray-300 dark:border-slate-600 p-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:border-blueprint-blue focus:outline-none"
                       />
                     </div>
                     <div>
-                      <label htmlFor="po-zip" className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                      <label htmlFor="po-zip" className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">
                         Zip Code
                       </label>
                       <input
@@ -225,7 +225,7 @@ export function POFormModal({ cartItems, estimatedTotal, onClose, onSuccess }: P
                         name="zip"
                         required
                         maxLength={5}
-                        className="w-full border border-gray-300 p-2 focus:border-blueprint-blue focus:outline-none"
+                        className="w-full border border-gray-300 dark:border-slate-600 p-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:border-blueprint-blue focus:outline-none"
                       />
                     </div>
                   </div>
@@ -235,13 +235,13 @@ export function POFormModal({ cartItems, estimatedTotal, onClose, onSuccess }: P
               {/* Fieldsets 2 & 3 side by side */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Fieldset 2: Order Summary */}
-                <fieldset className="border border-gray-200 p-4 bg-gray-50">
+                <fieldset className="border border-gray-200 dark:border-slate-700 p-4 bg-gray-50 dark:bg-slate-800">
                   <legend className="text-sm font-bold text-blueprint-blue px-2 uppercase tracking-wide">
                     2. Order Summary
                   </legend>
                   <div className="space-y-4 pt-2">
                     <div>
-                      <label htmlFor="po-summary" className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                      <label htmlFor="po-summary" className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">
                         Items in Cart
                       </label>
                       <textarea
@@ -249,11 +249,11 @@ export function POFormModal({ cartItems, estimatedTotal, onClose, onSuccess }: P
                         name="poProductSummary"
                         readOnly
                         value={summaryText}
-                        className="w-full border border-gray-300 p-2 bg-gray-100 h-24 font-mono text-xs resize-none"
+                        className="w-full border border-gray-300 dark:border-slate-600 p-2 bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-gray-100 h-24 font-mono text-xs resize-none"
                       />
                     </div>
                     <div>
-                      <label htmlFor="po-start-date" className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                      <label htmlFor="po-start-date" className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">
                         Requested Start Date
                       </label>
                       <input
@@ -261,26 +261,26 @@ export function POFormModal({ cartItems, estimatedTotal, onClose, onSuccess }: P
                         type="date"
                         name="start_date"
                         required
-                        className="w-full border border-gray-300 p-2 focus:border-blueprint-blue focus:outline-none"
+                        className="w-full border border-gray-300 dark:border-slate-600 p-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:border-blueprint-blue focus:outline-none"
                       />
                     </div>
                   </div>
                 </fieldset>
 
                 {/* Fieldset 3: Deployment */}
-                <fieldset className="border border-gray-200 p-4 bg-gray-50">
+                <fieldset className="border border-gray-200 dark:border-slate-700 p-4 bg-gray-50 dark:bg-slate-800">
                   <legend className="text-sm font-bold text-blueprint-blue px-2 uppercase tracking-wide">
                     3. Deployment
                   </legend>
                   <div className="space-y-4 pt-2">
                     <div>
-                      <label htmlFor="po-cloud" className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                      <label htmlFor="po-cloud" className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">
                         Cloud Provider
                       </label>
                       <select
                         id="po-cloud"
                         name="deployment_location"
-                        className="w-full border border-gray-300 p-2 focus:border-blueprint-blue focus:outline-none"
+                        className="w-full border border-gray-300 dark:border-slate-600 p-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:border-blueprint-blue focus:outline-none"
                       >
                         <option value="AWS">AWS</option>
                         <option value="Azure">Azure</option>
@@ -289,14 +289,14 @@ export function POFormModal({ cartItems, estimatedTotal, onClose, onSuccess }: P
                       </select>
                     </div>
                     <div>
-                      <label htmlFor="po-tech-contact" className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                      <label htmlFor="po-tech-contact" className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">
                         Technical Contact Email (Optional)
                       </label>
                       <input
                         id="po-tech-contact"
                         type="email"
                         name="tech_contact"
-                        className="w-full border border-gray-300 p-2 focus:border-blueprint-blue focus:outline-none"
+                        className="w-full border border-gray-300 dark:border-slate-600 p-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:border-blueprint-blue focus:outline-none"
                       />
                     </div>
                   </div>
@@ -304,7 +304,7 @@ export function POFormModal({ cartItems, estimatedTotal, onClose, onSuccess }: P
               </div>
             </div>
 
-            <div className="flex items-center justify-end space-x-4 mt-6 pt-6 border-t border-gray-200">
+            <div className="flex items-center justify-end space-x-4 mt-6 pt-6 border-t border-gray-200 dark:border-slate-700">
               <button
                 type="button"
                 onClick={onClose}

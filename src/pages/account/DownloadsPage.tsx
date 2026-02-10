@@ -38,7 +38,7 @@ export default function DownloadsPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
-      <h1 className="text-2xl font-bold text-gray-900 mb-4">Downloads</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Downloads</h1>
 
       {!isGitHubConfigured() && (
         <div className="mb-6 p-3 bg-blue-50 border border-blue-200 text-blue-800 text-sm">
@@ -48,13 +48,13 @@ export default function DownloadsPage() {
 
       {availableAssets.length > 0 && (
         <div className="mb-10">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Available Downloads</h2>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">Available Downloads</h2>
           <div className="space-y-3">
             {availableAssets.map((asset) => (
-              <div key={asset.assetId} className="bg-white border border-gray-300 p-5 flex items-center justify-between">
+              <div key={asset.assetId} className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 p-5 flex items-center justify-between">
                 <div>
-                  <p className="font-bold text-gray-900">{asset.displayName}</p>
-                  <p className="text-sm text-gray-500">
+                  <p className="font-bold text-gray-900 dark:text-gray-100">{asset.displayName}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     {fileTypeLabels[asset.fileType] || asset.fileType} &middot; v{asset.version} &middot;{' '}
                     {downloadService.formatFileSize(asset.sizeBytes)}
                   </p>
@@ -68,17 +68,17 @@ export default function DownloadsPage() {
 
       {lockedAssets.length > 0 && (
         <div className="mb-10">
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Locked</h2>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">Locked</h2>
           <div className="space-y-3">
             {lockedAssets.map((asset) => (
-              <div key={asset.assetId} className="bg-gray-50 border border-gray-200 p-5 flex items-center justify-between opacity-60">
+              <div key={asset.assetId} className="bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 p-5 flex items-center justify-between opacity-60">
                 <div>
-                  <p className="font-bold text-gray-700">{asset.displayName}</p>
-                  <p className="text-sm text-gray-400">
+                  <p className="font-bold text-gray-700 dark:text-gray-300">{asset.displayName}</p>
+                  <p className="text-sm text-gray-400 dark:text-gray-400">
                     {fileTypeLabels[asset.fileType] || asset.fileType} &middot; v{asset.version}
                   </p>
                 </div>
-                <span className="text-sm text-gray-400 font-medium">Purchase Required</span>
+                <span className="text-sm text-gray-400 dark:text-gray-400 font-medium">Purchase Required</span>
               </div>
             ))}
           </div>
@@ -86,25 +86,25 @@ export default function DownloadsPage() {
       )}
 
       <div>
-        <h2 className="text-lg font-bold text-gray-900 mb-4">Download History</h2>
+        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">Download History</h2>
         {history.length === 0 ? (
-          <div className="bg-white border border-gray-300 p-8 text-center">
-            <p className="text-gray-500">No downloads yet.</p>
+          <div className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 p-8 text-center">
+            <p className="text-gray-500 dark:text-gray-400">No downloads yet.</p>
           </div>
         ) : (
-          <div className="bg-white border border-gray-300">
+          <div className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-200 bg-gray-50">
-                  <th className="text-left px-4 py-3 font-medium text-gray-700">File</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-700">Date</th>
+                <tr className="border-b border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900">
+                  <th className="text-left px-4 py-3 font-medium text-gray-700 dark:text-gray-300">File</th>
+                  <th className="text-left px-4 py-3 font-medium text-gray-700 dark:text-gray-300">Date</th>
                 </tr>
               </thead>
               <tbody>
                 {history.map((record, i) => (
-                  <tr key={`${record.assetId}-${i}`} className="border-b border-gray-100 last:border-0">
-                    <td className="px-4 py-3 text-gray-900">{record.fileName}</td>
-                    <td className="px-4 py-3 text-gray-500">{new Date(record.downloadedAt).toLocaleString()}</td>
+                  <tr key={`${record.assetId}-${i}`} className="border-b border-gray-100 dark:border-slate-700 last:border-0">
+                    <td className="px-4 py-3 text-gray-900 dark:text-gray-100">{record.fileName}</td>
+                    <td className="px-4 py-3 text-gray-500 dark:text-gray-400">{new Date(record.downloadedAt).toLocaleString()}</td>
                   </tr>
                 ))}
               </tbody>

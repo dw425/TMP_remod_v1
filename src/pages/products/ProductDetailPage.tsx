@@ -117,13 +117,13 @@ export default function ProductDetailPage() {
       />
 
       {/* Breadcrumb */}
-      <nav aria-label="Breadcrumb" className="mb-6 text-sm text-gray-500">
+      <nav aria-label="Breadcrumb" className="mb-6 text-sm text-gray-500 dark:text-gray-400">
         <ol className="flex items-center gap-1.5">
           <li><Link to={ROUTES.HOME} className="hover:text-blueprint-blue transition-colors">Home</Link></li>
           <li><span className="mx-1">/</span></li>
           <li><Link to={ROUTES.HOME} className="hover:text-blueprint-blue transition-colors">Products</Link></li>
           <li><span className="mx-1">/</span></li>
-          <li className="text-gray-900 font-medium">{product.title}</li>
+          <li className="text-gray-900 dark:text-gray-100 font-medium">{product.title}</li>
         </ol>
       </nav>
 
@@ -160,7 +160,7 @@ export default function ProductDetailPage() {
               <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 border-b border-gray-100 dark:border-slate-700 pb-3 mb-4">
                 Summary
               </h2>
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
                 {product.longDescription || product.description}
               </p>
             </section>
@@ -172,7 +172,7 @@ export default function ProductDetailPage() {
               <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 border-b border-gray-100 dark:border-slate-700 pb-3 mb-5">
                 What It Does
               </h2>
-              <div className="space-y-4 text-gray-600 leading-relaxed text-sm md:text-base">
+              <div className="space-y-4 text-gray-600 dark:text-gray-300 leading-relaxed text-sm md:text-base">
                 {product.whatItDoes.map((section, i) => (
                   <div key={i}>
                     <h3 className="text-lg font-bold text-blueprint-blue">{section.heading}</h3>
@@ -193,10 +193,10 @@ export default function ProductDetailPage() {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {product.benefits.map((benefit, i) => (
-                  <div key={i} className="p-4 bg-gray-50 border-l-4 border-blueprint-blue">
-                    <p className="font-bold text-sm text-gray-900">{benefit.title}</p>
+                  <div key={i} className="p-4 bg-gray-50 dark:bg-slate-800/50 border-l-4 border-blueprint-blue">
+                    <p className="font-bold text-sm text-gray-900 dark:text-gray-100">{benefit.title}</p>
                     {benefit.description && (
-                      <p className="text-xs text-gray-500 mt-1">{benefit.description}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{benefit.description}</p>
                     )}
                   </div>
                 ))}
@@ -215,11 +215,11 @@ export default function ProductDetailPage() {
               </h3>
               <div className="space-y-6">
                 {/* Single User tier */}
-                <div className="pb-6 border-b border-gray-100">
-                  <h4 className="text-md font-bold text-gray-900">Single User</h4>
+                <div className="pb-6 border-b border-gray-100 dark:border-slate-700">
+                  <h4 className="text-md font-bold text-gray-900 dark:text-gray-100">Single User</h4>
                   <p className="text-2xl font-bold text-blueprint-blue mt-1">
                     {formatCurrency(product.priceMonthly)}
-                    <span className="text-xs text-gray-500 font-normal"> / mo</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 font-normal"> / mo</span>
                   </p>
                   <button
                     onClick={handleAddToCart}
@@ -232,8 +232,8 @@ export default function ProductDetailPage() {
                 {/* Team / Contact Sales */}
                 <div className="space-y-4">
                   <div>
-                    <h4 className="text-md font-bold text-gray-900">Team Account</h4>
-                    <p className="text-sm text-gray-500 mt-1">Starting at $5,000.00/mo</p>
+                    <h4 className="text-md font-bold text-gray-900 dark:text-gray-100">Team Account</h4>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Starting at $5,000.00/mo</p>
                     <button
                       onClick={() => { setShowContactSales(true); track(EVENTS.MODAL_INTERACTION, { modal: 'contact_sales', action: 'open', productName: product.title }); }}
                       className="w-full mt-3 bg-black text-white font-bold py-3 uppercase tracking-widest text-[10px] hover:bg-gray-800 transition-colors"
@@ -244,7 +244,7 @@ export default function ProductDetailPage() {
 
                   <button
                     onClick={() => { setShowAmIReady(true); track(EVENTS.MODAL_INTERACTION, { modal: 'am_i_ready', action: 'open', productName: product.title }); }}
-                    className="w-full bg-gray-200 text-gray-800 font-bold py-3 uppercase tracking-widest text-[10px] hover:bg-gray-300 transition-colors"
+                    className="w-full bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-200 font-bold py-3 uppercase tracking-widest text-[10px] hover:bg-gray-300 dark:hover:bg-slate-600 transition-colors"
                   >
                     Am I Ready?
                   </button>
@@ -286,7 +286,7 @@ export default function ProductDetailPage() {
 
       {/* Related Products */}
       {relatedProducts.length > 0 && (
-        <section className="mt-16 border-t border-gray-200 pt-10">
+        <section className="mt-16 border-t border-gray-200 dark:border-slate-700 pt-10">
           <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6">
             You May Also Like
           </h2>
@@ -295,12 +295,12 @@ export default function ProductDetailPage() {
               <Link
                 key={rp.id}
                 to={`/products/${rp.slug}`}
-                className="sharp-card p-6 bg-white hover:shadow-lg transition-all group"
+                className="sharp-card p-6 hover:shadow-lg transition-all group"
               >
-                <h3 className="text-lg font-bold text-gray-900 group-hover:text-blueprint-blue transition-colors mb-1">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 group-hover:text-blueprint-blue transition-colors mb-1">
                   {rp.title}
                 </h3>
-                <p className="text-sm text-gray-500 mb-3 line-clamp-2">{rp.description}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-3 line-clamp-2">{rp.description}</p>
                 <span className="text-xs font-bold text-blueprint-blue uppercase tracking-wide">
                   View Details &rarr;
                 </span>

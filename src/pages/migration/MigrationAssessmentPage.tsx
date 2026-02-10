@@ -21,7 +21,7 @@ function SignupPromptModal({ onClose }: { onClose: () => void }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black/50" onClick={onClose} onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }} role="button" tabIndex={-1} aria-label="Close modal" />
       <div className="relative bg-white dark:bg-slate-800 w-full max-w-md border-t-4 border-blueprint-blue p-8 shadow-2xl">
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600" aria-label="Close">
+        <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" aria-label="Close">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
@@ -30,13 +30,13 @@ function SignupPromptModal({ onClose }: { onClose: () => void }) {
           <svg className="w-14 h-14 mx-auto text-blueprint-blue mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <h2 className="text-xl font-bold text-gray-900">Assessment Saved!</h2>
-          <p className="text-sm text-gray-500 mt-2">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">Assessment Saved!</h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
             Your ROM estimate has been generated and saved to the calculator.
           </p>
         </div>
-        <div className="bg-blue-50 border border-blue-100 p-4 mb-6">
-          <p className="text-sm text-gray-700">
+        <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800 p-4 mb-6">
+          <p className="text-sm text-gray-700 dark:text-gray-300">
             <strong>Create a free account</strong> to save your assessments to your dashboard, track multiple migrations, and access your results anytime.
           </p>
         </div>
@@ -55,7 +55,7 @@ function SignupPromptModal({ onClose }: { onClose: () => void }) {
           </Link>
           <Link
             to="/migration/calculator"
-            className="block w-full text-center text-sm text-gray-500 hover:text-gray-700"
+            className="block w-full text-center text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
           >
             Continue to Calculator &rarr;
           </Link>
@@ -140,7 +140,7 @@ export default function MigrationAssessmentPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
       {/* Breadcrumb */}
-      <nav aria-label="Breadcrumb" className="mb-6 text-sm text-gray-500">
+      <nav aria-label="Breadcrumb" className="mb-6 text-sm text-gray-500 dark:text-gray-400">
         <ol className="flex items-center gap-1.5">
           <li><Link to={ROUTES.HOME} className="hover:text-blueprint-blue transition-colors">Home</Link></li>
           <li><span className="mx-1">/</span></li>
@@ -151,20 +151,20 @@ export default function MigrationAssessmentPage() {
       </nav>
 
       {/* Header with brand accent */}
-      <div className="mb-8 pb-6 border-b border-gray-200">
+      <div className="mb-8 pb-6 border-b border-gray-200 dark:border-slate-700">
         <div className="flex items-center gap-4 mb-3">
           <div
             className="w-2 h-12 shrink-0"
             style={{ backgroundColor: schema.brandColor }}
           />
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">
               {schema.title}
             </h1>
-            <p className="text-gray-500 mt-1 text-sm">{schema.subtitle}</p>
+            <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">{schema.subtitle}</p>
           </div>
         </div>
-        <div className="flex items-center gap-4 text-xs text-gray-400">
+        <div className="flex items-center gap-4 text-xs text-gray-400 dark:text-gray-500">
           <span className="font-bold uppercase tracking-wider">{sectionCount} Sections</span>
           <span>|</span>
           <span>Estimated 15-25 minutes</span>
@@ -174,8 +174,8 @@ export default function MigrationAssessmentPage() {
       {/* Progress bar */}
       <div className="sticky top-20 z-30 bg-bg-primary dark:bg-[#0f172a] py-3 mb-6 -mx-4 px-4">
         <div className="flex items-center gap-3">
-          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider shrink-0">Progress</span>
-          <div className="flex-1 h-1.5 bg-gray-200 overflow-hidden">
+          <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider shrink-0">Progress</span>
+          <div className="flex-1 h-1.5 bg-gray-200 dark:bg-slate-700 overflow-hidden">
             <div
               className="h-full transition-all duration-300"
               style={{
@@ -214,7 +214,7 @@ export default function MigrationAssessmentPage() {
         ))}
 
         {/* Submit area */}
-        <div className="flex items-center gap-4 pt-6 border-t border-gray-200">
+        <div className="flex items-center gap-4 pt-6 border-t border-gray-200 dark:border-slate-700">
           <Button type="submit">Generate ROM Estimate</Button>
           <Button
             type="button"
@@ -226,7 +226,7 @@ export default function MigrationAssessmentPage() {
           <button
             type="button"
             onClick={() => navigate('/migration')}
-            className="text-sm text-gray-500 hover:text-gray-700 ml-auto"
+            className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 ml-auto"
           >
             Cancel
           </button>

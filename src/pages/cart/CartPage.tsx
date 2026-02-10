@@ -39,10 +39,10 @@ export default function CartPage() {
   return (
     <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <SEO title="Your Cart" description="Review your selected Blueprint Marketplace items." canonical="/cart" />
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">Your Quote Cart</h1>
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-8">Your Quote Cart</h1>
 
       {/* Info Banner */}
-      <div className="mb-6 p-4 bg-blue-50 border border-blue-100 text-sm text-blue-800 flex items-start gap-3">
+      <div className="mb-6 p-4 bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800 text-sm text-blue-800 dark:text-blue-200 flex items-start gap-3">
         <svg className="w-5 h-5 text-blueprint-blue shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
@@ -52,27 +52,27 @@ export default function CartPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         {/* Cart Items Table */}
         <div className="lg:col-span-8">
-          <div className="sharp-card bg-white overflow-hidden">
+          <div className="sharp-card overflow-hidden">
             {items.length > 0 ? (
               <table className="w-full">
-                <thead className="bg-gray-50">
+                <thead className="bg-gray-50 dark:bg-slate-800">
                   <tr>
-                    <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Product / Service
                     </th>
-                    <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Type
                     </th>
-                    <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Billing
                     </th>
-                    <th className="text-center px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    <th className="text-center px-6 py-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Qty
                     </th>
-                    <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                       Price
                     </th>
-                    <th className="px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                    <th className="px-6 py-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     </th>
                   </tr>
                 </thead>
@@ -85,40 +85,40 @@ export default function CartPage() {
 
                     return (
                       <tr key={item.id}>
-                        <td className="py-4 px-6 border-b border-gray-100">
-                          <div className="font-bold text-gray-900">{item.title}</div>
+                        <td className="py-4 px-6 border-b border-gray-100 dark:border-slate-700">
+                          <div className="font-bold text-gray-900 dark:text-gray-100">{item.title}</div>
                         </td>
-                        <td className="py-4 px-6 border-b border-gray-100 text-sm text-gray-500">
+                        <td className="py-4 px-6 border-b border-gray-100 dark:border-slate-700 text-sm text-gray-500 dark:text-gray-400">
                           {item.type || 'Software'}
                         </td>
-                        <td className="py-4 px-6 border-b border-gray-100 text-sm text-gray-500 capitalize">
+                        <td className="py-4 px-6 border-b border-gray-100 dark:border-slate-700 text-sm text-gray-500 dark:text-gray-400 capitalize">
                           {item.billing || '-'}
                         </td>
-                        <td className="py-4 px-6 border-b border-gray-100">
+                        <td className="py-4 px-6 border-b border-gray-100 dark:border-slate-700">
                           <div className="flex items-center justify-center gap-2">
                             <button
                               onClick={() => decrement(item.id)}
-                              className="w-7 h-7 flex items-center justify-center border border-gray-300 text-gray-500 hover:border-blueprint-blue hover:text-blueprint-blue transition-colors text-sm font-bold"
+                              className="w-7 h-7 flex items-center justify-center border border-gray-300 dark:border-slate-600 text-gray-500 dark:text-gray-400 hover:border-blueprint-blue hover:text-blueprint-blue transition-colors text-sm font-bold"
                               aria-label="Decrease quantity"
                             >
                               &minus;
                             </button>
-                            <span className="w-8 text-center text-sm font-bold text-gray-900">
+                            <span className="w-8 text-center text-sm font-bold text-gray-900 dark:text-gray-100">
                               {item.quantity}
                             </span>
                             <button
                               onClick={() => add({ id: item.id, title: item.title, type: item.type, billing: item.billing, price: item.price })}
-                              className="w-7 h-7 flex items-center justify-center border border-gray-300 text-gray-500 hover:border-blueprint-blue hover:text-blueprint-blue transition-colors text-sm font-bold"
+                              className="w-7 h-7 flex items-center justify-center border border-gray-300 dark:border-slate-600 text-gray-500 dark:text-gray-400 hover:border-blueprint-blue hover:text-blueprint-blue transition-colors text-sm font-bold"
                               aria-label="Increase quantity"
                             >
                               +
                             </button>
                           </div>
                         </td>
-                        <td className="py-4 px-6 border-b border-gray-100 font-mono text-sm text-gray-900">
+                        <td className="py-4 px-6 border-b border-gray-100 dark:border-slate-700 font-mono text-sm text-gray-900 dark:text-gray-100">
                           {priceText}
                         </td>
-                        <td className="py-4 px-6 border-b border-gray-100">
+                        <td className="py-4 px-6 border-b border-gray-100 dark:border-slate-700">
                           <button
                             onClick={() => { track(EVENTS.CART_ITEM_REMOVED, { productId: item.id, productName: item.title }); remove(item.id); }}
                             className="text-gray-400 hover:text-red-600 transition-colors"
@@ -142,7 +142,7 @@ export default function CartPage() {
             ) : (
               <div className="p-12 text-center">
                 <svg
-                  className="w-16 h-16 text-gray-300 mx-auto mb-4"
+                  className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -154,8 +154,8 @@ export default function CartPage() {
                     d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                   />
                 </svg>
-                <p className="text-gray-500 text-lg mb-2">Your cart is currently empty.</p>
-                <p className="text-sm text-gray-400 mb-6">
+                <p className="text-gray-500 dark:text-gray-400 text-lg mb-2">Your cart is currently empty.</p>
+                <p className="text-sm text-gray-400 dark:text-gray-500 mb-6">
                   Add items from the marketplace to request a quote.
                 </p>
                 <Link
@@ -171,22 +171,22 @@ export default function CartPage() {
 
         {/* Summary Sidebar */}
         <div className="lg:col-span-4">
-          <div className="sharp-card p-6 bg-white sticky top-28">
+          <div className="sharp-card p-6 sticky top-28">
             <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">
               Summary
             </h3>
-            <div className="space-y-3 mb-6 border-b border-gray-100 pb-6">
+            <div className="space-y-3 mb-6 border-b border-gray-100 dark:border-slate-700 pb-6">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Monthly Recurring</span>
-                <span className="font-bold text-gray-900">{formatCurrency(monthlyTotal)}</span>
+                <span className="text-gray-600 dark:text-gray-400">Monthly Recurring</span>
+                <span className="font-bold text-gray-900 dark:text-gray-100">{formatCurrency(monthlyTotal)}</span>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">One-Time Implementation</span>
-                <span className="font-bold text-gray-900">{formatCurrency(onetimeTotal)}</span>
+                <span className="text-gray-600 dark:text-gray-400">One-Time Implementation</span>
+                <span className="font-bold text-gray-900 dark:text-gray-100">{formatCurrency(onetimeTotal)}</span>
               </div>
             </div>
             <div className="flex justify-between items-center mb-6">
-              <span className="text-lg font-bold text-gray-900">Total Est.</span>
+              <span className="text-lg font-bold text-gray-900 dark:text-gray-100">Total Est.</span>
               <span className="text-xl font-bold text-blueprint-blue">
                 {formatCurrency(grandTotal)}
               </span>
@@ -208,7 +208,7 @@ export default function CartPage() {
 
       {/* Recommended Products */}
       {recommended.length > 0 && (
-        <section className="mt-16 border-t border-gray-200 pt-10">
+        <section className="mt-16 border-t border-gray-200 dark:border-slate-700 pt-10">
           <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6">
             You Might Also Like
           </h2>
@@ -217,14 +217,14 @@ export default function CartPage() {
               <Link
                 key={rp.id}
                 to={`/products/${rp.slug}`}
-                className="sharp-card p-6 bg-white hover:shadow-lg transition-all group"
+                className="sharp-card p-6 hover:shadow-lg transition-all group"
               >
-                <h3 className="text-lg font-bold text-gray-900 group-hover:text-blueprint-blue transition-colors mb-1">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 group-hover:text-blueprint-blue transition-colors mb-1">
                   {rp.title}
                 </h3>
-                <p className="text-sm text-gray-500 mb-3 line-clamp-2">{rp.description}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-3 line-clamp-2">{rp.description}</p>
                 <div className="flex justify-between items-center">
-                  <span className="text-sm font-bold text-gray-900">{formatCurrency(rp.priceMonthly)}/mo</span>
+                  <span className="text-sm font-bold text-gray-900 dark:text-gray-100">{formatCurrency(rp.priceMonthly)}/mo</span>
                   <span className="text-xs font-bold text-blueprint-blue uppercase tracking-wide">
                     View Details &rarr;
                   </span>

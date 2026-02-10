@@ -44,7 +44,7 @@ export function FormField({ field, register, errors, disabled }: FormFieldProps)
       {/* Label + help text */}
       {field.type !== 'checkbox' && (
         <div className="mb-1.5">
-          <label htmlFor={field.name} className="block text-sm font-semibold text-gray-800">
+          <label htmlFor={field.name} className="block text-sm font-semibold text-gray-800 dark:text-gray-200">
             {field.label}
             {field.required && <span className="text-red-500 ml-0.5">*</span>}
           </label>
@@ -85,7 +85,7 @@ export function FormField({ field, register, errors, disabled }: FormFieldProps)
       ) : field.type === 'checkbox-group' ? (
         <div className="grid grid-cols-2 gap-x-6 gap-y-2">
           {field.options?.map((opt) => (
-            <label key={opt.value} className="flex items-center gap-2 text-sm text-gray-700 py-1">
+            <label key={opt.value} className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 py-1">
               <input
                 type="checkbox"
                 value={opt.value}
@@ -100,7 +100,7 @@ export function FormField({ field, register, errors, disabled }: FormFieldProps)
 
       /* Single Checkbox */
       ) : field.type === 'checkbox' ? (
-        <label className="flex items-center gap-2 text-sm text-gray-700 py-1">
+        <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 py-1">
           <input
             type="checkbox"
             disabled={disabled}
@@ -135,7 +135,7 @@ export function FormField({ field, register, errors, disabled }: FormFieldProps)
             <span className="text-xs text-gray-400 w-20 shrink-0 text-right">{RANGE_LABELS[field.max ?? 5]}</span>
           </div>
           <div className="text-center mt-1">
-            <span className="inline-block text-xs font-bold text-blueprint-blue bg-blue-50 px-2 py-0.5">
+            <span className="inline-block text-xs font-bold text-blueprint-blue bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5">
               {rangeValue} — {RANGE_LABELS[rangeValue] || rangeValue}
             </span>
           </div>

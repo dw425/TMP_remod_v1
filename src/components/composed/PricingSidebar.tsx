@@ -38,7 +38,7 @@ export function PricingSidebar({ product }: PricingSidebarProps) {
 
         {/* Billing Toggle */}
         <div className="space-y-2">
-          <span className="text-sm font-medium text-gray-700">Billing</span>
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Billing</span>
           <div className="flex gap-2">
             <Button
               variant={billing === 'monthly' ? 'primary' : 'secondary'}
@@ -58,9 +58,9 @@ export function PricingSidebar({ product }: PricingSidebarProps) {
         </div>
 
         {/* Price Display */}
-        <div className="text-center py-4 border-t border-b border-gray-200">
-          <div className="text-3xl font-bold text-gray-900">{formatCurrency(price)}</div>
-          <div className="text-sm text-gray-500">{billingLabel}</div>
+        <div className="text-center py-4 border-t border-b border-gray-200 dark:border-slate-700">
+          <div className="text-3xl font-bold text-gray-900 dark:text-gray-100">{formatCurrency(price)}</div>
+          <div className="text-sm text-gray-500 dark:text-gray-400">{billingLabel}</div>
         </div>
 
         {/* Add to Cart Button */}
@@ -69,7 +69,7 @@ export function PricingSidebar({ product }: PricingSidebarProps) {
         </Button>
 
         {/* Info Text */}
-        <p className="text-xs text-gray-500 text-center">
+        <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
           Click "Add to Cart" to request a purchase order. Our team will contact you within 24 hours.
         </p>
       </div>

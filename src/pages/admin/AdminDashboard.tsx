@@ -50,21 +50,21 @@ export default function AdminDashboard() {
   return (
     <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <SEO title="Admin Portal" description="Blueprint Marketplace administration dashboard." canonical="/admin" />
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Portal</h1>
-      <p className="text-gray-500 mb-8">Manage users, orders, and system configuration.</p>
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">Admin Portal</h1>
+      <p className="text-gray-500 dark:text-gray-400 mb-8">Manage users, orders, and system configuration.</p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {ADMIN_CARDS.map((card) => (
           <Link
             key={card.title}
             to={card.to}
-            className="sharp-card p-6 bg-white hover:border-blueprint-blue transition-colors group"
+            className="sharp-card p-6 bg-white dark:bg-slate-800 hover:border-blueprint-blue transition-colors group"
           >
             <div className="mb-4">{card.icon}</div>
-            <h3 className="text-lg font-bold text-gray-900 group-hover:text-blueprint-blue transition-colors mb-2">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 group-hover:text-blueprint-blue transition-colors mb-2">
               {card.title}
             </h3>
-            <p className="text-sm text-gray-500">{card.description}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{card.description}</p>
           </Link>
         ))}
       </div>

@@ -18,11 +18,11 @@ export default function MigrationLandingPage() {
         canonical="/migration"
       />
 
-      <div className="mb-12 border-b border-gray-200 pb-8">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight mb-4">
+      <div className="mb-12 border-b border-gray-200 dark:border-slate-700 pb-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 tracking-tight mb-4">
           Migration Assessments
         </h1>
-        <p className="text-lg text-gray-600 max-w-3xl">
+        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl">
           Select your current platform to access specific migration assessments,
           questionnaires, and accelerator tools designed to speed up your move to
           the Lakehouse.

@@ -278,7 +278,7 @@ export default function AnalyticsDashboard() {
   if (loading || !derived) {
     return (
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <p className="text-gray-500 text-center py-20">Loading analytics...</p>
+        <p className="text-gray-500 dark:text-gray-400 text-center py-20">Loading analytics...</p>
       </main>
     );
   }
@@ -293,8 +293,8 @@ export default function AnalyticsDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-1">Analytics Dashboard</h1>
-          <p className="text-gray-500 text-sm">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-1">Analytics Dashboard</h1>
+          <p className="text-gray-500 dark:text-gray-400 text-sm">
             {interactions.length.toLocaleString()} events tracked &middot; {users.length} users &middot; {orders.length} orders
           </p>
         </div>
@@ -302,13 +302,13 @@ export default function AnalyticsDashboard() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 border-b border-gray-200 mb-6">
+      <div className="flex gap-1 border-b border-gray-200 dark:border-slate-700 mb-6">
         {(['dashboard', 'feed'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2 text-sm font-bold capitalize transition-colors border-b-2 ${
-              activeTab === tab ? 'border-blueprint-blue text-blueprint-blue' : 'border-transparent text-gray-500 hover:text-gray-700'
+              activeTab === tab ? 'border-blueprint-blue text-blueprint-blue' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
             }`}
           >
             {tab === 'dashboard' ? 'Dashboard' : 'Activity Feed'}
@@ -331,7 +331,7 @@ export default function AnalyticsDashboard() {
           <ChartPanel title="Activity Over Time" right={
             <div className="flex gap-1">
               {([7, 30] as const).map((d) => (
-                <button key={d} onClick={() => setTrendDays(d)} className={`px-3 py-1 text-xs font-bold transition-colors ${trendDays === d ? 'bg-blueprint-blue text-white' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}>
+                <button key={d} onClick={() => setTrendDays(d)} className={`px-3 py-1 text-xs font-bold transition-colors ${trendDays === d ? 'bg-blueprint-blue text-white' : 'bg-gray-100 dark:bg-slate-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-600'}`}>
                   {d}D
                 </button>
               ))}
@@ -466,10 +466,10 @@ export default function AnalyticsDashboard() {
                 return (
                   <div key={step.step}>
                     <div className="flex items-center justify-between text-sm mb-1">
-                      <span className="text-gray-700 font-medium">{step.step}</span>
-                      <span className="text-gray-500 text-xs">{step.count.toLocaleString()} ({step.pct}%)</span>
+                      <span className="text-gray-700 dark:text-gray-300 font-medium">{step.step}</span>
+                      <span className="text-gray-500 dark:text-gray-400 text-xs">{step.count.toLocaleString()} ({step.pct}%)</span>
                     </div>
-                    <div className="w-full bg-gray-100 h-7 relative">
+                    <div className="w-full bg-gray-100 dark:bg-slate-700 h-7 relative">
                       <div className="h-7 transition-all flex items-center pl-2" style={{ width: `${widthPct}%`, backgroundColor: color }}>
                         {step.pct > 10 && <span className="text-white text-xs font-bold">{step.pct}%</span>}
                       </div>
@@ -484,17 +484,17 @@ export default function AnalyticsDashboard() {
 
       {/* ═══ Activity Feed Tab ═══ */}
       {activeTab === 'feed' && (
-        <div className="bg-white border border-gray-200 divide-y divide-gray-100 max-h-[600px] overflow-y-auto">
+        <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 divide-y divide-gray-100 dark:divide-slate-700 max-h-[600px] overflow-y-auto">
           {interactions.length === 0 ? (
-            <p className="text-gray-400 text-sm text-center py-12">No activity recorded yet. Browse the site to generate events.</p>
+            <p className="text-gray-400 dark:text-gray-500 text-sm text-center py-12">No activity recorded yet. Browse the site to generate events.</p>
           ) : (
             interactions.slice(0, 100).map((i) => (
               <div key={i.id} className="px-4 py-3 flex items-center justify-between text-sm">
                 <div className="flex items-center gap-3 min-w-0">
-                  <span className="inline-block px-2 py-0.5 bg-blue-50 text-blueprint-blue text-xs font-bold whitespace-nowrap">
+                  <span className="inline-block px-2 py-0.5 bg-blue-50 dark:bg-blue-900/30 text-blueprint-blue text-xs font-bold whitespace-nowrap">
                     {friendlyEvent(i.event)}
                   </span>
-                  <span className="text-gray-700 truncate">
+                  <span className="text-gray-700 dark:text-gray-300 truncate">
                     {(i.properties.pageName as string) ||
                       (i.properties.productName as string) ||
                       (i.properties.category as string) ||
@@ -531,7 +531,7 @@ function GaugeCard({ label, value, max, suffix, color, sub }: {
   const display = suffix === '%' ? value.toFixed(1) : Math.round(value).toLocaleString();
 
   return (
-    <div className="bg-white border border-gray-200 border-t-4 border-t-blueprint-blue p-4 text-center">
+    <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 border-t-4 border-t-blueprint-blue p-4 text-center">
       <svg viewBox="0 0 130 75" className="w-full max-w-[160px] mx-auto">
         {/* Background track */}
         <path
@@ -557,8 +557,8 @@ function GaugeCard({ label, value, max, suffix, color, sub }: {
           {display}{suffix}
         </text>
       </svg>
-      <p className="text-xs font-bold uppercase tracking-wider text-gray-500 mt-1">{label}</p>
-      {sub && <p className="text-xs text-gray-400 mt-0.5">{sub}</p>}
+      <p className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 mt-1">{label}</p>
+      {sub && <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{sub}</p>}
     </div>
   );
 }
@@ -566,9 +566,9 @@ function GaugeCard({ label, value, max, suffix, color, sub }: {
 /** Chart panel wrapper with sharp-card styling */
 function ChartPanel({ title, children, right }: { title: string; children: React.ReactNode; right?: React.ReactNode }) {
   return (
-    <div className="bg-white border border-gray-200 border-t-4 border-t-blueprint-blue p-5">
+    <div className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 border-t-4 border-t-blueprint-blue p-5">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-bold text-gray-900 text-sm uppercase tracking-wide">{title}</h3>
+        <h3 className="font-bold text-gray-900 dark:text-gray-100 text-sm uppercase tracking-wide">{title}</h3>
         {right}
       </div>
       {children}
@@ -579,7 +579,7 @@ function ChartPanel({ title, children, right }: { title: string; children: React
 /** Empty state for charts */
 function EmptyChart({ text }: { text?: string }) {
   return (
-    <div className="flex items-center justify-center h-48 text-gray-400">
+    <div className="flex items-center justify-center h-48 text-gray-400 dark:text-gray-500">
       <div className="text-center">
         <svg className="w-10 h-10 mx-auto mb-2 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />

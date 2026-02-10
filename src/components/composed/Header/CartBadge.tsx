@@ -12,7 +12,7 @@ export function CartBadge() {
       aria-label={totalCount > 0 ? `Shopping cart, ${totalCount} item${totalCount === 1 ? '' : 's'}` : 'Shopping cart, empty'}
     >
       <svg
-        className="w-6 h-6 text-gray-600 group-hover:text-blueprint-blue transition-colors"
+        className="w-6 h-6 text-gray-600 dark:text-gray-400 group-hover:text-blueprint-blue transition-colors"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"

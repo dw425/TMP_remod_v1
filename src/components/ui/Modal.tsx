@@ -79,13 +79,13 @@ export function Modal({ isOpen, onClose, children, title }: ModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="bg-white max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-fade-in"
+        className="bg-white dark:bg-slate-900 max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-fade-in"
       >
-        <div className="sticky top-0 bg-white border-b border-gray-300 px-6 py-4 flex items-center justify-between">
-          {title && <h2 id={titleId} className="text-2xl font-bold text-gray-900">{title}</h2>}
+        <div className="sticky top-0 bg-white dark:bg-slate-900 border-b border-gray-300 dark:border-slate-700 px-6 py-4 flex items-center justify-between">
+          {title && <h2 id={titleId} className="text-2xl font-bold text-gray-900 dark:text-gray-100">{title}</h2>}
           <button
             onClick={onClose}
-            className="ml-auto text-gray-500 hover:text-gray-900 text-2xl font-bold leading-none"
+            className="ml-auto text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 text-2xl font-bold leading-none"
             aria-label="Close dialog"
           >
             ×

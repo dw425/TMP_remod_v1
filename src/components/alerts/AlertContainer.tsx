@@ -14,7 +14,7 @@ export function AlertContainer() {
           key={alert.id}
           role="alert"
           className={cn(
-            'bg-white border-l-4 shadow-lg p-4 animate-pop-in',
+            'bg-white dark:bg-slate-900 border-l-4 shadow-lg p-4 animate-pop-in',
             {
               'border-green-500': alert.type === 'success',
               'border-red-500': alert.type === 'error',
@@ -25,8 +25,8 @@ export function AlertContainer() {
         >
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h4 className="font-bold text-gray-900">{alert.title}</h4>
-              {alert.message && <p className="text-sm text-gray-600 mt-1">{alert.message}</p>}
+              <h4 className="font-bold text-gray-900 dark:text-gray-100">{alert.title}</h4>
+              {alert.message && <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{alert.message}</p>}
             </div>
             <button
               onClick={() => dismiss(alert.id)}

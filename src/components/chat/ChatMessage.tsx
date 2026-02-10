@@ -13,7 +13,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
         className={`max-w-[80%] px-3 py-2 text-sm ${
           isUser
             ? 'bg-blueprint-blue text-white'
-            : 'bg-gray-100 text-gray-900 border border-gray-200'
+            : 'bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-gray-100 border border-gray-200 dark:border-slate-700'
         }`}
       >
         {message.content}
@@ -25,7 +25,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
 export function TypingIndicator() {
   return (
     <div className="flex justify-start mb-3">
-      <div className="bg-gray-100 border border-gray-200 px-4 py-2 text-sm">
+      <div className="bg-gray-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 px-4 py-2 text-sm">
         <span className="inline-flex gap-1">
           <span className="w-1.5 h-1.5 bg-gray-400 animate-bounce" style={{ animationDelay: '0ms' }} />
           <span className="w-1.5 h-1.5 bg-gray-400 animate-bounce" style={{ animationDelay: '150ms' }} />

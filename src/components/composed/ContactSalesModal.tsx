@@ -56,26 +56,26 @@ export function ContactSalesModal({ productTitle, onClose, onSuccess }: ContactS
     >
       <div className="fixed inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.8)' }} onClick={onClose} aria-hidden="true" />
       <div
-        className="relative bg-white shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col border-t-8 border-black"
+        className="relative bg-white dark:bg-slate-900 shadow-xl w-full max-w-lg max-h-[90vh] flex flex-col border-t-8 border-black dark:border-slate-500"
       >
-        <header className="p-6 border-b border-gray-100">
+        <header className="p-6 border-b border-gray-100 dark:border-slate-700">
           <div className="flex justify-between items-start mb-4">
-            <h2 className="text-3xl font-bold text-gray-900">Contact Sales</h2>
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100">Contact Sales</h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-900 text-3xl leading-none"
+              className="text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 text-3xl leading-none"
               aria-label="Close"
             >
               &times;
             </button>
           </div>
 
-          <div className="bg-blue-50 border-l-4 border-blueprint-blue p-4">
-            <p className="text-sm text-gray-600 font-medium mb-1">Prefer to speak directly?</p>
+          <div className="bg-blue-50 dark:bg-blue-900/30 border-l-4 border-blueprint-blue p-4">
+            <p className="text-sm text-gray-600 dark:text-gray-300 font-medium mb-1">Prefer to speak directly?</p>
             <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6">
               <a
                 href="tel:2064558326"
-                className="flex items-center text-gray-900 font-bold hover:text-blueprint-blue transition-colors"
+                className="flex items-center text-gray-900 dark:text-gray-100 font-bold hover:text-blueprint-blue transition-colors"
               >
                 <svg className="w-4 h-4 mr-2 text-blueprint-blue" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
@@ -84,7 +84,7 @@ export function ContactSalesModal({ productTitle, onClose, onSuccess }: ContactS
               </a>
               <a
                 href="mailto:Info@bpcs.com"
-                className="flex items-center text-gray-900 font-bold hover:text-blueprint-blue transition-colors"
+                className="flex items-center text-gray-900 dark:text-gray-100 font-bold hover:text-blueprint-blue transition-colors"
               >
                 <svg className="w-4 h-4 mr-2 text-blueprint-blue" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
@@ -101,7 +101,7 @@ export function ContactSalesModal({ productTitle, onClose, onSuccess }: ContactS
           <input type="hidden" name="product_page" value={productTitle || ''} />
 
           <div>
-            <label htmlFor="cs-fullName" className="block text-xs font-bold text-gray-500 uppercase mb-1">
+            <label htmlFor="cs-fullName" className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">
               Full Name
             </label>
             <input
@@ -109,11 +109,11 @@ export function ContactSalesModal({ productTitle, onClose, onSuccess }: ContactS
               type="text"
               name="fullName"
               required
-              className="w-full border border-gray-300 p-3 focus:border-blueprint-blue focus:outline-none"
+              className="w-full border border-gray-300 dark:border-slate-600 p-3 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:border-blueprint-blue focus:outline-none"
             />
           </div>
           <div>
-            <label htmlFor="cs-email" className="block text-xs font-bold text-gray-500 uppercase mb-1">
+            <label htmlFor="cs-email" className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">
               Business Email
             </label>
             <input
@@ -121,11 +121,11 @@ export function ContactSalesModal({ productTitle, onClose, onSuccess }: ContactS
               type="email"
               name="email"
               required
-              className="w-full border border-gray-300 p-3 focus:border-blueprint-blue focus:outline-none"
+              className="w-full border border-gray-300 dark:border-slate-600 p-3 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:border-blueprint-blue focus:outline-none"
             />
           </div>
           <div>
-            <label htmlFor="cs-message" className="block text-xs font-bold text-gray-500 uppercase mb-1">
+            <label htmlFor="cs-message" className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase mb-1">
               Message
             </label>
             <textarea
@@ -133,7 +133,7 @@ export function ContactSalesModal({ productTitle, onClose, onSuccess }: ContactS
               name="message"
               rows={4}
               required
-              className="w-full border border-gray-300 p-3 focus:border-blueprint-blue focus:outline-none"
+              className="w-full border border-gray-300 dark:border-slate-600 p-3 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 focus:border-blueprint-blue focus:outline-none"
             />
           </div>
           <div className="flex flex-col gap-2 mt-4">

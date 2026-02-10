@@ -72,7 +72,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
           <h4 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{modalTitle}</h4>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-gray-100 transition-colors"
+            className="p-1 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
             aria-label="Close"
           >
             <svg className="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -93,8 +93,8 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                     onClick={() => { setActiveTab(tab.id); track('product_modal_tab_changed', { tab: tab.id, productName: product.title }); }}
                     className={`w-full text-left px-4 py-3 font-bold text-sm transition-colors border-l-4 ${
                       activeTab === tab.id
-                        ? 'bg-white border-blueprint-blue text-blueprint-blue shadow-sm'
-                        : 'border-transparent text-gray-500 hover:bg-white hover:text-gray-800'
+                        ? 'bg-white dark:bg-slate-900 border-blueprint-blue text-blueprint-blue shadow-sm'
+                        : 'border-transparent text-gray-500 hover:bg-white dark:hover:bg-slate-900 hover:text-gray-800 dark:hover:text-gray-200'
                     }`}
                   >
                     {tab.label}
@@ -123,11 +123,11 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                   {product.id === 7 ? (
                     /* Special overview for Top Trending Insight */
                     <>
-                      <h5 className="font-bold text-gray-900 text-lg mb-2">The Challenge</h5>
+                      <h5 className="font-bold text-gray-900 dark:text-gray-100 text-lg mb-2">The Challenge</h5>
                       <p className="mb-4">The pressure on marketing leaders to prove ROI has never been greater. Yet, disconnected data sources and manual spreadsheets force critical budget decisions based on incomplete information. This reactive approach leads to wasted spend and missed opportunities.</p>
-                      <h5 className="font-bold text-gray-900 text-lg mb-2">The Solution: A Factory for Intelligence</h5>
+                      <h5 className="font-bold text-gray-900 dark:text-gray-100 text-lg mb-2">The Solution: A Factory for Intelligence</h5>
                       <p className="mb-4">Winning demands a shift from hindsight to foresight. The &quot;AI Factory&quot; model unifies your data using Unity Catalog and predicts outcomes with precision. By embedding AI-driven forecasting into your planning, marketing transforms from a cost center into a predictable revenue engine.</p>
-                      <h5 className="font-bold text-gray-900 text-lg mb-2">Key Takeaways</h5>
+                      <h5 className="font-bold text-gray-900 dark:text-gray-100 text-lg mb-2">Key Takeaways</h5>
                       <ul className="list-disc pl-5 space-y-1 mb-6">
                         <li><strong>Unify Data:</strong> Connect siloed campaign data for a single source of truth.</li>
                         <li><strong>Predict ROAS:</strong> Use AI agents to generate 7- and 14-day revenue projections.</li>
@@ -137,7 +137,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                   ) : (
                     <>
                       {/* Solution Overview */}
-                      <h5 className="font-bold text-xs uppercase tracking-wide text-gray-900 mb-3">
+                      <h5 className="font-bold text-xs uppercase tracking-wide text-gray-900 dark:text-gray-100 mb-3">
                         Solution Overview
                       </h5>
                       <p className="mb-3 leading-relaxed">{product.description}</p>
@@ -148,7 +148,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                       {/* What It Does */}
                       {product.whatItDoes?.[0] && (
                         <div className="mb-4">
-                          <h5 className="font-bold text-xs uppercase tracking-wide text-gray-900 mb-3 mt-5">
+                          <h5 className="font-bold text-xs uppercase tracking-wide text-gray-900 dark:text-gray-100 mb-3 mt-5">
                             {product.whatItDoes[0].heading}
                           </h5>
                           {product.whatItDoes[0].paragraphs.map((p, i) => (
@@ -160,7 +160,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                       {/* Key Features */}
                       {product.features.length > 0 && (
                         <div className="mb-4">
-                          <h5 className="font-bold text-xs uppercase tracking-wide text-gray-900 mb-3 mt-5">
+                          <h5 className="font-bold text-xs uppercase tracking-wide text-gray-900 dark:text-gray-100 mb-3 mt-5">
                             Key Capabilities
                           </h5>
                           <ul className="list-disc pl-5 space-y-1">
@@ -174,13 +174,13 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                       {/* Benefits */}
                       {product.benefits && product.benefits.length > 0 && (
                         <div className="mb-4">
-                          <h5 className="font-bold text-xs uppercase tracking-wide text-gray-900 mb-3 mt-5">
+                          <h5 className="font-bold text-xs uppercase tracking-wide text-gray-900 dark:text-gray-100 mb-3 mt-5">
                             Business Impact
                           </h5>
                           <ul className="space-y-2">
                             {product.benefits.map((b, i) => (
                               <li key={i}>
-                                <strong className="text-gray-900">{b.title}</strong>
+                                <strong className="text-gray-900 dark:text-gray-100">{b.title}</strong>
                                 {b.description && <span> — {b.description}</span>}
                               </li>
                             ))}
@@ -206,8 +206,8 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                       />
                     </div>
                   ) : (
-                    <div className="w-full h-full bg-gray-100 flex items-center justify-center border border-gray-200 shadow-inner">
-                      <p className="text-gray-500 font-medium">Video Preview Unavailable</p>
+                    <div className="w-full h-full bg-gray-100 dark:bg-slate-800 flex items-center justify-center border border-gray-200 dark:border-slate-700 shadow-inner">
+                      <p className="text-gray-500 dark:text-gray-400 font-medium">Video Preview Unavailable</p>
                     </div>
                   )}
                 </div>
@@ -218,22 +218,22 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                 <div>
                   {hasPricing ? (
                     <>
-                      <h5 className="font-bold text-sm uppercase tracking-wide mb-6">Pricing Models</h5>
+                      <h5 className="font-bold text-sm uppercase tracking-wide mb-6 dark:text-gray-100">Pricing Models</h5>
                       <div className="grid gap-4">
-                        <div className="p-6 border border-gray-200 bg-gray-50">
-                          <h6 className="font-bold text-gray-900">Single User</h6>
-                          <p className="text-gray-600 text-sm mt-1">{formatCurrency(product.priceMonthly)}/mo</p>
+                        <div className="p-6 border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800">
+                          <h6 className="font-bold text-gray-900 dark:text-gray-100">Single User</h6>
+                          <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">{formatCurrency(product.priceMonthly)}/mo</p>
                         </div>
-                        <div className="p-6 border border-gray-200 bg-gray-50">
-                          <h6 className="font-bold text-gray-900">Team Account</h6>
-                          <p className="text-gray-600 text-sm mt-1">Starting at $5,000.00/mo</p>
+                        <div className="p-6 border border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800">
+                          <h6 className="font-bold text-gray-900 dark:text-gray-100">Team Account</h6>
+                          <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">Starting at $5,000.00/mo</p>
                         </div>
                       </div>
                     </>
                   ) : (
-                    <div className="p-6 border border-gray-200 text-center bg-gray-50">
-                      <h6 className="font-bold text-gray-900 mb-2">Enterprise Pricing</h6>
-                      <p className="text-gray-600 text-sm mb-4">Contact us for a custom quote based on your environment and requirements.</p>
+                    <div className="p-6 border border-gray-200 dark:border-slate-700 text-center bg-gray-50 dark:bg-slate-800">
+                      <h6 className="font-bold text-gray-900 dark:text-gray-100 mb-2">Enterprise Pricing</h6>
+                      <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">Contact us for a custom quote based on your environment and requirements.</p>
                     </div>
                   )}
                 </div>
@@ -242,8 +242,8 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
               {/* Prerequisites Tab */}
               {activeTab === 'prerequisites' && (
                 <div>
-                  <h5 className="font-bold text-sm uppercase tracking-wide mb-4">System Requirements</h5>
-                  <ul className="list-disc list-inside text-sm text-gray-600 space-y-2 border-l-2 border-yellow-400 pl-4 bg-yellow-50 p-4">
+                  <h5 className="font-bold text-sm uppercase tracking-wide mb-4 dark:text-gray-100">System Requirements</h5>
+                  <ul className="list-disc list-inside text-sm text-gray-600 dark:text-gray-300 space-y-2 border-l-2 border-yellow-400 pl-4 bg-yellow-50 dark:bg-yellow-900/20 p-4">
                     {product.readinessChecklist && product.readinessChecklist.length > 0 ? (
                       product.readinessChecklist.map((item, i) => (
                         <li key={i}>{item}</li>

@@ -124,7 +124,7 @@ export default function SignupPage() {
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Create Account</h1>
 
         {displayError && (
-          <div role="alert" className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm">
+          <div role="alert" className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
             {displayError}
           </div>
         )}
@@ -132,17 +132,17 @@ export default function SignupPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="signup-firstName" className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+              <label htmlFor="signup-firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">First Name</label>
               <input id="signup-firstName" type="text" name="firstName" value={form.firstName} onChange={handleChange} required autoComplete="given-name" className={inputClass} />
             </div>
             <div>
-              <label htmlFor="signup-lastName" className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+              <label htmlFor="signup-lastName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Last Name</label>
               <input id="signup-lastName" type="text" name="lastName" value={form.lastName} onChange={handleChange} required autoComplete="family-name" className={inputClass} />
             </div>
           </div>
 
           <div>
-            <label htmlFor="signup-email" className="block text-sm font-medium text-gray-700 mb-1">Business Email</label>
+            <label htmlFor="signup-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Business Email</label>
             <input
               id="signup-email"
               type="email"
@@ -160,12 +160,12 @@ export default function SignupPage() {
           </div>
 
           <div>
-            <label htmlFor="signup-company" className="block text-sm font-medium text-gray-700 mb-1">Company</label>
+            <label htmlFor="signup-company" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Company</label>
             <input id="signup-company" type="text" name="company" value={form.company} onChange={handleChange} required autoComplete="organization" className={inputClass} />
           </div>
 
           <div>
-            <label htmlFor="signup-password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label htmlFor="signup-password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
             <div className="relative">
               <input id="signup-password" type={showPassword ? 'text' : 'password'} name="password" value={form.password} onChange={handleChange} required minLength={8} autoComplete="new-password" className={inputClass} />
               <button
@@ -186,7 +186,7 @@ export default function SignupPage() {
             {/* Password strength meter */}
             {form.password && passwordStrength && (
               <div className="mt-2">
-                <div className="h-1.5 w-full bg-gray-200">
+                <div className="h-1.5 w-full bg-gray-200 dark:bg-slate-700">
                   <div
                     className={`h-full transition-all duration-300 ${STRENGTH_COLORS[passwordStrength.score]} ${STRENGTH_WIDTHS[passwordStrength.score]}`}
                   />
@@ -202,7 +202,7 @@ export default function SignupPage() {
           </div>
 
           <div>
-            <label htmlFor="signup-confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+            <label htmlFor="signup-confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Confirm Password</label>
             <input id="signup-confirmPassword" type={showPassword ? 'text' : 'password'} name="confirmPassword" value={form.confirmPassword} onChange={handleChange} required autoComplete="new-password" className={inputClass} />
             {form.confirmPassword && form.password !== form.confirmPassword && (
               <p className="mt-1 text-xs text-red-600">Passwords do not match</p>
@@ -228,7 +228,7 @@ export default function SignupPage() {
           </Button>
         </form>
 
-        <p className="mt-6 text-sm text-center text-gray-500">
+        <p className="mt-6 text-sm text-center text-gray-500 dark:text-gray-400">
           Already have an account?{' '}
           <Link to={ROUTES.LOGIN} className="text-blueprint-blue hover:underline">
             Sign in

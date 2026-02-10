@@ -28,11 +28,11 @@ export default function DashboardPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-12">
-      <div className="bg-white border border-gray-300 border-t-4 border-t-blueprint-blue p-8 mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">
+      <div className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 border-t-4 border-t-blueprint-blue p-8 mb-8">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1">
           Welcome back, {user.firstName}
         </h1>
-        <p className="text-gray-500 text-sm">
+        <p className="text-gray-500 dark:text-gray-400 text-sm">
           {user.email} &middot; {user.company || 'No company'} &middot;{' '}
           <span className="capitalize">{user.role}</span>
         </p>
@@ -43,29 +43,29 @@ export default function DashboardPage() {
           <Link
             key={link.to}
             to={link.to}
-            className="bg-white border border-gray-300 p-6 hover:border-blueprint-blue transition-colors group"
+            className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 p-6 hover:border-blueprint-blue transition-colors group"
           >
-            <h2 className="text-lg font-bold text-gray-900 group-hover:text-blueprint-blue mb-1">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 group-hover:text-blueprint-blue mb-1">
               {link.label}
             </h2>
-            <p className="text-sm text-gray-500">{link.desc}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{link.desc}</p>
           </Link>
         ))}
 
         {/* Migration Suite card — expandable with saved assessments */}
-        <div className="bg-white border border-gray-300 hover:border-blueprint-blue transition-colors">
+        <div className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 hover:border-blueprint-blue transition-colors">
           <Link
             to={ROUTES.MIGRATION_HOME}
             className="block p-6 group"
           >
-            <h2 className="text-lg font-bold text-gray-900 group-hover:text-blueprint-blue mb-1">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 group-hover:text-blueprint-blue mb-1">
               Migration Suite
             </h2>
-            <p className="text-sm text-gray-500">Start a platform migration assessment</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">Start a platform migration assessment</p>
           </Link>
 
           {assessments.length > 0 && (
-            <div className="border-t border-gray-200 px-6 pb-4">
+            <div className="border-t border-gray-200 dark:border-slate-700 px-6 pb-4">
               <button
                 onClick={() => setShowAssessments(!showAssessments)}
                 className="flex items-center justify-between w-full py-3 text-sm font-bold text-blueprint-blue hover:underline"
@@ -86,24 +86,24 @@ export default function DashboardPage() {
                   {assessments.map((a) => (
                     <div
                       key={a.id}
-                      className="bg-gray-50 border border-gray-200 p-4"
+                      className="bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 p-4"
                     >
                       <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-sm font-bold text-gray-900">{a.platformName}</h3>
-                        <span className="text-xs text-gray-400">
+                        <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100">{a.platformName}</h3>
+                        <span className="text-xs text-gray-400 dark:text-gray-400">
                           {new Date(a.submittedAt).toLocaleDateString()}
                         </span>
                       </div>
-                      <div className="grid grid-cols-2 gap-2 text-xs text-gray-600">
+                      <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-400">
                         <div>
-                          <span className="text-gray-400">Manual:</span>{' '}
+                          <span className="text-gray-400 dark:text-gray-400">Manual:</span>{' '}
                           <span className="font-bold">{a.rom.totalHours.toLocaleString()} hrs</span>
-                          <span className="text-gray-400"> ({a.rom.totalWeeks} wks)</span>
+                          <span className="text-gray-400 dark:text-gray-400"> ({a.rom.totalWeeks} wks)</span>
                         </div>
                         <div>
-                          <span className="text-gray-400">Accelerated:</span>{' '}
+                          <span className="text-gray-400 dark:text-gray-400">Accelerated:</span>{' '}
                           <span className="font-bold text-blueprint-blue">{a.rom.acceleratedHours.toLocaleString()} hrs</span>
-                          <span className="text-gray-400"> ({a.rom.acceleratedWeeks} wks)</span>
+                          <span className="text-gray-400 dark:text-gray-400"> ({a.rom.acceleratedWeeks} wks)</span>
                         </div>
                       </div>
                       <div className="mt-2 flex gap-3">

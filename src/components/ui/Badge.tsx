@@ -13,7 +13,7 @@ export function Badge({ children, variant = 'default', className }: BadgeProps) 
       className={cn(
         'inline-block px-3 py-1 text-xs font-bold',
         {
-          'bg-gray-200 text-gray-800': variant === 'default',
+          'bg-gray-200 dark:bg-slate-700 text-gray-800 dark:text-gray-200': variant === 'default',
           'bg-blueprint-blue text-white': variant === 'primary',
           'bg-green-500 text-white': variant === 'success',
           'bg-yellow-500 text-white': variant === 'warning',

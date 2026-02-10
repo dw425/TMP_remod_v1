@@ -57,7 +57,7 @@ export function ChatWidget() {
   return (
     <div className="fixed bottom-4 right-4 z-40">
       {isOpen && (
-        <div className="mb-3 w-80 bg-white border border-gray-300 shadow-xl flex flex-col" style={{ maxHeight: '480px' }}>
+        <div className="mb-3 w-80 bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 shadow-xl flex flex-col" style={{ maxHeight: '480px' }}>
           {/* Header */}
           <div className="bg-blueprint-blue text-white px-4 py-3 flex items-center justify-between">
             <div>
@@ -82,7 +82,7 @@ export function ChatWidget() {
             style={{ minHeight: '200px', maxHeight: '300px' }}
           >
             {messages.length === 0 && (
-              <div className="text-center text-gray-400 text-sm py-8">
+              <div className="text-center text-gray-400 dark:text-gray-500 text-sm py-8">
                 <p className="mb-1 font-medium">Welcome!</p>
                 <p>Ask a question or use the quick actions below.</p>
               </div>

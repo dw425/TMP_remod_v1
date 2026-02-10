@@ -34,14 +34,14 @@ export function ReadinessChecklist({ product }: ReadinessChecklistProps) {
     <SharpCard className="p-6">
       <div className="space-y-4">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">Readiness Checklist</h3>
-          <p className="text-sm text-gray-500 mt-1">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Readiness Checklist</h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             {completedCount} of {totalCount} items complete ({percentage}%)
           </p>
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full h-2 bg-gray-200 overflow-hidden">
+        <div className="w-full h-2 bg-gray-200 dark:bg-slate-700 overflow-hidden">
           <div
             className="h-full bg-blueprint-blue transition-all duration-300"
             style={{ width: `${percentage}%` }}
@@ -60,7 +60,7 @@ export function ReadinessChecklist({ product }: ReadinessChecklistProps) {
               />
               <span
                 className={`text-sm ${
-                  checked[index] ? 'text-gray-400 line-through' : 'text-gray-700 group-hover:text-gray-900'
+                  checked[index] ? 'text-gray-400 line-through' : 'text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-gray-100'
                 }`}
               >
                 {item}

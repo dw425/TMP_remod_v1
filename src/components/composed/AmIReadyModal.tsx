@@ -66,13 +66,13 @@ export function AmIReadyModal({ product, onClose }: AmIReadyModalProps) {
     >
       <div className="fixed inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.8)' }} onClick={onClose} aria-hidden="true" />
       <div
-        className="relative bg-white shadow-xl w-full max-w-3xl max-h-[95vh] flex flex-col border-t-8 border-blueprint-blue"
+        className="relative bg-white dark:bg-slate-900 shadow-xl w-full max-w-3xl max-h-[95vh] flex flex-col border-t-8 border-blueprint-blue"
       >
-        <header className="p-6 border-b border-gray-100 flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-900">Are You Ready?</h2>
+        <header className="p-6 border-b border-gray-100 dark:border-slate-700 flex justify-between items-center">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Are You Ready?</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-900 text-3xl"
+            className="text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 text-3xl"
             aria-label="Close"
           >
             &times;
@@ -80,12 +80,12 @@ export function AmIReadyModal({ product, onClose }: AmIReadyModalProps) {
         </header>
 
         <div className="p-6 overflow-y-auto text-sm space-y-3">
-          <p className="text-gray-500 mb-4">
+          <p className="text-gray-500 dark:text-gray-400 mb-4">
             This tool is most effective when you can answer &quot;yes&quot; to all of the following statements:
           </p>
-          <div className="grid grid-cols-1 gap-y-4 text-gray-800">
+          <div className="grid grid-cols-1 gap-y-4 text-gray-800 dark:text-gray-200">
             {CHECKLIST_ITEMS.map((item, index) => (
-              <div key={index} className="flex items-start bg-gray-50 p-3 border border-gray-100">
+              <div key={index} className="flex items-start bg-gray-50 dark:bg-slate-800 p-3 border border-gray-100 dark:border-slate-700">
                 <input
                   id={`ready-${index}`}
                   type="checkbox"
@@ -101,7 +101,7 @@ export function AmIReadyModal({ product, onClose }: AmIReadyModalProps) {
           </div>
         </div>
 
-        <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-100">
+        <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-100 dark:border-slate-700">
           <button
             onClick={onClose}
             className="px-6 py-2 text-xs font-bold uppercase text-gray-500 hover:text-gray-800"

@@ -19,7 +19,7 @@ export default function WhitepaperPage() {
       />
 
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-8">
+      <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-8">
         <Link to={ROUTES.HOME} className="hover:text-blueprint-blue">Home</Link>
         <span>/</span>
         <span className="hover:text-blueprint-blue cursor-pointer">Insights</span>
@@ -30,8 +30,8 @@ export default function WhitepaperPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
         {/* Main Article */}
         <div className="lg:col-span-8">
-          <article className="sharp-card p-8 md:p-12 border-t-4 border-t-blueprint-blue bg-white">
-            <header className="mb-10 border-b border-gray-100 pb-8">
+          <article className="sharp-card p-8 md:p-12 border-t-4 border-t-blueprint-blue bg-white dark:bg-slate-800">
+            <header className="mb-10 border-b border-gray-100 dark:border-slate-700 pb-8">
               <h1 className="text-3xl md:text-5xl font-bold text-blueprint-blue tracking-tight mb-6 leading-tight">
                 Stop guessing: Why AI forecasting is your new marketing strategy
               </h1>
@@ -41,15 +41,15 @@ export default function WhitepaperPage() {
                     BP
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-gray-900">By Blueprint Team</p>
-                    <p className="text-xs text-gray-500">October 2025</p>
+                    <p className="text-sm font-bold text-gray-900 dark:text-gray-100">By Blueprint Team</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">October 2025</p>
                   </div>
                 </div>
               </div>
             </header>
 
             <div className="article-body">
-              <p className="font-medium text-lg text-gray-700">
+              <p className="font-medium text-lg text-gray-700 dark:text-gray-300">
                 The pressure on marketing leaders to prove return on investment (ROI) has never been greater. Yet, the tools many teams rely on for campaign forecasting remain rooted in the past.
               </p>
               <p>
@@ -91,7 +91,7 @@ export default function WhitepaperPage() {
                   <img
                     src={`${import.meta.env.BASE_URL}images/wp_image1of2.png`}
                     alt="CampaignIQ Factory Intelligence Interface"
-                    className="w-full h-auto border border-gray-200 shadow-sm"
+                    className="w-full h-auto border border-gray-200 dark:border-slate-700 shadow-sm"
                   />
                 </div>
               </div>
@@ -101,7 +101,7 @@ export default function WhitepaperPage() {
                   <img
                     src={`${import.meta.env.BASE_URL}images/wp_image2of2.png`}
                     alt="Unity Catalog Governance Dashboard"
-                    className="w-full h-auto border border-gray-200 shadow-sm"
+                    className="w-full h-auto border border-gray-200 dark:border-slate-700 shadow-sm"
                   />
                 </div>
                 <div className="order-1 md:order-2">
@@ -138,7 +138,7 @@ export default function WhitepaperPage() {
                 As highlighted in the TDWI webinar, &quot;Turning Data into Decisions,&quot; the goal is to centralize data and apply AI-driven forecasting to evaluate scenarios before spending.
               </p>
 
-              <div className="my-10 sharp-card border border-gray-200">
+              <div className="my-10 sharp-card border border-gray-200 dark:border-slate-700">
                 <div className="aspect-video w-full bg-black">
                   <iframe
                     src="https://www.youtube.com/embed/RREDkHtJZDY"
@@ -148,9 +148,9 @@ export default function WhitepaperPage() {
                     className="w-full h-full"
                   />
                 </div>
-                <div className="p-6 bg-white">
+                <div className="p-6 bg-white dark:bg-slate-800">
                   <h3 className="text-xl font-bold text-blueprint-blue mb-3 mt-0">Summary</h3>
-                  <p className="text-gray-600 leading-relaxed text-sm mb-0">
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm mb-0">
                     CampaignIQ is a Databricks-native solution that empowers marketers with AI-driven ROAS forecasting, scenario simulation, and spend optimization. It unifies data, governance, and analytics to improve campaign performance and accelerate decision-making.
                   </p>
                 </div>
@@ -190,7 +190,7 @@ export default function WhitepaperPage() {
                 The time for siloed tools and manual forecasting is over. To lead your market, you need an AI-powered solution that delivers the speed, accuracy, and strategic foresight necessary to win. CampaignIQ provides the Databricks-native framework to make every media decision smarter, faster, and more accountable. Stop guessing and start building your future with data-driven confidence.
               </p>
 
-              <div className="mt-12 p-8 bg-gray-50 border-l-4 border-blueprint-blue sharp-card">
+              <div className="mt-12 p-8 bg-gray-50 dark:bg-slate-700 border-l-4 border-blueprint-blue sharp-card">
                 <h3 className="text-xl font-bold text-blueprint-blue mt-0 mb-4">
                   Ready to see how AI-powered forecasting can transform your marketing strategy?
                 </h3>
@@ -209,13 +209,13 @@ export default function WhitepaperPage() {
         {/* Sidebar */}
         <aside className="lg:col-span-4 space-y-8">
           {/* Related Solution */}
-          <div className="sharp-card p-6 border-t-4 border-black bg-white">
-            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6">
+          <div className="sharp-card p-6 border-t-4 border-black bg-white dark:bg-slate-800">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-6">
               Related Solution
             </h3>
             <div className="mb-6">
-              <h4 className="text-xl font-bold text-gray-900 mb-2">CampaignIQ</h4>
-              <p className="text-sm text-gray-500 leading-relaxed mb-4">
+              <h4 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2">CampaignIQ</h4>
+              <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-4">
                 The AI-powered ROAS analysis tool to maximize your advertising investment. Unify data, forecast outcomes, and simulate strategies.
               </p>
             </div>
@@ -228,18 +228,18 @@ export default function WhitepaperPage() {
           </div>
 
           {/* Stay Updated */}
-          <div className="sharp-card p-6 border border-gray-200 bg-white">
-            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">
+          <div className="sharp-card p-6 border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">
               Stay Updated
             </h3>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
               Get the latest insights on Data & AI delivered directly to your inbox.
             </p>
             <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
               <input
                 type="email"
                 placeholder="Business Email"
-                className="w-full p-3 border border-gray-300 text-xs focus:border-blueprint-blue outline-none sharp-card"
+                className="w-full p-3 border border-gray-300 dark:border-slate-600 text-xs focus:border-blueprint-blue outline-none sharp-card bg-white dark:bg-slate-700 dark:text-gray-100"
               />
               <button className="w-full bg-black text-white font-bold py-3 uppercase tracking-widest text-[10px] hover:bg-gray-800 transition-colors">
                 Subscribe
@@ -248,15 +248,15 @@ export default function WhitepaperPage() {
           </div>
 
           {/* Topics */}
-          <div className="sharp-card p-6 border border-gray-200 bg-white">
-            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">
+          <div className="sharp-card p-6 border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">
               Topics
             </h3>
             <div className="flex flex-wrap gap-2">
               {['AI', 'Marketing', 'Forecasting', 'Databricks'].map((topic) => (
                 <span
                   key={topic}
-                  className="px-3 py-1 bg-gray-100 text-[10px] font-bold text-gray-600 uppercase tracking-wide border border-gray-200"
+                  className="px-3 py-1 bg-gray-100 dark:bg-slate-700 text-[10px] font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wide border border-gray-200 dark:border-slate-600"
                 >
                   {topic}
                 </span>

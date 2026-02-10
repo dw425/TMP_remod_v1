@@ -55,8 +55,8 @@ export function AuthLayout() {
               alt="Blueprint"
               className="h-8 w-auto blue-logo-filter"
             />
-            <div className="h-6 w-px bg-gray-300" />
-            <span className="text-lg font-medium text-gray-500 tracking-tight">Marketplace</span>
+            <div className="h-6 w-px bg-gray-300 dark:bg-slate-600" />
+            <span className="text-lg font-medium text-gray-500 dark:text-gray-400 tracking-tight">Marketplace</span>
           </Link>
         </div>
 

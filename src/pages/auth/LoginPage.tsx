@@ -85,7 +85,7 @@ export default function LoginPage() {
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Sign In</h1>
 
         {isLockedOut && (
-          <div role="alert" className="mb-4 p-3 bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm">
+          <div role="alert" className="mb-4 p-3 bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-200 text-sm">
             <p className="font-medium">Account temporarily locked</p>
             <p className="mt-1">
               Too many failed attempts. Try again in{' '}
@@ -97,14 +97,14 @@ export default function LoginPage() {
         )}
 
         {error && !isLockedOut && (
-          <div role="alert" className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm">
+          <div role="alert" className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label htmlFor="login-email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label htmlFor="login-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
             <input
               id="login-email"
               type="email"
@@ -118,7 +118,7 @@ export default function LoginPage() {
             />
           </div>
           <div>
-            <label htmlFor="login-password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+            <label htmlFor="login-password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
             <div className="relative">
               <input
                 id="login-password"
@@ -155,7 +155,7 @@ export default function LoginPage() {
           <Link to={ROUTES.FORGOT_PASSWORD} className="text-blueprint-blue hover:underline block">
             Forgot password?
           </Link>
-          <p className="text-gray-500">
+          <p className="text-gray-500 dark:text-gray-400">
             Don't have an account?{' '}
             <Link to={ROUTES.SIGNUP} className="text-blueprint-blue hover:underline">
               Sign up

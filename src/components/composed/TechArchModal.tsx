@@ -26,7 +26,7 @@ export function TechArchModal({ src, onClose }: TechArchModalProps) {
     >
       <div className="fixed inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.8)' }} onClick={onClose} aria-hidden="true" />
       <div
-        className="relative bg-white p-2 border border-gray-200 shadow-xl w-full max-w-4xl"
+        className="relative bg-white dark:bg-slate-900 p-2 border border-gray-200 dark:border-slate-700 shadow-xl w-full max-w-4xl"
       >
         <button
           onClick={onClose}

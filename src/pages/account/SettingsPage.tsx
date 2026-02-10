@@ -39,33 +39,33 @@ export default function SettingsPage() {
   };
 
   const inputClass =
-    'w-full border border-gray-300 px-3 py-2 text-gray-900 bg-white focus:outline-none focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue';
+    'w-full border border-gray-300 dark:border-slate-600 px-3 py-2 text-gray-900 dark:text-gray-100 bg-white dark:bg-slate-800 focus:outline-none focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue';
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-12">
-      <h1 className="text-2xl font-bold text-gray-900 mb-8">Account Settings</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-8">Account Settings</h1>
 
-      <div className="bg-white border border-gray-300 border-t-4 border-t-blueprint-blue p-8">
-        <h2 className="text-lg font-bold text-gray-900 mb-6">Profile Information</h2>
+      <div className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 border-t-4 border-t-blueprint-blue p-8">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-6">Profile Information</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="settings-firstName" className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+              <label htmlFor="settings-firstName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">First Name</label>
               <input id="settings-firstName" type="text" name="firstName" value={form.firstName} onChange={handleChange} required autoComplete="given-name" className={inputClass} />
             </div>
             <div>
-              <label htmlFor="settings-lastName" className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+              <label htmlFor="settings-lastName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Last Name</label>
               <input id="settings-lastName" type="text" name="lastName" value={form.lastName} onChange={handleChange} required autoComplete="family-name" className={inputClass} />
             </div>
           </div>
           <div>
-            <label htmlFor="settings-email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input id="settings-email" type="email" value={user.email} disabled className={`${inputClass} bg-gray-50 text-gray-400 cursor-not-allowed`} />
-            <p className="text-xs text-gray-400 mt-1">Email cannot be changed</p>
+            <label htmlFor="settings-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+            <input id="settings-email" type="email" value={user.email} disabled className={`${inputClass} bg-gray-50 dark:bg-slate-700 text-gray-400 dark:text-gray-400 cursor-not-allowed`} />
+            <p className="text-xs text-gray-400 dark:text-gray-400 mt-1">Email cannot be changed</p>
           </div>
           <div>
-            <label htmlFor="settings-company" className="block text-sm font-medium text-gray-700 mb-1">Company</label>
+            <label htmlFor="settings-company" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Company</label>
             <input id="settings-company" type="text" name="company" value={form.company} onChange={handleChange} autoComplete="organization" className={inputClass} />
           </div>
           <div className="pt-4">
@@ -76,10 +76,10 @@ export default function SettingsPage() {
         </form>
       </div>
 
-      <div className="bg-white border border-gray-300 p-8 mt-6">
-        <h2 className="text-lg font-bold text-gray-900 mb-2">Account Details</h2>
-        <div className="text-sm text-gray-500 space-y-1">
-          <p>Role: <span className="capitalize font-medium text-gray-700">{user.role}</span></p>
+      <div className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 p-8 mt-6">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">Account Details</h2>
+        <div className="text-sm text-gray-500 dark:text-gray-400 space-y-1">
+          <p>Role: <span className="capitalize font-medium text-gray-700 dark:text-gray-300">{user.role}</span></p>
           <p>Member since: {new Date(user.createdAt).toLocaleDateString()}</p>
           <p>Last login: {new Date(user.lastLogin).toLocaleDateString()}</p>
         </div>

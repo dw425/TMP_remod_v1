@@ -38,7 +38,7 @@ export function UserMenu() {
     return (
       <Link
         to={ROUTES.LOGIN}
-        className="text-sm font-medium text-gray-700 hover:text-blueprint-blue transition-colors"
+        className="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-blueprint-blue transition-colors"
       >
         Sign In
       </Link>
@@ -74,12 +74,12 @@ export function UserMenu() {
       </button>
 
       {open && (
-        <div role="menu" aria-label="Account menu" className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 shadow-lg z-50">
-          <div className="px-4 py-3 border-b border-gray-200">
-            <p className="text-sm font-medium text-gray-900 truncate">
+        <div role="menu" aria-label="Account menu" className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 shadow-lg z-50">
+          <div className="px-4 py-3 border-b border-gray-200 dark:border-slate-700">
+            <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
               {user.firstName} {user.lastName}
             </p>
-            <p className="text-xs text-gray-500 truncate">{user.email}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
           </div>
           {menuItems.map((item) => (
             <Link
@@ -87,7 +87,7 @@ export function UserMenu() {
               to={item.to}
               role="menuitem"
               onClick={() => setOpen(false)}
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blueprint-blue"
+              className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-800 hover:text-blueprint-blue"
             >
               {item.label}
             </Link>
@@ -97,7 +97,7 @@ export function UserMenu() {
               to={ROUTES.ADMIN_DASHBOARD}
               role="menuitem"
               onClick={() => setOpen(false)}
-              className="block px-4 py-2 text-sm text-blueprint-blue font-bold hover:bg-blue-50"
+              className="block px-4 py-2 text-sm text-blueprint-blue font-bold hover:bg-blue-50 dark:hover:bg-slate-800"
             >
               Admin Portal
             </Link>
@@ -105,7 +105,7 @@ export function UserMenu() {
           <button
             role="menuitem"
             onClick={handleLogout}
-            className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 border-t border-gray-200"
+            className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-slate-800 border-t border-gray-200 dark:border-slate-700"
           >
             Sign Out
           </button>

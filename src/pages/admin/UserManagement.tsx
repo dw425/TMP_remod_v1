@@ -96,37 +96,37 @@ export default function UserManagement() {
   return (
     <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <SEO title="User Management" description="Manage registered users." canonical="/admin/users" />
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">User Management</h1>
-      <p className="text-gray-500 mb-8">{sorted.length} registered user{sorted.length !== 1 ? 's' : ''}</p>
+      <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">User Management</h1>
+      <p className="text-gray-500 dark:text-gray-400 mb-8">{sorted.length} registered user{sorted.length !== 1 ? 's' : ''}</p>
 
-      <div className="sharp-card bg-white overflow-hidden">
+      <div className="sharp-card bg-white dark:bg-slate-800 overflow-hidden">
         {sorted.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-gray-50">
+              <thead className="bg-gray-50 dark:bg-slate-700">
                 <tr>
-                  <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Name</th>
+                  <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Name</th>
                   <th
-                    className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-blueprint-blue"
+                    className="text-left px-6 py-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-blueprint-blue"
                     onClick={() => handleSort('email')}
                   >
                     Email{sortIcon('email')}
                   </th>
-                  <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Company</th>
-                  <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Role</th>
+                  <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Company</th>
+                  <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Role</th>
                   <th
-                    className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-blueprint-blue"
+                    className="text-left px-6 py-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-blueprint-blue"
                     onClick={() => handleSort('createdAt')}
                   >
                     Signed Up{sortIcon('createdAt')}
                   </th>
                   <th
-                    className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:text-blueprint-blue"
+                    className="text-left px-6 py-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider cursor-pointer hover:text-blueprint-blue"
                     onClick={() => handleSort('lastLogin')}
                   >
                     Last Login{sortIcon('lastLogin')}
                   </th>
-                  <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="text-left px-6 py-3 text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -134,8 +134,8 @@ export default function UserManagement() {
                   const orders = getOrdersForUser(user.email);
                   const isExpanded = expandedUser === user.id;
                   return (
-                    <tr key={user.id} className="border-t border-gray-100">
-                      <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                    <tr key={user.id} className="border-t border-gray-100 dark:border-slate-700">
+                      <td className="px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
                         <button
                           onClick={() => setExpandedUser(isExpanded ? null : user.id)}
                           className="text-left hover:text-blueprint-blue"
@@ -144,17 +144,17 @@ export default function UserManagement() {
                           <span className="text-[10px] text-gray-400 ml-1">{isExpanded ? '\u25B2' : '\u25BC'}</span>
                         </button>
                         {isExpanded && (
-                          <div className="mt-3 p-4 bg-gray-50 border border-gray-200 text-xs space-y-2">
-                            <p className="font-bold text-gray-700 uppercase tracking-wider mb-2">Activity</p>
-                            <p><span className="text-gray-500">User ID:</span> {user.id}</p>
-                            <p><span className="text-gray-500">Login count:</span> {user.loginCount || 1}</p>
-                            <p><span className="text-gray-500">Orders:</span> {orders.length}</p>
+                          <div className="mt-3 p-4 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-xs space-y-2">
+                            <p className="font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-2">Activity</p>
+                            <p><span className="text-gray-500 dark:text-gray-400">User ID:</span> {user.id}</p>
+                            <p><span className="text-gray-500 dark:text-gray-400">Login count:</span> {user.loginCount || 1}</p>
+                            <p><span className="text-gray-500 dark:text-gray-400">Orders:</span> {orders.length}</p>
                             {orders.length > 0 && (
                               <div className="mt-2">
-                                <p className="font-bold text-gray-700 uppercase tracking-wider mb-1">Purchase History</p>
+                                <p className="font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider mb-1">Purchase History</p>
                                 {orders.map((order, i) => (
-                                  <div key={i} className="py-1 border-b border-gray-100 last:border-0">
-                                    <p className="text-gray-600">
+                                  <div key={i} className="py-1 border-b border-gray-100 dark:border-slate-600 last:border-0">
+                                    <p className="text-gray-600 dark:text-gray-400">
                                       {new Date(order.createdAt).toLocaleDateString()} — ${order.total.toLocaleString()} — <span className={order.status === 'approved' ? 'text-green-600' : order.status === 'rejected' ? 'text-red-600' : 'text-yellow-600'}>{order.status}</span>
                                     </p>
                                     <p className="text-gray-400">{order.items.map((it) => it.title).join(', ')}</p>
@@ -165,23 +165,23 @@ export default function UserManagement() {
                           </div>
                         )}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-500">{user.email}</td>
-                      <td className="px-6 py-4 text-sm text-gray-500">{user.company || '\u2014'}</td>
+                      <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{user.email}</td>
+                      <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{user.company || '\u2014'}</td>
                       <td className="px-6 py-4">
                         <select
                           value={user.role}
                           onChange={(e) => handleRoleChange(user.id, e.target.value as User['role'])}
-                          className="text-[10px] font-bold uppercase px-2 py-1 border border-gray-200 bg-white cursor-pointer"
+                          className="text-[10px] font-bold uppercase px-2 py-1 border border-gray-200 dark:border-slate-600 bg-white dark:bg-slate-700 dark:text-gray-100 cursor-pointer"
                         >
                           <option value="user">User</option>
                           <option value="admin">Admin</option>
                           <option value="partner">Partner</option>
                         </select>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-500">
+                      <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                         {new Date(user.createdAt).toLocaleDateString()}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-500">
+                      <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                         {new Date(user.lastLogin).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4">
@@ -195,7 +195,7 @@ export default function UserManagement() {
                             </button>
                             <button
                               onClick={() => setConfirmDelete(null)}
-                              className="text-[10px] font-bold uppercase px-3 py-1 bg-gray-200 text-gray-600 hover:bg-gray-300"
+                              className="text-[10px] font-bold uppercase px-3 py-1 bg-gray-200 dark:bg-slate-600 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-slate-500"
                             >
                               Cancel
                             </button>
@@ -203,7 +203,7 @@ export default function UserManagement() {
                         ) : (
                           <button
                             onClick={() => setConfirmDelete(user.id)}
-                            className="text-[10px] font-bold uppercase px-3 py-1 text-red-600 hover:bg-red-50 border border-red-200"
+                            className="text-[10px] font-bold uppercase px-3 py-1 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 border border-red-200 dark:border-red-800"
                           >
                             Delete
                           </button>
@@ -216,22 +216,22 @@ export default function UserManagement() {
             </table>
           </div>
         ) : (
-          <div className="p-12 text-center text-gray-500">
+          <div className="p-12 text-center text-gray-500 dark:text-gray-400">
             <p className="text-lg mb-2">No registered users yet.</p>
-            <p className="text-sm text-gray-400">Users will appear here after they create accounts.</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500">Users will appear here after they create accounts.</p>
           </div>
         )}
       </div>
 
-      <div className="mt-8 p-6 bg-gray-50 border border-gray-200">
-        <h3 className="font-bold text-sm uppercase tracking-widest text-gray-500 mb-3">Admin Setup</h3>
-        <p className="text-sm text-gray-600 mb-2">
-          To configure admin emails, set the <code className="bg-gray-200 px-1 py-0.5 text-xs">VITE_ADMIN_EMAILS</code> environment variable with a comma-separated list of email addresses.
+      <div className="mt-8 p-6 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700">
+        <h3 className="font-bold text-sm uppercase tracking-widest text-gray-500 dark:text-gray-400 mb-3">Admin Setup</h3>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+          To configure admin emails, set the <code className="bg-gray-200 dark:bg-slate-700 px-1 py-0.5 text-xs">VITE_ADMIN_EMAILS</code> environment variable with a comma-separated list of email addresses.
         </p>
-        <p className="text-sm text-gray-500">
-          Example: <code className="bg-gray-200 px-1 py-0.5 text-xs">VITE_ADMIN_EMAILS=admin@company.com,manager@company.com</code>
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          Example: <code className="bg-gray-200 dark:bg-slate-700 px-1 py-0.5 text-xs">VITE_ADMIN_EMAILS=admin@company.com,manager@company.com</code>
         </p>
-        <p className="text-sm text-gray-500 mt-2">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
           You can also promote any existing user to admin using the Role dropdown above.
         </p>
       </div>
