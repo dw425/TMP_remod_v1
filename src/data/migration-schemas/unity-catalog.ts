@@ -71,6 +71,9 @@ export const unityCatalogSchema: MigrationSchema = {
           type: 'textarea',
           placeholder: 'Do you own the upstream data? If not, list dependencies.',
         },
+        { name: 'organizationName', label: 'Organization / Company Name', type: 'text', required: true, helpText: 'Legal entity or business name' },
+        { name: 'department', label: 'Department or Business Unit', type: 'text', helpText: 'Primary department sponsoring this migration' },
+        { name: 'migrationUrgency', label: 'Migration Urgency', type: 'select', helpText: 'How soon does this migration need to start?', options: [{ value: 'critical', label: 'Critical (< 3 months)' }, { value: 'high', label: 'High (3-6 months)' }, { value: 'normal', label: 'Normal (6-12 months)' }, { value: 'planning', label: 'Planning (12+ months)' }] },
       ],
     },
 
@@ -154,6 +157,9 @@ export const unityCatalogSchema: MigrationSchema = {
           type: 'textarea',
           placeholder: 'List primary S3 buckets, ADLS containers, or GCS buckets.',
         },
+        { name: 'deltaLakeVersion', label: 'Delta Lake Version', type: 'text', helpText: 'e.g., 2.4, 3.0' },
+        { name: 'volumesUsed', label: 'UC Volumes in Use', type: 'select', helpText: 'Are Unity Catalog Volumes being used for file management?', options: [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }] },
+        { name: 'modelRegistry', label: 'MLflow Model Registry', type: 'select', helpText: 'Is MLflow model registry being used?', options: [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }] },
       ],
     },
 
@@ -389,6 +395,9 @@ export const unityCatalogSchema: MigrationSchema = {
           type: 'textarea',
           placeholder: 'Centralized vs Decentralized ownership.',
         },
+        { name: 'downtimeAcceptable', label: 'Acceptable Downtime Window', type: 'select', helpText: 'Maximum acceptable downtime during cutover', options: [{ value: 'zero', label: 'Zero downtime' }, { value: 'minimal', label: 'Minimal (< 1 hour)' }, { value: 'moderate', label: 'Moderate (< 4 hours)' }, { value: 'flexible', label: 'Flexible' }] },
+        { name: 'dataRetentionYears', label: 'Data Retention Requirement', type: 'number', min: 0, unit: 'years', helpText: 'How many years of historical data must be migrated?' },
+        { name: 'disasterRecovery', label: 'Disaster Recovery Strategy', type: 'select', helpText: 'Target DR architecture post-migration', options: [{ value: 'active-active', label: 'Active-Active' }, { value: 'active-passive', label: 'Active-Passive' }, { value: 'backup-only', label: 'Backup Only' }, { value: 'none', label: 'None' }] },
       ],
     },
 
@@ -418,6 +427,22 @@ export const unityCatalogSchema: MigrationSchema = {
           type: 'textarea',
           placeholder: 'Planned expansions in next 6-12 months.',
         },
+      ],
+    },
+
+    /* ------------------------------------------------------------------ */
+    /*  Data Quality & Readiness                                          */
+    /* ------------------------------------------------------------------ */
+    {
+      id: 'data-quality',
+      title: 'Data Quality & Readiness',
+      subtitle: 'Assess current data quality and migration readiness',
+      canMarkNA: true,
+      fields: [
+        { name: 'dataQualityScore', label: 'Overall Data Quality', type: 'range', min: 1, max: 5, defaultValue: 3, helpText: 'Rate the overall quality and consistency of your data' },
+        { name: 'dataLineageDocumented', label: 'Data Lineage Documentation', type: 'select', helpText: 'Is data lineage documented for key pipelines?', options: [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }, { value: 'partial', label: 'Partial' }] },
+        { name: 'testingStrategy', label: 'Testing & Validation Approach', type: 'textarea', helpText: 'Describe how data accuracy and completeness will be validated post-migration' },
+        { name: 'rollbackPlan', label: 'Rollback Strategy', type: 'textarea', helpText: 'What is the plan if the migration needs to be reversed?' },
       ],
     },
 

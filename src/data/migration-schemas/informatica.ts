@@ -37,6 +37,9 @@ export const informaticaSchema: MigrationSchema = {
           placeholder:
             'e.g., Reduce licensing costs, modernize data platform, enable AI/ML...',
         },
+        { name: 'organizationName', label: 'Organization / Company Name', type: 'text', required: true, helpText: 'Legal entity or business name' },
+        { name: 'department', label: 'Department or Business Unit', type: 'text', helpText: 'Primary department sponsoring this migration' },
+        { name: 'migrationUrgency', label: 'Migration Urgency', type: 'select', helpText: 'How soon does this migration need to start?', options: [{ value: 'critical', label: 'Critical (< 3 months)' }, { value: 'high', label: 'High (3-6 months)' }, { value: 'normal', label: 'Normal (6-12 months)' }, { value: 'planning', label: 'Planning (12+ months)' }] },
       ],
     },
 
@@ -69,6 +72,9 @@ export const informaticaSchema: MigrationSchema = {
           placeholder:
             'Describe the server environment (OS, on-premise vs. cloud, high availability, grid)...',
         },
+        { name: 'cloudEdition', label: 'Using IICS (Cloud)', type: 'select', helpText: 'Informatica Intelligent Cloud Services in use?', options: [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }] },
+        { name: 'highAvailability', label: 'High Availability', type: 'select', helpText: 'HA grid / failover configured?', options: [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }] },
+        { name: 'connectionCount', label: 'Connection Objects', type: 'number', min: 0, helpText: 'Total database/file/API connection objects' },
       ],
     },
     {
@@ -404,6 +410,25 @@ export const informaticaSchema: MigrationSchema = {
           type: 'number',
           min: 0,
         },
+        { name: 'downtimeAcceptable', label: 'Acceptable Downtime Window', type: 'select', helpText: 'Maximum acceptable downtime during cutover', options: [{ value: 'zero', label: 'Zero downtime' }, { value: 'minimal', label: 'Minimal (< 1 hour)' }, { value: 'moderate', label: 'Moderate (< 4 hours)' }, { value: 'flexible', label: 'Flexible' }] },
+        { name: 'dataRetentionYears', label: 'Data Retention Requirement', type: 'number', min: 0, unit: 'years', helpText: 'How many years of historical data must be migrated?' },
+        { name: 'disasterRecovery', label: 'Disaster Recovery Strategy', type: 'select', helpText: 'Target DR architecture post-migration', options: [{ value: 'active-active', label: 'Active-Active' }, { value: 'active-passive', label: 'Active-Passive' }, { value: 'backup-only', label: 'Backup Only' }, { value: 'none', label: 'None' }] },
+      ],
+    },
+
+    /* ------------------------------------------------------------------ */
+    /*  Data Quality & Readiness                                          */
+    /* ------------------------------------------------------------------ */
+    {
+      id: 'data-quality',
+      title: 'Data Quality & Readiness',
+      subtitle: 'Assess current data quality and migration readiness',
+      canMarkNA: true,
+      fields: [
+        { name: 'dataQualityScore', label: 'Overall Data Quality', type: 'range', min: 1, max: 5, defaultValue: 3, helpText: 'Rate the overall quality and consistency of your data' },
+        { name: 'dataLineageDocumented', label: 'Data Lineage Documentation', type: 'select', helpText: 'Is data lineage documented for key pipelines?', options: [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }, { value: 'partial', label: 'Partial' }] },
+        { name: 'testingStrategy', label: 'Testing & Validation Approach', type: 'textarea', helpText: 'Describe how data accuracy and completeness will be validated post-migration' },
+        { name: 'rollbackPlan', label: 'Rollback Strategy', type: 'textarea', helpText: 'What is the plan if the migration needs to be reversed?' },
       ],
     },
 

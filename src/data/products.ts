@@ -329,6 +329,8 @@ export const products: Product[] = [
     categories: ['healthcare', 'oil-gas', 'defense'],
     description:
       'The assembly line for business-ready AI. Shift from experimentation to industrialized delivery reducing risk and accelerating value.',
+    longDescription:
+      'Built on the Databricks Data Intelligence Platform and certified as a Databricks Brickbuilder Solution, the AI Factory combines pre-built accelerators, governance frameworks, and automation to make AI delivery rapid, secure, and repeatable. It aligns infrastructure and intelligence under a unified operational model, acting as the connective layer between data pipelines, AI development, and business outcomes.',
     features: [
       '90-Day implementation roadmap',
       'Pre-built RAG templates',
@@ -341,6 +343,22 @@ export const products: Product[] = [
     tags: ['GenAI', 'RAG', 'Tutorial'],
     industries: ['All Industries', 'Defense', 'Oil & Gas'],
     detailPage: '/content/ai-factory',
+    whatItDoes: [
+      {
+        heading: 'From experimentation to production-grade AI',
+        paragraphs: [
+          'End-to-End AI Maturity Tracking: Track AI initiatives across six stages from ideation through production deployment, ensuring governance compliance and ROI validation at every step.',
+          'Pre-Built Accelerators: Jumpstart common use cases — churn prediction, demand forecasting, recommendation engines — with ready-to-deploy templates built on Databricks best practices.',
+          'Safe Experimentation: An AI simulation and pre-production validation environment lets teams safely experiment with RAG systems, autonomous agents, and GenAI applications before committing to production.',
+          'Governed Deployment: Seamless packaging and release management via Databricks Asset Bundles (DAB), with automated governance, self-service schema creation, and compliance tracking.',
+        ],
+      },
+    ],
+    benefits: [
+      { title: 'Faster Time to Value', description: '90-day path from concept to production-ready AI.' },
+      { title: 'Reduced Risk', description: 'Pre-validated patterns and governance guardrails at every stage.' },
+      { title: 'Scalable Delivery', description: 'Repeatable framework that industrializes AI across the enterprise.' },
+    ],
   },
   {
     id: 20,
@@ -350,7 +368,9 @@ export const products: Product[] = [
     type: 'accelerator',
     categories: [],
     description:
-      'Assess, transform, and enhance your data migration initiative.\n\nMigration Analyzer: Delivers a deep assessment of EDW migration feasibility, complexity, and cost using AI-driven insights.\n\nMigration Transformer: Automates schema, code, and pipeline migration to Databricks using metadata-driven frameworks.\n\nMigration Optimizer: Enhances performance, governance, and BI modernization post-migration using AI-driven cost tuning.',
+      'Assess, transform, and enhance your data migration initiative. A three-part suite covering assessment, transformation, and optimization for enterprise data platform migrations to Databricks.',
+    longDescription:
+      'The Blueprint Data Migration Suite is a comprehensive, AI-driven toolset that supports every phase of your enterprise data warehouse migration journey. From initial feasibility assessment through automated code conversion to post-migration performance tuning, the suite reduces migration risk, accelerates timelines, and ensures your Databricks investment delivers maximum value from day one.',
     features: [
       'Platform-specific assessment forms',
       'Automated ROM calculator',
@@ -362,5 +382,20 @@ export const products: Product[] = [
     tags: ['Migration', 'Modernization', 'Legacy'],
     industries: ['All Industries'],
     detailPage: '/migration',
+    whatItDoes: [
+      {
+        heading: 'End-to-end migration acceleration',
+        paragraphs: [
+          'Migration Analyzer: Delivers a deep assessment of EDW migration feasibility, complexity, and cost using AI-driven insights. Supports 11 source platforms including Teradata, Snowflake, Oracle, SQL Server, Hadoop, and more.',
+          'Migration Transformer: Automates schema, code, and pipeline migration to Databricks using metadata-driven frameworks. Converts SQL, stored procedures, and ETL logic with validation at every step.',
+          'Migration Optimizer: Enhances performance, governance, and BI modernization post-migration using AI-driven cost tuning. Ensures your new Databricks environment is fully optimized for production workloads.',
+        ],
+      },
+    ],
+    benefits: [
+      { title: 'Reduced Migration Risk', description: 'AI-powered assessment identifies complexity and blockers before you begin.' },
+      { title: 'Accelerated Timelines', description: 'Automated code conversion and playbooks cut migration effort by up to 60%.' },
+      { title: 'Optimized Outcomes', description: 'Post-migration tuning ensures peak performance and cost efficiency.' },
+    ],
   },
 ];

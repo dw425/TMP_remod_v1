@@ -129,7 +129,7 @@ export default function ProductDetailPage() {
 
       {/* Header */}
       <header className="mb-10">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight mb-2">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 tracking-tight mb-2">
           {product.title}
         </h1>
         <p className="text-lg text-blueprint-blue font-medium">{product.subtitle}</p>
@@ -156,8 +156,8 @@ export default function ProductDetailPage() {
               </div>
             </section>
 
-            <section className="bg-white p-6 border border-gray-200">
-              <h2 className="text-xl font-bold text-gray-900 border-b border-gray-100 pb-3 mb-4">
+            <section className="bg-white dark:bg-slate-800 p-6 border border-gray-200 dark:border-slate-700">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 border-b border-gray-100 dark:border-slate-700 pb-3 mb-4">
                 Summary
               </h2>
               <p className="text-sm text-gray-600 leading-relaxed">
@@ -168,8 +168,8 @@ export default function ProductDetailPage() {
 
           {/* What It Does section */}
           {product.whatItDoes && product.whatItDoes.length > 0 && (
-            <section className="bg-white p-8 border border-gray-200">
-              <h2 className="text-xl font-bold text-gray-900 border-b border-gray-100 pb-3 mb-5">
+            <section className="bg-white dark:bg-slate-800 p-8 border border-gray-200 dark:border-slate-700">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 border-b border-gray-100 dark:border-slate-700 pb-3 mb-5">
                 What It Does
               </h2>
               <div className="space-y-4 text-gray-600 leading-relaxed text-sm md:text-base">
@@ -187,8 +187,8 @@ export default function ProductDetailPage() {
 
           {/* Benefits section */}
           {product.benefits && product.benefits.length > 0 && (
-            <section className="bg-white p-8 border border-gray-200">
-              <h2 className="text-xl font-bold text-gray-900 border-b border-gray-100 pb-3 mb-5">
+            <section className="bg-white dark:bg-slate-800 p-8 border border-gray-200 dark:border-slate-700">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 border-b border-gray-100 dark:border-slate-700 pb-3 mb-5">
                 Benefits
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -253,7 +253,7 @@ export default function ProductDetailPage() {
             </div>
 
             {/* Resources */}
-            <div className="bg-white p-6 border border-gray-200">
+            <div className="bg-white dark:bg-slate-800 p-6 border border-gray-200 dark:border-slate-700">
               <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">
                 Resources
               </h3>

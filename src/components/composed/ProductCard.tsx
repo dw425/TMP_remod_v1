@@ -77,16 +77,16 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
         <h4 className="text-lg font-bold text-blueprint-blue transition-colors mb-2 tracking-tight leading-snug pr-16">
           {product.title}
         </h4>
-        <p className="text-sm text-gray-600 leading-relaxed mb-0 line-clamp-3">
+        <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-0 line-clamp-3">
           {product.description}
         </p>
       </div>
 
       {/* Footer */}
-      <div className="mt-4 pt-3 border-t border-gray-100">
+      <div className="mt-4 pt-3 border-t border-gray-100 dark:border-slate-700">
         {/* Price Row */}
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-bold text-gray-900">
+          <span className="text-sm font-bold text-gray-900 dark:text-gray-100">
             {hasPricing ? `${formatCurrency(product.priceMonthly)}/mo` : 'Free'}
           </span>
 

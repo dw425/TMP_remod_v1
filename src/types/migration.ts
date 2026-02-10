@@ -17,12 +17,18 @@ export interface MigrationField {
   min?: number;
   max?: number;
   defaultValue?: string | number | boolean | string[];
+  /** Explanatory text shown below the field label */
+  helpText?: string;
+  /** Unit label shown inside number fields (e.g. "TB", "$") */
+  unit?: string;
 }
 
 export interface MigrationSection {
   id: string;
   title: string;
   subtitle?: string;
+  /** Longer description shown when section is expanded */
+  description?: string;
   canMarkNA: boolean;
   fields: MigrationField[];
 }

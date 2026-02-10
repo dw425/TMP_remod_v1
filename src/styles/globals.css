@@ -12,6 +12,12 @@
     --border-card: #d1d5db;
   }
 
+  :root.dark {
+    --bg-primary: #0f172a;
+    --text-primary: #f1f5f9;
+    --border-card: #334155;
+  }
+
   body {
     font-family: 'DM Sans', sans-serif;
     background-color: var(--bg-primary);
@@ -60,6 +66,14 @@
   .sharp-card:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
+  :root.dark .sharp-card {
+    background: #1e293b;
+    border-color: #334155;
+    border-top-color: #1d4ed8;
+  }
+  :root.dark .sharp-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
 
   /* Category filter buttons */
   .filter-btn {
@@ -80,6 +94,14 @@
     color: #1d4ed8;
     border-bottom: 2px solid #1d4ed8;
   }
+  :root.dark .filter-btn {
+    color: #94a3b8;
+  }
+  :root.dark .filter-btn:hover,
+  :root.dark .filter-btn.active {
+    color: #60a5fa;
+    border-bottom-color: #60a5fa;
+  }
 
   /* Form error text */
   .form-error {
@@ -95,6 +117,13 @@
   }
   .cart-item:hover {
     border-color: #1d4ed8;
+  }
+  :root.dark .cart-item {
+    border-color: #334155;
+    background: #1e293b;
+  }
+  :root.dark .cart-item:hover {
+    border-color: #60a5fa;
   }
 
   /* Checkout / PO button */
@@ -144,6 +173,10 @@
     margin-bottom: 0.4rem;
     color: #374151;
   }
+  :root.dark .article-body h2 { color: #f1f5f9; }
+  :root.dark .article-body h3 { color: #60a5fa; }
+  :root.dark .article-body p,
+  :root.dark .article-body li { color: #cbd5e1; }
 
   /* Migration assessment tile cards */
   .button-grid {
@@ -249,6 +282,26 @@
     transform: none;
     box-shadow: none;
     border-color: #d1d5db;
+  }
+
+  /* Tile card dark mode */
+  :root.dark .tile-card {
+    background-color: #1e293b;
+    border-color: #334155;
+    color: #f1f5f9;
+  }
+  :root.dark .tile-card:hover {
+    border-color: #475569;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+  }
+  :root.dark .card-title {
+    color: #f1f5f9;
+  }
+  :root.dark .card-tag {
+    color: #94a3b8;
+  }
+  :root.dark .tile-card.placeholder {
+    border-color: #475569;
   }
 
   /* Grid item pop-in animation */

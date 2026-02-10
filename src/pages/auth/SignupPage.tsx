@@ -113,15 +113,15 @@ export default function SignupPage() {
 
   const displayError = localError || error;
   const inputClass =
-    'w-full border border-gray-300 px-3 py-2 text-gray-900 bg-white focus:outline-none focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue';
+    'w-full border border-gray-300 px-3 py-2 text-gray-900 bg-white focus:outline-none focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue dark:bg-slate-800 dark:border-slate-600 dark:text-gray-100';
 
   const showEmailError = emailTouched && emailValidation && !emailValidation.valid;
 
   return (
     <div className="w-full max-w-md">
       <SEO title="Create Account" description="Create a Blueprint Marketplace account to access enterprise Databricks solutions." />
-      <div className="bg-white border border-gray-300 border-t-4 border-t-blueprint-blue p-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Create Account</h1>
+      <div className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 border-t-4 border-t-blueprint-blue p-8">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Create Account</h1>
 
         {displayError && (
           <div role="alert" className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm">

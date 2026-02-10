@@ -4,7 +4,7 @@ import { ROUTES } from '@/config/routes';
 
 export function AuthLayout() {
   return (
-    <div className="min-h-screen bg-bg-primary font-dm-sans flex">
+    <div className="min-h-screen bg-bg-primary font-dm-sans flex dark:text-gray-100">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-blueprint-blue focus:text-white focus:px-4 focus:py-2 focus:font-bold"

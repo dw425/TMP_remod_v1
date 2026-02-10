@@ -38,9 +38,9 @@ export function MobileNav() {
         className="xl:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5"
         aria-label="Open navigation menu"
       >
-        <span className="block w-6 h-0.5 bg-gray-900" />
-        <span className="block w-6 h-0.5 bg-gray-900" />
-        <span className="block w-6 h-0.5 bg-gray-900" />
+        <span className="block w-6 h-0.5 bg-gray-900 dark:bg-gray-100" />
+        <span className="block w-6 h-0.5 bg-gray-900 dark:bg-gray-100" />
+        <span className="block w-6 h-0.5 bg-gray-900 dark:bg-gray-100" />
       </button>
 
       {/* Backdrop */}
@@ -55,13 +55,13 @@ export function MobileNav() {
 
       {/* Slide-out Drawer */}
       <div
-        className={`fixed top-0 right-0 h-full w-[320px] max-w-[90vw] bg-white z-[101] border-l-4 border-blueprint-blue shadow-xl flex flex-col transition-transform duration-300 ${
+        className={`fixed top-0 right-0 h-full w-[320px] max-w-[90vw] bg-white dark:bg-slate-900 z-[101] border-l-4 border-blueprint-blue shadow-xl flex flex-col transition-transform duration-300 ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Drawer Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
-          <span className="text-sm font-bold text-gray-900 uppercase tracking-wider">Menu</span>
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800">
+          <span className="text-sm font-bold text-gray-900 dark:text-gray-100 uppercase tracking-wider">Menu</span>
           <button
             onClick={() => setIsOpen(false)}
             className="text-gray-400 hover:text-gray-900 text-2xl"
@@ -210,7 +210,7 @@ export function MobileNav() {
         </div>
 
         {/* Drawer Footer */}
-        <div className="p-4 border-t border-gray-200 bg-gray-50">
+        <div className="p-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800">
           <a
             href={BPCS_LINKS.contact}
             target="_blank"

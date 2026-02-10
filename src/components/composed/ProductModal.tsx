@@ -51,38 +51,6 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
   const hasPricing = product.priceMonthly > 0;
   const tabs = isTool ? TOOL_TABS : [{ id: 'overview' as TabId, label: 'Overview' }];
 
-  // Determine action button text and behavior
-  const getActionButton = () => {
-    if (product.detailPage) {
-      return {
-        text: product.id === 7 ? 'Go to Insight' : 'Get Started',
-        onClick: () => {
-          onClose();
-          navigate(product.detailPage!);
-        },
-      };
-    }
-    if (isTool && product.slug) {
-      return {
-        text: 'Get Started',
-        onClick: () => {
-          onClose();
-          navigate(`/products/${product.slug}`);
-        },
-      };
-    }
-    return {
-      text: 'Contact Us Today',
-      onClick: () => {
-        // Could open contact modal — for now navigate to product page
-        onClose();
-        navigate(`/products/${product.slug}`);
-      },
-    };
-  };
-
-  const action = getActionButton();
-
   // Determine modal title
   const modalTitle = product.id === 7
     ? 'Stop guessing: Why AI forecasting is your new marketing strategy'
@@ -97,11 +65,11 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
     >
       <div className="fixed inset-0" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={onClose} aria-hidden="true" />
       <div
-        className="relative bg-white w-full max-w-[53rem] h-[480px] overflow-hidden flex flex-col modal-enter shadow-2xl"
+        className="relative bg-white dark:bg-slate-900 w-full max-w-[53rem] h-[560px] overflow-hidden flex flex-col modal-enter shadow-2xl"
       >
         {/* Header */}
-        <div className="flex items-start justify-between p-6 border-b border-gray-100 shrink-0">
-          <h4 className="text-2xl font-bold text-gray-900">{modalTitle}</h4>
+        <div className="flex items-start justify-between p-6 border-b border-gray-100 dark:border-slate-700 shrink-0">
+          <h4 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{modalTitle}</h4>
           <button
             onClick={onClose}
             className="p-1 hover:bg-gray-100 transition-colors"
@@ -117,7 +85,7 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
         <div className="flex-grow overflow-hidden">
           <div className="flex flex-col md:flex-row h-full">
             {/* Left Sidebar with Tabs */}
-            <div className="w-full md:w-1/4 bg-gray-50 border-r border-gray-100 p-6 flex flex-col shrink-0">
+            <div className="w-full md:w-1/4 bg-gray-50 dark:bg-slate-800 border-r border-gray-100 dark:border-slate-700 p-6 flex flex-col shrink-0">
               <nav className="flex flex-col space-y-1 mb-4">
                 {tabs.map((tab) => (
                   <button
@@ -133,34 +101,28 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                   </button>
                 ))}
               </nav>
-              <div className="space-y-2">
-                <button
-                  onClick={action.onClick}
-                  className="w-full px-4 py-3 bg-blueprint-blue text-white text-sm font-bold uppercase tracking-wider hover:bg-blue-800 transition-colors shadow-sm btn-rounded"
-                >
-                  {action.text}
-                </button>
+              <div>
                 <button
                   onClick={() => {
                     onClose();
                     const target = product.detailPage || `/products/${product.slug}`;
                     navigate(target);
                   }}
-                  className="w-full px-4 py-2 text-xs font-bold text-blueprint-blue hover:underline uppercase tracking-wider"
+                  className="w-full px-4 py-3 bg-blueprint-blue text-white text-sm font-bold uppercase tracking-wider hover:bg-blue-800 transition-colors shadow-sm btn-rounded"
                 >
-                  View Full Details &rarr;
+                  View Full Details
                 </button>
               </div>
             </div>
 
             {/* Right Content Area */}
-            <div className="w-full md:w-3/4 p-4 bg-white overflow-y-auto">
+            <div className="w-full md:w-3/4 p-4 bg-white dark:bg-slate-900 overflow-y-auto">
               {/* Overview Tab */}
               {activeTab === 'overview' && (
-                <div>
+                <div className="prose prose-sm max-w-none text-gray-600 dark:text-gray-300">
                   {product.id === 7 ? (
                     /* Special overview for Top Trending Insight */
-                    <div className="prose prose-sm max-w-none text-gray-600">
+                    <>
                       <h5 className="font-bold text-gray-900 text-lg mb-2">The Challenge</h5>
                       <p className="mb-4">The pressure on marketing leaders to prove ROI has never been greater. Yet, disconnected data sources and manual spreadsheets force critical budget decisions based on incomplete information. This reactive approach leads to wasted spend and missed opportunities.</p>
                       <h5 className="font-bold text-gray-900 text-lg mb-2">The Solution: A Factory for Intelligence</h5>
@@ -171,18 +133,61 @@ export function ProductModal({ product, isOpen, onClose }: ProductModalProps) {
                         <li><strong>Predict ROAS:</strong> Use AI agents to generate 7- and 14-day revenue projections.</li>
                         <li><strong>Simulate Strategy:</strong> Answer &quot;what-if&quot; questions to optimize budget before spending.</li>
                       </ul>
-                    </div>
+                    </>
                   ) : (
-                    <div>
-                      <h5 className="font-bold text-lg mb-4 text-gray-900 uppercase tracking-wide text-xs">
+                    <>
+                      {/* Solution Overview */}
+                      <h5 className="font-bold text-xs uppercase tracking-wide text-gray-900 mb-3">
                         Solution Overview
                       </h5>
-                      <div className="prose prose-sm max-w-none text-gray-600 leading-relaxed">
-                        {product.description.split('\n').filter(Boolean).map((para, i) => (
-                          <p key={i} className="mb-3">{para}</p>
-                        ))}
-                      </div>
-                    </div>
+                      <p className="mb-3 leading-relaxed">{product.description}</p>
+                      {product.longDescription && (
+                        <p className="mb-4 leading-relaxed">{product.longDescription}</p>
+                      )}
+
+                      {/* What It Does */}
+                      {product.whatItDoes?.[0] && (
+                        <div className="mb-4">
+                          <h5 className="font-bold text-xs uppercase tracking-wide text-gray-900 mb-3 mt-5">
+                            {product.whatItDoes[0].heading}
+                          </h5>
+                          {product.whatItDoes[0].paragraphs.map((p, i) => (
+                            <p key={i} className="mb-2 leading-relaxed">{p}</p>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Key Features */}
+                      {product.features.length > 0 && (
+                        <div className="mb-4">
+                          <h5 className="font-bold text-xs uppercase tracking-wide text-gray-900 mb-3 mt-5">
+                            Key Capabilities
+                          </h5>
+                          <ul className="list-disc pl-5 space-y-1">
+                            {product.features.map((f, i) => (
+                              <li key={i}>{f}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {/* Benefits */}
+                      {product.benefits && product.benefits.length > 0 && (
+                        <div className="mb-4">
+                          <h5 className="font-bold text-xs uppercase tracking-wide text-gray-900 mb-3 mt-5">
+                            Business Impact
+                          </h5>
+                          <ul className="space-y-2">
+                            {product.benefits.map((b, i) => (
+                              <li key={i}>
+                                <strong className="text-gray-900">{b.title}</strong>
+                                {b.description && <span> — {b.description}</span>}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </>
                   )}
                 </div>
               )}

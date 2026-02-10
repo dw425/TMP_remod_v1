@@ -76,13 +76,13 @@ export default function LoginPage() {
   const lockoutSeconds = Math.ceil(lockoutMs / 1000);
 
   const inputClass =
-    'w-full border border-gray-300 px-3 py-2 text-gray-900 bg-white focus:outline-none focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue';
+    'w-full border border-gray-300 px-3 py-2 text-gray-900 bg-white focus:outline-none focus:border-blueprint-blue focus:ring-1 focus:ring-blueprint-blue dark:bg-slate-800 dark:border-slate-600 dark:text-gray-100';
 
   return (
     <div className="w-full max-w-md">
       <SEO title="Sign In" description="Sign in to your Blueprint Marketplace account." />
-      <div className="bg-white border border-gray-300 border-t-4 border-t-blueprint-blue p-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Sign In</h1>
+      <div className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 border-t-4 border-t-blueprint-blue p-8">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">Sign In</h1>
 
         {isLockedOut && (
           <div role="alert" className="mb-4 p-3 bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm">

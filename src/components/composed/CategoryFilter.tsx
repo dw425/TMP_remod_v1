@@ -7,7 +7,7 @@ interface CategoryFilterProps {
 
 export function CategoryFilter({ activeCategory, onCategoryChange }: CategoryFilterProps) {
   return (
-    <section className="mb-10 border-b border-gray-300 pb-2">
+    <section className="mb-6 border-b border-gray-300 pb-2">
       <div className="flex flex-wrap gap-6">
         {categories.map((category) => (
           <button

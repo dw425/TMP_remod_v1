@@ -136,7 +136,7 @@ export function SearchBar() {
 
   return (
     <div ref={containerRef} className="relative">
-      <div className="flex items-center border border-gray-300 bg-white">
+      <div className="flex items-center border border-gray-300 bg-white dark:bg-slate-800 dark:border-slate-600">
         <svg className="w-4 h-4 text-gray-400 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
@@ -153,12 +153,12 @@ export function SearchBar() {
           aria-expanded={isOpen}
           aria-controls="search-results"
           aria-autocomplete="list"
-          className="w-full px-2 py-1.5 text-sm text-gray-900 bg-transparent border-none focus:outline-none"
+          className="w-full px-2 py-1.5 text-sm text-gray-900 dark:text-gray-100 bg-transparent border-none focus:outline-none"
         />
       </div>
 
       {isOpen && results.length > 0 && (
-        <div id="search-results" className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 shadow-lg z-50 max-h-80 overflow-y-auto" role="listbox">
+        <div id="search-results" className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 shadow-lg z-50 max-h-80 overflow-y-auto" role="listbox">
           {results.map((result, i) => (
             <button
               key={result.id}
@@ -180,7 +180,7 @@ export function SearchBar() {
       )}
 
       {isOpen && query.length >= 2 && results.length === 0 && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 shadow-lg z-50 p-4 text-center">
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 shadow-lg z-50 p-4 text-center">
           <p className="text-sm text-gray-500">No products found for &ldquo;{query}&rdquo;</p>
         </div>
       )}

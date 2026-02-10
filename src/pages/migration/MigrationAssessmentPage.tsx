@@ -20,7 +20,7 @@ function SignupPromptModal({ onClose }: { onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black/50" onClick={onClose} onKeyDown={(e) => { if (e.key === 'Escape') onClose(); }} role="button" tabIndex={-1} aria-label="Close modal" />
-      <div className="relative bg-white w-full max-w-md border-t-4 border-blueprint-blue p-8 shadow-2xl">
+      <div className="relative bg-white dark:bg-slate-800 w-full max-w-md border-t-4 border-blueprint-blue p-8 shadow-2xl">
         <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600" aria-label="Close">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -82,6 +82,8 @@ export default function MigrationAssessmentPage() {
     return <Navigate to="/migration" replace />;
   }
 
+  const sectionCount = schema.sections.length;
+
   async function onSubmit(data: Record<string, unknown>) {
     try {
       const effectiveConfig = getEffectiveConfig(schema!.platform, schema!.romConfig);
@@ -136,27 +138,83 @@ export default function MigrationAssessmentPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <button
-        onClick={() => navigate('/migration')}
-        className="text-sm text-blueprint-blue hover:underline mb-6 inline-block"
-      >
-        &larr; Back to Migration Suite
-      </button>
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      {/* Breadcrumb */}
+      <nav aria-label="Breadcrumb" className="mb-6 text-sm text-gray-500">
+        <ol className="flex items-center gap-1.5">
+          <li><Link to={ROUTES.HOME} className="hover:text-blueprint-blue transition-colors">Home</Link></li>
+          <li><span className="mx-1">/</span></li>
+          <li><Link to="/migration" className="hover:text-blueprint-blue transition-colors">Migration Suite</Link></li>
+          <li><span className="mx-1">/</span></li>
+          <li className="font-medium" style={{ color: schema.brandColor }}>{platformConfig.name}</li>
+        </ol>
+      </nav>
 
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold" style={{ color: schema.brandColor }}>
-          {schema.title}
-        </h1>
-        <p className="text-gray-500 mt-2">{schema.subtitle}</p>
+      {/* Header with brand accent */}
+      <div className="mb-8 pb-6 border-b border-gray-200">
+        <div className="flex items-center gap-4 mb-3">
+          <div
+            className="w-2 h-12 shrink-0"
+            style={{ backgroundColor: schema.brandColor }}
+          />
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+              {schema.title}
+            </h1>
+            <p className="text-gray-500 mt-1 text-sm">{schema.subtitle}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-4 text-xs text-gray-400">
+          <span className="font-bold uppercase tracking-wider">{sectionCount} Sections</span>
+          <span>|</span>
+          <span>Estimated 15-25 minutes</span>
+        </div>
       </div>
 
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {schema.sections.map((section) => (
-          <AssessmentSection key={section.id} section={section} form={form} />
+      {/* Progress bar */}
+      <div className="sticky top-20 z-30 bg-bg-primary dark:bg-[#0f172a] py-3 mb-6 -mx-4 px-4">
+        <div className="flex items-center gap-3">
+          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider shrink-0">Progress</span>
+          <div className="flex-1 h-1.5 bg-gray-200 overflow-hidden">
+            <div
+              className="h-full transition-all duration-300"
+              style={{
+                backgroundColor: schema.brandColor,
+                width: '0%', // Visual only — no JS tracking needed
+              }}
+            />
+          </div>
+        </div>
+        {/* Section jump nav */}
+        <div className="flex gap-1.5 mt-2 overflow-x-auto pb-1">
+          {schema.sections.map((s, i) => (
+            <a
+              key={s.id}
+              href={`#section-${s.id}`}
+              className="text-[10px] font-bold text-gray-400 hover:text-blueprint-blue uppercase tracking-wider whitespace-nowrap px-2 py-1 border border-gray-200 dark:border-slate-700 hover:border-blueprint-blue transition-colors bg-white dark:bg-slate-800 dark:text-gray-400 dark:hover:text-blue-400 shrink-0"
+            >
+              {i + 1}. {s.title}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Form */}
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {schema.sections.map((section, i) => (
+          <div key={section.id} id={`section-${section.id}`}>
+            <AssessmentSection
+              section={section}
+              form={form}
+              index={i}
+              total={sectionCount}
+              brandColor={schema.brandColor}
+            />
+          </div>
         ))}
 
-        <div className="flex gap-4">
+        {/* Submit area */}
+        <div className="flex items-center gap-4 pt-6 border-t border-gray-200">
           <Button type="submit">Generate ROM Estimate</Button>
           <Button
             type="button"
@@ -165,6 +223,13 @@ export default function MigrationAssessmentPage() {
           >
             Reset Form
           </Button>
+          <button
+            type="button"
+            onClick={() => navigate('/migration')}
+            className="text-sm text-gray-500 hover:text-gray-700 ml-auto"
+          >
+            Cancel
+          </button>
         </div>
       </form>
 
