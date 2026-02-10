@@ -13,11 +13,11 @@ function applyTheme(theme: Theme) {
   } else {
     document.documentElement.classList.remove('dark');
   }
-  localStorage.setItem('theme', theme);
+  localStorage.setItem('bp-theme', theme);
 }
 
 function getInitialTheme(): Theme {
-  const stored = localStorage.getItem('theme') as Theme | null;
+  const stored = localStorage.getItem('bp-theme') as Theme | null;
   if (stored === 'dark' || stored === 'light') return stored;
   return 'light';
 }

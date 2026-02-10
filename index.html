@@ -27,7 +27,7 @@
   </head>
   <body>
     <script>
-      (function(){if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark')}})();
+      (function(){localStorage.removeItem('theme');if(localStorage.getItem('bp-theme')==='dark'){document.documentElement.classList.add('dark')}else{document.documentElement.classList.remove('dark')}})();
     </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
