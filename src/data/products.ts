@@ -40,7 +40,7 @@ export const products: Product[] = [
     title: 'Lakehouse Optimizer',
     subtitle: 'AI-Powered Databricks Lakehouse Optimization.',
     type: 'tool',
-    categories: ['financial-services', 'gaming', 'media', 'oil-gas', 'defense'],
+    categories: ['financial-services', 'manufacturing', 'retail', 'cmeg', 'federal-government'],
     description:
       'Control costs, optimize architecture, and forecast value. Stop the "cost management whipsaw" and ensure financial accountability for your Databricks commitment.',
     longDescription:
@@ -87,7 +87,7 @@ export const products: Product[] = [
     title: 'CampaignIQ',
     subtitle: 'AI-Powered Promotion & Campaign Analytics.',
     type: 'tool',
-    categories: ['gaming', 'media'],
+    categories: ['cmeg', 'retail'],
     description:
       'AI-powered media planning. Campaign IQ\'s ROAS Maximizer connects campaign data from disparate sources, providing a single source of truth for your marketing performance.',
     longDescription:
@@ -134,7 +134,7 @@ export const products: Product[] = [
     title: 'SAP Working Capital',
     subtitle: 'Real-Time Working Capital Intelligence from SAP.',
     type: 'tool',
-    categories: ['financial-services'],
+    categories: ['financial-services', 'manufacturing'],
     description:
       'Real-Time Working Capital Intelligence Powered by SAP and Databricks. Unify disparate SAP sources (receivables, payables, inventory) to automate pipeline and forecast cash flow.',
     longDescription:
@@ -182,7 +182,7 @@ export const products: Product[] = [
     title: 'PromotionIQ',
     subtitle: 'Analyze, Optimize, and Recommend Promotions with AI.',
     type: 'tool',
-    categories: ['gaming', 'media'],
+    categories: ['cmeg', 'retail'],
     description:
       'Analyze, Optimize, and Recommend Promotions. Forecast promotion effectiveness beyond redemptions and track spend accountability with AI.',
     longDescription:
@@ -229,7 +229,7 @@ export const products: Product[] = [
     title: 'ChurnIQ',
     subtitle: 'Predictive Retention Intelligence.',
     type: 'tool',
-    categories: ['financial-services', 'gaming', 'media'],
+    categories: ['financial-services', 'cmeg', 'retail'],
     description:
       'Predict, Segment, and Retain Customers with Databricks. Proactively identify at-risk users using behavioral patterns and generate tailored next-best actions.',
     longDescription:
@@ -276,7 +276,7 @@ export const products: Product[] = [
     title: 'CustomerSupport IQ',
     subtitle: 'Real-Time Transcript Intelligence and Agent Coaching with GenAI.',
     type: 'tool',
-    categories: ['healthcare'],
+    categories: ['health-life-sciences', 'retail', 'financial-services'],
     description:
       'Real-Time Transcript Intelligence and Agent Coaching with GenAI. Elevating Customer Experience Through GenAI-Powered Insights.',
     longDescription:
@@ -326,7 +326,7 @@ export const products: Product[] = [
     title: "Blueprint's AI Factory",
     subtitle: 'From strategy to production in 90 days.',
     type: 'service',
-    categories: ['healthcare', 'oil-gas', 'defense'],
+    categories: ['health-life-sciences', 'manufacturing', 'federal-government'],
     description:
       'The assembly line for business-ready AI. Shift from experimentation to industrialized delivery reducing risk and accelerating value.',
     longDescription:
