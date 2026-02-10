@@ -126,7 +126,7 @@ export default function MarketplacePage() {
 
         <section>
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-3xl font-light text-gray-900 dark:text-gray-100 tracking-tight">
+            <h3 className="text-3xl font-medium text-black dark:text-gray-100 tracking-tight">
               {activeCategoryName}
             </h3>
           </div>
