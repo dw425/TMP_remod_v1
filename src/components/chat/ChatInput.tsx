@@ -31,8 +31,7 @@ export function ChatInput({ onSend, quickActions, disabled }: ChatInputProps) {
               key={action.label}
               onClick={() => onSend(action.message)}
               disabled={disabled}
-              className="text-xs px-2.5 py-1 border border-blue-200 text-blueprint-blue bg-blue-50 hover:bg-blue-100 transition-colors disabled:opacity-50"
-              style={{ borderRadius: '999px' }}
+              className="chat-pill text-xs px-2.5 py-1 border border-blue-200 text-blueprint-blue bg-blue-50 hover:bg-blue-100 transition-colors disabled:opacity-50"
             >
               {action.label}
             </button>
@@ -48,14 +47,12 @@ export function ChatInput({ onSend, quickActions, disabled }: ChatInputProps) {
           disabled={disabled}
           maxLength={500}
           aria-label="Chat message"
-          className="flex-1 border border-gray-200 px-3 py-1.5 text-sm text-gray-900 bg-gray-50 focus:outline-none focus:border-blueprint-blue focus:bg-white transition-colors"
-          style={{ borderRadius: '8px' }}
+          className="chat-input flex-1 border border-gray-200 px-3 py-1.5 text-sm text-gray-900 bg-gray-50 focus:outline-none focus:border-blueprint-blue focus:bg-white transition-colors"
         />
         <button
           type="submit"
           disabled={disabled || !text.trim()}
-          className="bg-blueprint-blue text-white px-3 py-1.5 text-sm font-medium hover:bg-blue-800 transition-colors disabled:opacity-50"
-          style={{ borderRadius: '8px' }}
+          className="chat-send bg-blueprint-blue text-white px-3 py-1.5 text-sm font-medium hover:bg-blue-800 transition-colors disabled:opacity-50"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
