@@ -57,9 +57,9 @@ export function ChatWidget() {
   return (
     <div className="fixed bottom-4 right-4 z-40">
       {isOpen && (
-        <div className="mb-3 w-80 bg-white border border-gray-200 shadow-2xl flex flex-col overflow-hidden" style={{ maxHeight: '480px', borderRadius: '12px' }}>
+        <div className="mb-3 w-80 border border-gray-200/60 shadow-2xl flex flex-col overflow-hidden backdrop-blur-sm" style={{ maxHeight: '480px', borderRadius: '16px', background: 'rgba(255,255,255,0.88)' }}>
           {/* Header */}
-          <div className="bg-blueprint-blue text-white px-4 py-3 flex items-center justify-between" style={{ borderRadius: '12px 12px 0 0' }}>
+          <div className="bg-blueprint-blue text-white px-4 py-3 flex items-center justify-between" style={{ borderRadius: '16px 16px 0 0' }}>
             <div>
               <p className="font-bold text-sm" id="chat-title">Blueprint Assistant</p>
               <p className="text-xs text-blue-200">Ask me anything about our products</p>
