@@ -57,12 +57,12 @@ export function ChatWidget() {
   return (
     <div className="fixed bottom-4 right-4 z-40">
       {isOpen && (
-        <div className="mb-3 w-80 border border-gray-200/60 shadow-2xl flex flex-col overflow-hidden backdrop-blur-sm" style={{ maxHeight: '480px', borderRadius: '16px', background: 'rgba(255,255,255,0.88)' }}>
+        <div className="mb-3 w-80 border border-gray-200/40 shadow-2xl flex flex-col overflow-hidden backdrop-blur-md" style={{ maxHeight: '480px', borderRadius: '24px', background: 'rgba(255,255,255,0.95)' }}>
           {/* Header */}
-          <div className="bg-blueprint-blue text-white px-4 py-3 flex items-center justify-between" style={{ borderRadius: '16px 16px 0 0' }}>
-            <div>
-              <p className="font-bold text-sm" id="chat-title">Blueprint Assistant</p>
-              <p className="text-xs text-blue-200">Ask me anything about our products</p>
+          <div className="bg-blueprint-blue text-white px-4 py-3 flex items-center justify-between" style={{ borderRadius: '24px 24px 0 0' }}>
+            <div className="flex items-center gap-2">
+              <span className="text-lg" role="img" aria-label="puppy">🐶</span>
+              <p className="font-bold text-sm" id="chat-title">Blue</p>
             </div>
             <button
               onClick={handleToggle}
