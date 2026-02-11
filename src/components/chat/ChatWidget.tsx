@@ -57,19 +57,22 @@ export function ChatWidget() {
   return (
     <div className="fixed bottom-4 right-4 z-40">
       {isOpen && (
-        <div className="mb-3 w-80 bg-white dark:bg-slate-900 border border-gray-300 dark:border-slate-700 shadow-xl flex flex-col" style={{ maxHeight: '480px' }}>
+        <div className="mb-3 w-80 bg-white border border-gray-200 shadow-2xl flex flex-col overflow-hidden" style={{ maxHeight: '480px', borderRadius: '12px' }}>
           {/* Header */}
-          <div className="bg-blueprint-blue text-white px-4 py-3 flex items-center justify-between">
+          <div className="bg-blueprint-blue text-white px-4 py-3 flex items-center justify-between" style={{ borderRadius: '12px 12px 0 0' }}>
             <div>
               <p className="font-bold text-sm" id="chat-title">Blueprint Assistant</p>
               <p className="text-xs text-blue-200">Ask me anything about our products</p>
             </div>
             <button
               onClick={handleToggle}
-              className="text-white hover:text-blue-200 text-lg leading-none"
+              className="w-7 h-7 flex items-center justify-center text-white/80 hover:text-white hover:bg-white/20 transition-colors"
+              style={{ borderRadius: '6px' }}
               aria-label="Close chat"
             >
-              &times;
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
             </button>
           </div>
 
@@ -82,7 +85,7 @@ export function ChatWidget() {
             style={{ minHeight: '200px', maxHeight: '300px' }}
           >
             {messages.length === 0 && (
-              <div className="text-center text-gray-400 dark:text-gray-500 text-sm py-8">
+              <div className="text-center text-gray-400 text-sm py-8">
                 <p className="mb-1 font-medium">Welcome!</p>
                 <p>Ask a question or use the quick actions below.</p>
               </div>
@@ -103,18 +106,12 @@ export function ChatWidget() {
         onClick={handleToggle}
         aria-expanded={isOpen}
         aria-label={isOpen ? 'Close chat assistant' : 'Open chat assistant'}
-        className="bg-blueprint-blue text-white p-4 shadow-lg hover:bg-blue-800 transition-colors"
+        className="bg-blueprint-blue text-white p-3.5 shadow-lg hover:bg-blue-800 transition-all hover:scale-105"
         style={{ borderRadius: '9999px' }}
       >
-        {isOpen ? (
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        ) : (
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-          </svg>
-        )}
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
       </button>
     </div>
   );

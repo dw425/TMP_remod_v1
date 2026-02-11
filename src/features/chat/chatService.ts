@@ -19,14 +19,12 @@ interface QuickAction {
 
 const PRODUCT_INFO: Record<string, { name: string; price: string; summary: string; slug: string }> = {};
 for (const p of products) {
-  if (p.type === 'tool') {
-    PRODUCT_INFO[p.slug] = {
-      name: p.title,
-      price: `$${p.priceMonthly.toLocaleString()}/mo`,
-      summary: p.description,
-      slug: p.slug,
-    };
-  }
+  PRODUCT_INFO[p.slug] = {
+    name: p.title,
+    price: p.priceMonthly > 0 ? `$${p.priceMonthly.toLocaleString()}/mo` : 'Free / Contact Sales',
+    summary: p.description,
+    slug: p.slug,
+  };
 }
 
 // ─── Knowledge Base ─────────────────────────────────────
@@ -34,68 +32,107 @@ for (const p of products) {
 const KNOWLEDGE_BASE: Record<string, string[]> = {
   pricing: [
     'Our IQ products start at $1,000/month for single-user licenses. Team licenses (5 users) are $5,000/month. Enterprise pricing is available — contact sales for a custom quote.',
-    'All products include Databricks integration, ongoing support, and regular updates.',
-    'We offer monthly billing. Annual plans with a discount can be arranged through sales.',
+    'All products include Databricks integration, ongoing support, and regular updates. Annual plans with a discount can be arranged through sales.',
+    'The AI Factory and Migration Suite are service/accelerator offerings — contact sales for engagement pricing.',
   ],
   migration: [
-    'The Migration Suite supports 11 platforms: SAP, Snowflake, Oracle, Redshift, SQL Server, Informatica, Azure Synapse, Teradata, Talend, GCP, and Unity Catalog.',
-    'Each assessment generates a ROM (Rough Order of Magnitude) cost estimate based on environment complexity, data volume, and migration scope.',
-    'Assessments typically take 15-20 minutes. Results include time estimates, staffing recommendations, and risk factors.',
+    'The Blueprint Data Migration Suite is a comprehensive, AI-driven toolset covering assessment, transformation, and optimization for enterprise data platform migrations to Databricks.',
+    'The Migration Suite supports 11 platforms: Teradata, Snowflake, Oracle, Redshift, SQL Server, Informatica, Azure Synapse, SAP, Talend, GCP, and Unity Catalog.',
+    'Each platform assessment covers environment details, data volumes, complexity scoring, ETL pipelines, security requirements, and target state architecture. It generates a ROM (Rough Order of Magnitude) cost estimate.',
+    'Assessments include sections for data quality & readiness, disaster recovery planning, migration urgency, and rollback strategy. They typically take 15-20 minutes to complete.',
+    'Results include time estimates, staffing recommendations, risk factors, and a detailed cost breakdown you can submit as a proposal request.',
   ],
   contact: [
     'Reach our team at Info@bpcs.com or call (206) 455-8326.',
     'Use the "Contact Sales" button on any product page for pricing discussions. We typically respond within 1 business day.',
+    'You can also use the "Talk to Sales" button on the marketplace homepage or the Contact Sales modal on the AI Factory page.',
   ],
   databricks: [
-    'All Blueprint products are built for Databricks. You need an active workspace to deploy.',
-    'We support one-click deployment via OAuth, manual notebook download, or Asset Bundle CLI deploy.',
-    'Products leverage Delta Lake, Unity Catalog, and MLflow for enterprise-grade data management.',
+    'All Blueprint products are built natively for Databricks. You need an active workspace to deploy.',
+    'We support three deployment methods: OAuth one-click deploy, manual notebook download, or Databricks Asset Bundle (DAB) CLI deploy.',
+    'Products leverage Delta Lake, Unity Catalog, and MLflow for enterprise-grade data management and governance.',
+    'Connect your Databricks workspace from the Deployments page in your account dashboard.',
   ],
-  lho: [
-    'Lakehouse Optimizer continuously analyzes your Databricks Lakehouse to identify optimization opportunities.',
-    'Key features: Automated Table Optimization, Query Performance Insights, and Cost Governance Engine.',
+  'lakehouse-optimizer': [
+    'Lakehouse Optimizer provides real-time cost monitoring, automated optimization recommendations, and multi-workspace governance for your Databricks Lakehouse.',
+    'Key capabilities: Value Forecasting & Accountability, Cost Whipsaw Prevention, and Architectural Optimization for right-sizing workloads.',
+    'It helps FinOps teams manage 200+ workspaces with visibility into budget-to-actual performance, compute costs, and ROI tracking.',
     'Starting at $1,000/mo for single user. Team license (5 users) at $5,000/mo.',
   ],
-  campaigniq: [
-    'CampaignIQ is an AI-powered promotion & campaign analytics engine for marketing teams.',
-    'It provides Intelligent Promotion Forecasting, Campaign Performance Scoring, and Anomaly Detection & Alerts.',
-    'CampaignIQ helps achieve higher campaign ROI, faster decision cycles, and eliminates guesswork.',
+  'campaign-iq': [
+    'CampaignIQ is an AI-powered campaign analytics engine that connects data from disparate sources into a single source of truth for marketing performance.',
+    'Key capabilities: Intelligent Promotion Forecasting, Campaign Performance Scoring with real-time health scores, and Anomaly Detection & Alerts that monitor metrics 24/7.',
+    'It helps achieve up to 35% higher campaign ROI, faster decision cycles with instant dashboards, and ML-powered forecasts that replace guesswork.',
+    'Starting at $1,000/mo for single user. Team license (5 users) at $5,000/mo.',
   ],
   'sap-working-capital': [
-    'SAP Working Capital connects to your SAP ERP environment for cash flow optimization.',
-    'Features include Cash Flow Prediction Engine, DPO/DSO/DIO Optimization, and Supplier Risk Scoring.',
+    'SAP Working Capital provides real-time working capital intelligence powered by SAP and Databricks integration.',
+    'It unifies SAP sources (receivables, payables, inventory) to automate pipeline and forecast cash flow with ML-driven analytics.',
+    'Key capabilities: Cash Flow Prediction Engine, DPO/DSO/DIO Optimization, Supplier Risk Scoring, and Executive Dashboards.',
+    'It eliminates costly data silos, enables AI-driven financial intelligence, and lowers TCO by shifting to cloud-first architecture.',
+    'Starting at $1,000/mo for single user. Team license (5 users) at $5,000/mo.',
   ],
-  churniq: [
-    'ChurnIQ is a machine learning engine that identifies customers most likely to churn.',
-    'It provides Predictive Churn Scoring, Driver Analysis Engine, and Retention Playbook Generator.',
+  'churn-iq': [
+    'ChurnIQ is a predictive retention intelligence engine that identifies customers most likely to churn using behavioral patterns.',
+    'Key capabilities: Predictive Churn Scoring (90%+ accuracy), Driver Analysis Engine that explains WHY customers churn, and Retention Playbook Generator with segment-specific strategies.',
+    'It helps reduce churn by identifying at-risk customers weeks in advance and recommending the optimal intervention — discount, outreach, feature education, or loyalty reward.',
+    'Starting at $1,000/mo for single user. Team license (5 users) at $5,000/mo.',
   ],
-  'customersupport-iq': [
-    'CustomerSupport IQ is an AI layer on your support operations for smarter ticketing.',
-    'Features: Smart Ticket Routing, Agent Performance Analytics, and Predictive Escalation Engine.',
+  'customer-support-iq': [
+    'CustomerSupport IQ provides real-time transcript intelligence and agent coaching powered by GenAI.',
+    'Key capabilities: Agent Coaching at Scale (surface coaching opportunities without listening to every call), Churn Signals & Escalation Risk detection, Sentiment & Trend Analysis, and Team Performance Accountability.',
+    'It processes call transcripts in real-time, flags frustration or cancellation intent, and provides dashboards tracking call volume, themes, and sentiment.',
+    'Starting at $1,000/mo for single user. Team license (5 users) at $5,000/mo.',
   ],
-  promotioniq: [
-    'PromotionIQ is a deep analytics engine for retail and CPG promotion management.',
-    'It analyzes Promotion Performance, Cannibalization & Halo effects, and optimizes Promotional Calendars.',
+  'promotion-iq': [
+    'PromotionIQ is a deep analytics engine for retail, CPG, and sportsbook promotion management.',
+    'Key capabilities: Promotion Effectiveness Forecasting (beyond simple redemption tracking), Spend Accountability with per-dollar ROI tracking, and Marketing Team Enablement with self-service testing tools.',
+    'It helps maximize promo ROI across user cohorts, eliminate waste with behavioral forecasting, and equip marketers to personalize offers.',
+    'Starting at $1,000/mo for single user. Team license (5 users) at $5,000/mo.',
   ],
-  aifactory: [
-    'The AI Factory offers a 90-day engagement framework to build and deploy AI solutions.',
-    'Three engagement levels: Strategy Sprint (1-day workshop), Build & Prove (6-week foundations), and Scale & Embed (12-week build & deploy).',
-    'The framework covers 5 phases: Alignment, POC, MVP, Pre-Production, and Production.',
+  'ai-factory': [
+    "Blueprint's AI Factory is a 90-day engagement framework to build and deploy production-grade AI solutions on Databricks.",
+    'Three engagement levels: Strategy Sprint (1-day workshop, $5K-$15K), Build & Prove (6-week foundations, $50K-$100K), and Scale & Embed (12-week build & deploy, $150K-$300K).',
+    'The framework covers 5 phases: Alignment, POC, MVP, Pre-Production, and Production. It includes pre-built RAG templates, model governance, and production deployment patterns.',
+    'Built on the Databricks Data Intelligence Platform and certified as a Databricks Brickbuilder Solution.',
+  ],
+  'data-migration-suite': [
+    'The Blueprint Data Migration Suite covers three phases: Migration Analyzer (assessment & feasibility), Migration Transformer (automated code conversion), and Migration Optimizer (post-migration tuning).',
+    'Supports 11 source platforms: Teradata, Snowflake, Oracle, SQL Server, Redshift, Informatica, Azure Synapse, SAP, Talend, GCP, and Unity Catalog.',
+    'Each assessment includes environment analysis, data quality scoring, rollback planning, disaster recovery, and generates a detailed ROM cost estimate.',
+  ],
+  'top-trending-insight': [
+    'Top Trending Insight is a whitepaper on how AI-Powered Forecasting is rewriting the marketing playbook.',
+    'It explores how the AI Factory model predicts outcomes with precision using CampaignIQ for data-driven marketing strategies.',
   ],
   download: [
     'Downloads are available from your account dashboard after purchase.',
     'All downloads include license watermarking with your email for security.',
-    'You can download Jupyter notebooks, Python wheels, and asset bundles.',
+    'You can download Jupyter notebooks, Python wheels, and Databricks Asset Bundles.',
   ],
   account: [
-    'Sign up for a free account to access downloads and deployments.',
-    'Your dashboard shows order history, downloads, and deployment status.',
-    'Update your profile and company information in Account Settings.',
+    'Sign up for a free account to access downloads, deployments, and order history.',
+    'Your dashboard shows purchased products, migration assessments, downloads, and deployment status.',
+    'Manage your profile, company info, and notification preferences in Account Settings.',
+    'Your wishlist lets you save products for later — accessible from the heart icon on any product card.',
   ],
   deployment: [
-    'Deploy products to Databricks using three methods: OAuth one-click deploy, manual notebook upload, or Asset Bundle CLI.',
+    'Deploy products to Databricks using three methods: OAuth one-click deploy, manual notebook upload, or Databricks Asset Bundle CLI.',
     'Visit your Deployments page to connect your Databricks workspace via OAuth.',
     'All deployments are tracked with version history and status updates.',
+  ],
+  search: [
+    'Use the search bar in the header to find products by name, tag, or category.',
+    'Search results show product type, description, and link directly to the product detail page.',
+  ],
+  wishlist: [
+    'Save products to your wishlist by clicking the heart icon on any product card or detail page.',
+    'View and manage your wishlist from the account dashboard.',
+  ],
+  cart: [
+    'Add tool products to your cart from the marketplace or product detail pages.',
+    'The cart supports monthly billing. Choose quantity and review your order before submitting a PO request.',
+    'PO requests are submitted via Formspree and our team will follow up within 1 business day.',
   ],
 };
 
@@ -131,16 +168,19 @@ function fuzzyMatch(input: string, target: string): boolean {
 
 // ─── Intent Detection ───────────────────────────────────
 
-type Intent = 'greeting' | 'pricing' | 'product_info' | 'migration' | 'contact' | 'deployment' | 'download' | 'account' | 'aifactory' | 'recommendation' | 'comparison' | 'unknown';
+type Intent = 'greeting' | 'pricing' | 'product_info' | 'migration' | 'contact' | 'deployment' | 'download' | 'account' | 'ai-factory' | 'search' | 'wishlist' | 'cart' | 'recommendation' | 'comparison' | 'unknown';
 
 const KEYWORD_MAP: Record<string, string[]> = {
   pricing: ['price', 'pricing', 'cost', 'how much', 'plan', 'license', 'subscription', 'pay', 'billing', 'enterprise', 'team'],
-  migration: ['migrat', 'assess', 'rom', 'platform', 'sap', 'snowflake', 'oracle', 'redshift', 'sql server', 'informatica', 'synapse', 'teradata', 'talend', 'gcp', 'unity catalog'],
+  migration: ['migrat', 'assess', 'rom', 'platform', 'snowflake', 'oracle', 'redshift', 'sql server', 'informatica', 'synapse', 'teradata', 'talend', 'gcp', 'unity catalog', 'data warehouse', 'edw'],
   contact: ['contact', 'email', 'reach', 'support', 'help', 'sales', 'talk', 'phone', 'call'],
-  deployment: ['deploy', 'databricks', 'workspace', 'cluster', 'notebook', 'oauth', 'install'],
-  download: ['download', 'wheel', 'bundle', 'file'],
-  account: ['account', 'sign up', 'register', 'login', 'profile', 'settings', 'password'],
-  aifactory: ['ai factory', 'engagement', 'tier', 'consulting', '90 day', '90-day', 'sprint', 'workshop'],
+  deployment: ['deploy', 'databricks', 'workspace', 'cluster', 'notebook', 'oauth', 'install', 'asset bundle'],
+  download: ['download', 'wheel', 'bundle', 'file', 'watermark'],
+  account: ['account', 'sign up', 'register', 'login', 'profile', 'settings', 'password', 'dashboard'],
+  'ai-factory': ['ai factory', 'engagement', 'tier', 'consulting', '90 day', '90-day', 'sprint', 'workshop', 'brickbuilder'],
+  search: ['search', 'find', 'browse', 'look for', 'where is'],
+  wishlist: ['wishlist', 'wish list', 'save for later', 'favorite', 'heart'],
+  cart: ['cart', 'checkout', 'purchase order', 'po request', 'buy', 'order'],
   recommendation: ['recommend', 'suggest', 'what should', 'which product', 'best for', 'right for'],
   comparison: ['compare', 'difference', 'vs', 'versus', 'between'],
 };
@@ -188,30 +228,43 @@ function getProductResponse(slug: string): string {
 
 function getRecommendation(message: string): string {
   const lower = message.toLowerCase();
-  if (lower.includes('marketing') || lower.includes('campaign') || lower.includes('promotion')) {
-    return 'Based on your interest, I\'d recommend **CampaignIQ** for campaign analytics or **PromotionIQ** for retail promotion management. Both start at $1,000/mo.';
+  if (lower.includes('marketing') || lower.includes('campaign') || lower.includes('ad') || lower.includes('roas')) {
+    return 'Based on your interest, I\'d recommend **CampaignIQ** for campaign analytics and ROAS optimization, or **PromotionIQ** for retail/sportsbook promotion management. Both start at $1,000/mo.';
   }
-  if (lower.includes('churn') || lower.includes('retention') || lower.includes('customer')) {
-    return 'For customer retention, check out **ChurnIQ** — it uses ML to predict churn and generate retention playbooks. For support optimization, **CustomerSupport IQ** is great.';
+  if (lower.includes('churn') || lower.includes('retention') || lower.includes('customer loss')) {
+    return 'For customer retention, check out **ChurnIQ** — it predicts churn with 90%+ accuracy and generates segment-specific retention playbooks. Starts at $1,000/mo.';
   }
-  if (lower.includes('sap') || lower.includes('cash') || lower.includes('finance')) {
-    return 'For financial operations, **SAP Working Capital** connects to your SAP ERP for cash flow optimization and supplier risk scoring.';
+  if (lower.includes('support') || lower.includes('call center') || lower.includes('agent') || lower.includes('transcript')) {
+    return '**CustomerSupport IQ** uses GenAI to analyze call transcripts in real-time, coach agents at scale, and detect churn signals. Starts at $1,000/mo.';
   }
-  if (lower.includes('databricks') || lower.includes('lakehouse') || lower.includes('performance')) {
-    return 'For Databricks optimization, **Lakehouse Optimizer** continuously tunes your workspace for faster queries and lower costs.';
+  if (lower.includes('sap') || lower.includes('cash') || lower.includes('finance') || lower.includes('working capital')) {
+    return 'For financial operations, **SAP Working Capital** integrates with your SAP ERP for real-time cash flow forecasting, supplier risk scoring, and DPO/DSO optimization.';
   }
-  return 'We offer 6 IQ products across analytics, customer intelligence, and operations. Could you tell me more about your use case? I\'ll recommend the best fit.';
+  if (lower.includes('databricks') || lower.includes('lakehouse') || lower.includes('performance') || lower.includes('finops') || lower.includes('cost')) {
+    return 'For Databricks optimization, **Lakehouse Optimizer** provides real-time cost monitoring, automated recommendations, and multi-workspace governance. Starts at $1,000/mo.';
+  }
+  if (lower.includes('migrat') || lower.includes('legacy') || lower.includes('warehouse') || lower.includes('edw')) {
+    return 'For data platform migration, the **Blueprint Data Migration Suite** covers 11 source platforms with AI-driven assessment, automated code conversion, and post-migration optimization.';
+  }
+  if (lower.includes('ai') || lower.includes('genai') || lower.includes('rag') || lower.includes('model')) {
+    return "**Blueprint's AI Factory** takes you from strategy to production-grade AI in 90 days. Three engagement tiers available — from a 1-day Strategy Sprint to a 12-week Scale & Embed program.";
+  }
+  return 'We offer 6 tool products (Lakehouse Optimizer, CampaignIQ, SAP Working Capital, ChurnIQ, CustomerSupport IQ, PromotionIQ), plus the AI Factory service and Data Migration Suite. Could you tell me more about your use case? I\'ll recommend the best fit.';
 }
 
 function getComparison(): string {
-  return 'Here\'s a quick comparison of our IQ products:\n\n' +
-    '- **Lakehouse Optimizer**: Databricks performance tuning\n' +
-    '- **CampaignIQ**: Marketing campaign analytics\n' +
-    '- **SAP Working Capital**: Cash flow optimization\n' +
-    '- **ChurnIQ**: Customer churn prediction\n' +
-    '- **CustomerSupport IQ**: Support ticket intelligence\n' +
-    '- **PromotionIQ**: Retail promotion analytics\n\n' +
-    'All are priced at $1,000/mo (single user) or $5,000/mo (team). Want details on any specific product?';
+  return 'Here\'s our full product lineup:\n\n' +
+    '**Tools** ($1,000/mo single user, $5,000/mo team):\n' +
+    '- **Lakehouse Optimizer**: Databricks FinOps & performance tuning\n' +
+    '- **CampaignIQ**: AI-powered campaign & marketing analytics\n' +
+    '- **SAP Working Capital**: Cash flow & working capital intelligence\n' +
+    '- **ChurnIQ**: Predictive customer retention\n' +
+    '- **CustomerSupport IQ**: GenAI-powered transcript intelligence\n' +
+    '- **PromotionIQ**: Promotion effectiveness & spend optimization\n\n' +
+    '**Services & Accelerators** (contact sales):\n' +
+    '- **AI Factory**: 90-day AI deployment framework\n' +
+    '- **Data Migration Suite**: 11-platform migration assessment & acceleration\n\n' +
+    'Want details on any specific product?';
 }
 
 function findBestResponse(message: string): string {
@@ -220,40 +273,17 @@ function findBestResponse(message: string): string {
   switch (intent) {
     case 'product_info':
       return productSlug ? getProductResponse(productSlug) : getComparison();
-    case 'pricing': {
-      const responses = KNOWLEDGE_BASE['pricing'];
-      return responses?.[Math.floor(Math.random() * responses.length)] ?? '';
-    }
-    case 'migration': {
-      const responses = KNOWLEDGE_BASE['migration'];
-      return responses?.[Math.floor(Math.random() * responses.length)] ?? '';
-    }
-    case 'contact': {
-      const responses = KNOWLEDGE_BASE['contact'];
-      return responses?.[Math.floor(Math.random() * responses.length)] ?? '';
-    }
-    case 'deployment': {
-      const responses = KNOWLEDGE_BASE['deployment'] || KNOWLEDGE_BASE['databricks'];
-      return responses?.[Math.floor(Math.random() * responses.length)] ?? '';
-    }
-    case 'download': {
-      const responses = KNOWLEDGE_BASE['download'];
-      return responses?.[Math.floor(Math.random() * responses.length)] ?? '';
-    }
-    case 'account': {
-      const responses = KNOWLEDGE_BASE['account'];
-      return responses?.[Math.floor(Math.random() * responses.length)] ?? '';
-    }
-    case 'aifactory': {
-      const responses = KNOWLEDGE_BASE['aifactory'];
-      return responses?.[Math.floor(Math.random() * responses.length)] ?? '';
-    }
     case 'recommendation':
       return getRecommendation(message);
     case 'comparison':
       return getComparison();
-    default:
-      return "I can help with product information, pricing, migration assessments, downloads, deployments, and account questions. Try asking about a specific product like \"Tell me about CampaignIQ\" or \"What are the pricing options?\".";
+    default: {
+      const responses = KNOWLEDGE_BASE[intent];
+      if (responses && responses.length > 0) {
+        return responses[Math.floor(Math.random() * responses.length)] ?? '';
+      }
+      return "I can help with product information, pricing, migration assessments, downloads, deployments, cart, wishlist, and account questions. Try asking about a specific product like \"Tell me about CampaignIQ\" or \"What are the pricing options?\".";
+    }
   }
 }
 
